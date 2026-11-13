@@ -1,0 +1,21 @@
+
+# Private information
+nex_login.json
+
+# Backup and temporary folders
+_backup/
+_backups/
+_tmp_check/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Separate projects - keep out of portfolio repository
+aptverse/
+campus-coin/
+codeher/
+jenkinson-sea-life/
+job-hive/
+maxwell-portfolio/
+weather-forecast/
