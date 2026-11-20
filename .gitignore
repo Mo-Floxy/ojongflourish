@@ -19,3 +19,13 @@ jenkinson-sea-life/
 job-hive/
 maxwell-portfolio/
 weather-forecast/
+
+# Build artifacts and QA captures
+vyra/node_modules/
+vyra/dist/
+vyra/.shots/
+
+# Local environment variables (copy vyra/.env.example instead)
+vyra/.env
+vyra/.env.local
+vyra/.env.*.local
