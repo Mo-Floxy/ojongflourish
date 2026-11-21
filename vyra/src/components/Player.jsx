@@ -12,6 +12,7 @@ import {
   VolumeX,
   ListMusic,
   Maximize2,
+  ScrollText,
   X,
 } from "lucide-react";
 import Equalizer from "./Equalizer";
@@ -43,6 +44,10 @@ export default function Player({
   onToggleQueue,
   onCloseQueue,
   onPlayTrack,
+  externalActive = false,
+  onReturnToVyra,
+  onOpenLyrics,
+  lyricsOpen = false,
 }) {
   const total = duration || track.duration;
   const pct = `${Math.min(100, (progress / total) * 100)}%`;
@@ -71,6 +76,13 @@ export default function Player({
           {error || (loading ? "Resolving the Audius stream…" : "")}
         </p>
       )}
+      {externalActive && (
+        <div className="player__external" role="status">
+          <span className="spotify-account__dot" aria-hidden="true" />
+          <span>Spotify embed active · VYRA audio paused</span>
+          <button type="button" onClick={onReturnToVyra}>Back to VYRA</button>
+        </div>
+      )}
       <span className="player__line" aria-hidden="true" />
       <input
         type="range"
@@ -82,6 +94,7 @@ export default function Player({
         onChange={(event) => onSeek(Number(event.target.value))}
         style={{ "--val": pct }}
         aria-label="Seek"
+        disabled={externalActive}
       />
 
       <div className="player__now">
@@ -104,9 +117,18 @@ export default function Player({
         >
           <Heart size={18} fill={liked.has(track.id) ? "currentColor" : "none"} />
         </button>
+        <button
+          type="button"
+          className={`ctrl player__lyrics-mini ${lyricsOpen ? "is-on" : ""}`}
+          onClick={onOpenLyrics}
+          aria-label="Lyrics"
+          title="Lyrics"
+        >
+          <ScrollText size={18} />
+        </button>
       </div>
 
-      <div className="player__center">
+      <div className={`player__center ${externalActive ? "is-external" : ""}`}>
         <div className="player__controls">
           <button
             type="button"
@@ -115,10 +137,18 @@ export default function Player({
             aria-label="Shuffle"
             aria-pressed={shuffle}
             title="Shuffle"
+            disabled={externalActive}
           >
             <Shuffle size={18} />
           </button>
-          <button type="button" className="ctrl" onClick={onPrev} aria-label="Previous track" title="Previous">
+          <button
+            type="button"
+            className="ctrl"
+            onClick={onPrev}
+            aria-label="Previous track"
+            title="Previous"
+            disabled={externalActive}
+          >
             <SkipBack size={20} fill="currentColor" />
           </button>
           <button
@@ -127,10 +157,18 @@ export default function Player({
             onClick={onToggle}
             aria-label={playing ? "Pause" : "Play"}
             title={playing ? "Pause" : "Play"}
+            disabled={externalActive}
           >
             {playing ? <Pause size={21} fill="currentColor" /> : <Play size={21} fill="currentColor" className="player__play-icon" />}
           </button>
-          <button type="button" className="ctrl" onClick={onNext} aria-label="Next track" title="Next">
+          <button
+            type="button"
+            className="ctrl"
+            onClick={onNext}
+            aria-label="Next track"
+            title="Next"
+            disabled={externalActive}
+          >
             <SkipForward size={20} fill="currentColor" />
           </button>
           <button
@@ -140,6 +178,7 @@ export default function Player({
             aria-label="Repeat"
             aria-pressed={repeat}
             title="Repeat"
+            disabled={externalActive}
           >
             <Repeat size={18} />
           </button>
@@ -157,12 +196,22 @@ export default function Player({
             className="range range--progress"
             style={{ "--val": pct }}
             aria-label="Seek"
+            disabled={externalActive}
           />
           <span>{formatTime(total)}</span>
         </div>
       </div>
 
       <div className="player__right">
+        <button
+          type="button"
+          className={`ctrl player__lyrics-btn ${lyricsOpen ? "is-on" : ""}`}
+          onClick={onOpenLyrics}
+          aria-label="Lyrics"
+          title="Lyrics"
+        >
+          <ScrollText size={19} />
+        </button>
         <button
           type="button"
           className={`ctrl player__queue-btn ${queueOpen ? "is-on" : ""}`}

@@ -15,6 +15,8 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import { SpotifyLogo } from "./SpotifyConnectDialog";
+import "../styles/spotify.css";
 
 const NAV = [
   { id: "home", label: "Home", icon: Home },
@@ -33,6 +35,8 @@ export default function Sidebar({
   onClose,
   likedCount,
   onUpgrade,
+  spotifyConnected = false,
+  spotifyName = "",
 }) {
   const [themeDark, setThemeDark] = useState(true);
 
@@ -84,14 +88,21 @@ export default function Sidebar({
           <span className="premium__crown">
             <Crown size={19} />
           </span>
-          <h3>Connect Spotify</h3>
-          <p className="premium__copy">Play official hits from Rema, Davido, Asake and more.</p>
+          <h3>{spotifyConnected ? "Spotify connected" : "Connect Spotify"}</h3>
+          <p className="premium__copy">
+            {spotifyConnected
+              ? spotifyName
+                ? `Searching Spotify for ${spotifyName}. Official audio stays with Spotify.`
+                : "Official search, links and embeds are ready."
+              : "Discover official hits from Rema, Davido, Asake and more."}
+          </p>
           <button
             type="button"
             className="btn-vyra btn-vyra--sm premium__cta"
             onClick={onUpgrade}
           >
-            Connect Now
+            <SpotifyLogo size={16} />
+            {spotifyConnected ? "Manage" : "Connect Now"}
             <ArrowRight size={15} />
           </button>
         </div>

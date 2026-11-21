@@ -26,6 +26,7 @@ export default function HomePage({
   onOpenAlbum,
   onPlaySpotifyTrack,
   onOpenPath,
+  onOpenSpotify,
   spotify,
 }) {
   const { currentId, playing, currentTrack, liked, toggleLike } = usePlayer();
@@ -79,7 +80,11 @@ export default function HomePage({
         onOpenArtist={onOpenArtist}
       />
 
-      <SpotifySection spotify={spotify} onPlayTrack={onPlaySpotifyTrack} />
+      <SpotifySection
+        spotify={spotify}
+        onPlayTrack={onPlaySpotifyTrack}
+        onOpenSpotify={onOpenSpotify}
+      />
 
       <MadeForYou
         onPlay={(input) => onPlayTrack(input)}

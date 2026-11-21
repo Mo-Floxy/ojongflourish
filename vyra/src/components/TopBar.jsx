@@ -13,11 +13,14 @@ import {
   Check,
   Crown,
   ExternalLink,
+  LogOut,
 } from "lucide-react";
 import { GENRES, NOTIFICATIONS } from "../data/music";
 import { searchAudius } from "../services/audius";
 import { useSpotifyContext } from "../context/SpotifyContext";
+import { SpotifyLogo } from "./SpotifyConnectDialog";
 import "../styles/search.css";
+import "../styles/spotify.css";
 
 const EMPTY_RESULTS = { tracks: [], artists: [], albums: [], playlists: [] };
 
@@ -29,7 +32,13 @@ const spotifyImage = (item) =>
 
 const spotifyUrl = (item) => item?.external_urls?.spotify || "";
 
-export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
+export default function TopBar({
+  onMenu,
+  onPlayTrack,
+  onPlaySpotifyTrack,
+  onGenreSelect,
+  onOpenSpotify,
+}) {
   const navigate = useNavigate();
   const spotify = useSpotifyContext();
 
@@ -46,7 +55,8 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
   const wrapRef = useRef(null);
 
   const q = query.trim();
-  const spotifyReady = spotify.configured && spotify.status === "connected";
+  const spotifyReady = spotify.configured && spotify.authenticated;
+  const spotifyPlaybackReady = spotifyReady && spotify.playerReady;
 
   const genreHits = useMemo(
     () => (q ? GENRES.filter((g) => g.name.toLowerCase().includes(q.toLowerCase())).slice(0, 3) : []),
@@ -238,7 +248,13 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
                 </p>
               )}
               {!spotifyReady && (
-                <p className="search__note">Spotify search needs a connected account — showing Audius results.</p>
+                <div className="search__note search__note--spotify">
+                  <SpotifyLogo size={16} />
+                  <span>Connect Spotify for official catalogue results.</span>
+                  <button type="button" onClick={() => { setSearchOpen(false); onOpenSpotify?.(); }}>
+                    Connect
+                  </button>
+                </div>
               )}
 
               {results.tracks.length > 0 && (
@@ -275,6 +291,21 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
                       );
                     }
                     const url = spotifyUrl(track);
+                    if (spotifyPlaybackReady && onPlaySpotifyTrack) {
+                      return (
+                        <button
+                          key={track.id}
+                          type="button"
+                          className="search__row"
+                          onClick={() => onPlaySpotifyTrack(track)}
+                        >
+                          {content}
+                          <span className="search__play">
+                            <Play size={13} fill="currentColor" />
+                          </span>
+                        </button>
+                      );
+                    }
                     return (
                       <a
                         key={track.id}
@@ -603,6 +634,26 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
                       <p className="profile-pop__plan">Free plan · 14-day streak</p>
                     </div>
                   </div>
+                  {spotifyReady ? (
+                    <div className="profile-pop__spotify">
+                      <SpotifyLogo size={17} />
+                      <span>
+                        <strong>{spotify.user?.display_name || spotify.user?.id || "Spotify"}</strong>
+                        <small>{spotify.playerReady ? "Connected · playback ready" : "Connected · links & embeds"}</small>
+                      </span>
+                      <button type="button" onClick={spotify.logout} aria-label="Disconnect Spotify">
+                        <LogOut size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="profile-pop__item"
+                      onClick={() => { setPanel(null); onOpenSpotify?.(); }}
+                    >
+                      <SpotifyLogo size={16} /> Connect Spotify
+                    </button>
+                  )}
                   <button type="button" className="profile-pop__item" onClick={() => goTo("/library")}>
                     <Check size={15} /> Your Library
                   </button>

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import {
   AudioLines,
   ExternalLink,
-  Headphones,
   LoaderCircle,
   LogOut,
   Play,
@@ -12,94 +11,124 @@ import {
 } from "lucide-react";
 import SectionHead from "./SectionHead";
 import Equalizer from "./Equalizer";
+import { SpotifyLogo } from "./SpotifyConnectDialog";
+import { spotifyRedirectUri } from "../lib/spotify";
 import { formatTime, SPOTIFY_PRESETS } from "../data/music";
+import "../styles/spotify.css";
 
-export default function SpotifySection({ spotify, onPlayTrack }) {
+export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) {
   const [query, setQuery] = useState(SPOTIFY_PRESETS[0].query);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [guestMode, setGuestMode] = useState(false);
   const autoSearched = useRef(false);
+
+  const authenticated = Boolean(spotify.configured && spotify.authenticated);
+  const playbackReady = authenticated && spotify.playerReady;
 
   const runSearch = async (value) => {
     if (!value?.trim()) return;
     setLoading(true);
-    const tracks = await spotify.search(value);
-    setResults(tracks);
-    setLoading(false);
+    try {
+      const tracks = await spotify.search(value);
+      setResults(tracks || []);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (spotify.status !== "connected" || autoSearched.current) return;
+    if (!authenticated || autoSearched.current) return;
     autoSearched.current = true;
     runSearch(SPOTIFY_PRESETS[0].query);
-  }, [spotify.status]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const connected = spotify.status === "connected" && Boolean(spotify.deviceId);
+  const headActions = authenticated ? (
+    spotify.user ? (
+      <div className="spotify-account">
+        <span className="spotify-account__dot" aria-hidden="true" />
+        <span>{spotify.user.display_name || spotify.user.email || spotify.user.id || "Spotify"}</span>
+        <button type="button" onClick={spotify.logout} aria-label="Disconnect Spotify" title="Disconnect">
+          <LogOut size={14} />
+        </button>
+      </div>
+    ) : null
+  ) : (
+    <button type="button" className="spotify-section-connect" onClick={onOpenSpotify}>
+      <SpotifyLogo size={16} /> Connect Spotify
+    </button>
+  );
 
   return (
     <section className="section" id="spotify">
       <SectionHead
         eyebrow={
           <span className="eyebrow-icon">
-            <Headphones size={19} />
+            <AudioLines size={19} />
           </span>
         }
         title="Popular Naija"
-        subtitle="Official hits from Rema, Davido, Asake, Ayra Starr and more — streamed through Spotify."
+        subtitle="Official hits from Rema, Davido, Asake, Ayra Starr and more — discover through Spotify."
       >
-        {connected && spotify.user && (
-          <div className="spotify-account">
-            <span className="spotify-account__dot" />
-            <span>{spotify.user.display_name || spotify.user.email || "Spotify"}</span>
-            <button type="button" onClick={spotify.logout} aria-label="Disconnect Spotify" title="Disconnect">
-              <LogOut size={14} />
-            </button>
-          </div>
-        )}
+        {headActions}
       </SectionHead>
 
       {!spotify.configured ? (
         <div className="spotify-card spotify-card--setup">
           <span className="spotify-card__icon"><AudioLines size={22} /></span>
           <div>
-            <h3>Connect your Spotify app</h3>
+            <h3>Spotify is optional</h3>
             <p>
-              Add a Spotify client ID to enable official playback. Create an app in the Spotify
-              Developer Dashboard, add <code>http://localhost:5173/</code> as a redirect URI, then
-              copy <code>.env.example</code> to <code>.env.local</code> and set your ID.
+              Add a Spotify client ID to enable official search and embeds. Register{" "}
+              <code>{spotifyRedirectUri() || "http://127.0.0.1:5173/"}</code> in the Spotify
+              Developer Dashboard, plus the production URI{" "}
+              <code>https://vyra-azure-iota.vercel.app/</code>, then set the values in{" "}
+              <code>.env.local</code>.
             </p>
             <div className="spotify-card__actions">
+              <button type="button" className="btn-vyra btn-vyra--sm" onClick={onOpenSpotify}>
+                <SpotifyLogo size={16} /> Continue as Guest
+              </button>
               <a
                 href="https://developer.spotify.com/dashboard"
                 target="_blank"
                 rel="noreferrer"
-                className="btn-vyra btn-vyra--sm"
+                className="btn-ghost"
               >
-                Open Developer Dashboard <ExternalLink size={14} />
+                Developer Dashboard <ExternalLink size={14} />
               </a>
             </div>
           </div>
         </div>
-      ) : !connected ? (
-        <div className="spotify-card spotify-card--login">
-          <span className="spotify-card__icon"><AudioLines size={22} /></span>
-          <div>
-            <h3>{spotify.status === "connecting" ? "Connecting Spotify…" : "Play the real chart hits"}</h3>
-            <p>
-              Sign in with a Spotify Premium account. Vyra uses Spotify’s official Web Playback
-              SDK, so the music streams from Spotify and is never stored here.
-            </p>
-            {spotify.error && <p className="spotify-card__error" role="alert">{spotify.error}</p>}
-            <div className="spotify-card__actions">
-              {spotify.status !== "connecting" && (
-                <button type="button" className="btn-vyra btn-vyra--sm" onClick={spotify.login}>
+      ) : !authenticated ? (
+        guestMode ? (
+          <div className="spotify-card spotify-card--guest">
+            <SpotifyLogo size={20} />
+            <span>You’re browsing as a guest. Audius and local playback still work.</span>
+            <button type="button" onClick={() => setGuestMode(false)}>Show Spotify options</button>
+            <button type="button" className="is-quiet" onClick={onOpenSpotify}>Connect</button>
+          </div>
+        ) : (
+          <div className="spotify-card spotify-card--login">
+            <span className="spotify-card__icon"><SpotifyLogo size={22} /></span>
+            <div>
+              <h3>Discover the real chart hits</h3>
+              <p>
+                Connect with Spotify’s secure PKCE login to search real tracks, artists, albums and
+                playlists. VYRA never sees your password and never downloads Spotify audio.
+              </p>
+              {spotify.error && <p className="spotify-card__error" role="alert">{spotify.error}</p>}
+              <div className="spotify-card__actions">
+                <button type="button" className="btn-vyra btn-vyra--sm" onClick={onOpenSpotify}>
                   <Play size={14} fill="currentColor" /> Connect Spotify
                 </button>
-              )}
-              {spotify.status === "connecting" && <LoaderCircle size={20} className="spin" />}
+                <button type="button" className="btn-ghost" onClick={() => setGuestMode(true)}>
+                  Continue as Guest
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )
       ) : (
         <>
           {spotify.error && <p className="spotify-card__error" role="alert">{spotify.error}</p>}
@@ -151,6 +180,7 @@ export default function SpotifySection({ spotify, onPlayTrack }) {
             {results.map((item) => {
               const active = spotify.track?.uri === item.uri;
               const image = item.album?.images?.at(-1)?.url || item.album?.images?.[0]?.url || "";
+              const officialUrl = item.external_urls?.spotify || "";
               return (
                 <div key={item.id} className={`spotify-result ${active ? "is-active" : ""}`}>
                   <img src={image} alt="" loading="lazy" />
@@ -162,27 +192,41 @@ export default function SpotifySection({ spotify, onPlayTrack }) {
                     </p>
                   </div>
                   <span className="spotify-result__time">{formatTime((item.duration_ms || 0) / 1000)}</span>
-                  <button
-                    type="button"
-                    className="spotify-result__play"
-                    onClick={() => onPlayTrack(item)}
-                    aria-label={`Play ${item.name}`}
-                    title={`Play ${item.name}`}
-                  >
-                    {active && spotify.playing ? (
-                      <Equalizer bars={4} animated barWidth={2} />
-                    ) : (
-                      <Play size={15} fill="currentColor" />
-                    )}
-                  </button>
+                  {playbackReady ? (
+                    <button
+                      type="button"
+                      className="spotify-result__play"
+                      onClick={() => onPlayTrack(item)}
+                      aria-label={`Play ${item.name} on Spotify`}
+                      title={`Play ${item.name} on Spotify`}
+                    >
+                      {active && spotify.playing ? (
+                        <Equalizer bars={4} animated barWidth={2} />
+                      ) : (
+                        <Play size={15} fill="currentColor" />
+                      )}
+                    </button>
+                  ) : officialUrl ? (
+                    <a
+                      className="spotify-result__play"
+                      href={officialUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Open ${item.name} in Spotify`}
+                      title="Open in Spotify"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  ) : null}
                 </div>
               );
             })}
           </div>
 
           <p className="spotify-note">
-            <Sparkles size={13} /> Playback requires Spotify Premium and an internet connection.
-            Search results and audio are provided by Spotify.
+            <Sparkles size={13} /> Search, artwork and official links work after connecting.
+            In-app playback needs Spotify Premium and app/account approval; embeds and open-in-Spotify
+            stay available otherwise.
           </p>
         </>
       )}

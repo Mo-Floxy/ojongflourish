@@ -5,7 +5,7 @@ const API_SRC = "https://open.spotify.com/embed/iframe-api/v1";
 const SPOTIFY_API_KEY = "__vyraSpotifyIframeApi";
 const ALLOW_ATTRIBUTE =
   "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
-const VALID_TYPES = new Set(["track", "album", "playlist"]);
+const VALID_TYPES = new Set(["track", "album", "playlist", "artist"]);
 
 let apiPromise = null;
 
@@ -116,6 +116,7 @@ export default function SpotifyEmbed({
   const onPlayRef = useRef(onPlay);
   const frameRef = useRef(null);
   const [apiAttached, setApiAttached] = useState(false);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     onPlayRef.current = onPlay;
@@ -149,9 +150,12 @@ export default function SpotifyEmbed({
     };
 
     setApiAttached(false);
+    setActive(false);
 
     const handlePlaybackStarted = () => {
-      if (!disposed) onPlayRef.current?.();
+      if (disposed) return;
+      setActive(true);
+      onPlayRef.current?.();
     };
 
     const bindController = (created) => {
@@ -239,12 +243,12 @@ export default function SpotifyEmbed({
         aria-live="polite"
       >
         <header className="spotify-embed-card__header">
-          <span className="spotify-embed-card__badge">Playing on Spotify</span>
+          <span className="spotify-embed-card__badge">Spotify player</span>
         </header>
         <p className="spotify-embed-card__message">
           {!isSupportedType
-            ? "This embed supports Spotify tracks, albums, and playlists only."
-            : "Add a Spotify track, album, or playlist ID to load the official embed."}
+            ? "This embed supports Spotify tracks, albums, playlists, and artists only."
+            : "Add a Spotify track, album, playlist, or artist ID to load the official embed."}
         </p>
         <p className="spotify-embed-card__note">
           Audio is streamed by Spotify. VYRA’s local/Audius player stays separate.
@@ -256,10 +260,12 @@ export default function SpotifyEmbed({
   return (
     <section
       className="spotify-embed-card"
-      aria-label={`${title} — Playing on Spotify`}
+      aria-label={`${title} — ${active ? "Playing on Spotify" : "Spotify player"}`}
     >
       <header className="spotify-embed-card__header">
-        <span className="spotify-embed-card__badge">Playing on Spotify</span>
+        <span className="spotify-embed-card__badge">
+          {active ? "Playing on Spotify" : "Spotify player"}
+        </span>
         <span className="spotify-embed-card__type">{type}</span>
       </header>
 
@@ -280,8 +286,8 @@ export default function SpotifyEmbed({
       </div>
 
       <p className="spotify-embed-card__note">
-        Streamed by Spotify. VYRA’s local/Audius player is separate and does not
-        control this embed.
+        Playback is controlled by Spotify’s embedded player. VYRA pauses its own
+        audio when Spotify starts; its controls never drive this embed.
       </p>
     </section>
   );

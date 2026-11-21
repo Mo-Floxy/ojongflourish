@@ -66,7 +66,18 @@ The local and Audius catalogues work without Spotify. Spotify search, embeds, an
 4. Restart the dev server and open <http://127.0.0.1:5173/>.
 5. For a deployed build, set `VITE_SPOTIFY_REDIRECT_URI=https://vyra-azure-iota.vercel.app/` in Vercel and redeploy.
 
-A Spotify **client ID is public configuration**. PKCE is used, so no client secret is stored in the browser. Spotify Premium is required for the optional Web Playback SDK. Search results, official links, and iframe embeds work without pretending that Spotify audio plays in VYRA’s own player.
+A Spotify **client ID is public configuration**. Authorization uses Authorization Code + PKCE with a random state, short-lived verifier, callback cleanup, refresh tokens, and friendly errors for cancellation, expiry, rate limits, restricted content, and network failures — no client secret or password is stored in the browser. Spotify Premium is required for the optional Web Playback SDK; Development Mode apps additionally require allowlisted accounts, and public access requires Spotify extended quota approval. Search, official links, and official iframe embeds work without pretending that Spotify audio plays in VYRA’s own player. Guests can dismiss Spotify and keep using Audius/local playback.
+
+## Lyrics (LRCLIB)
+
+The player has a **Lyrics** button on desktop and mobile. It opens a full glassmorphism lyrics view without changing the player, routes, or theme.
+
+- Uses LRCLIB’s official CORS-enabled `GET /api/get` endpoint; no key, scraping, or lyric text is bundled in VYRA.
+- Identifies the client with `X-User-Agent: VYRA v1.0 (https://vyra-azure-iota.vercel.app/)` and honours rate-limit/`Retry-After` responses. An optional public `VITE_LRCLIB_APP_ID` can be added for a higher allowance.
+- Matches by track title, artist, album and duration, then rejects records whose title/artist/album/duration disagree — so a remix or different version is never displayed.
+- Syncs highlighted lines to the actual `HTMLAudioElement` position (or Spotify SDK position for Spotify playback), with no guessing timer.
+- Supports LRC line timestamps, plain lyrics when no timestamps exist, instrumental/unavailable states, loading/retry errors, active-line auto-scroll, and manual scroll with “Follow playback”.
+- LRCLIB attribution is shown in the panel. See the [API documentation](https://lrclib.net/docs) for terms and implementation requirements.
 
 ## Deployment (Vercel)
 
@@ -79,6 +90,7 @@ Required Vercel environment variables:
 | `VITE_AUDIUS_API_KEY` | Your read-only Audius API key |
 | `VITE_SPOTIFY_CLIENT_ID` | Spotify app Client ID |
 | `VITE_SPOTIFY_REDIRECT_URI` | `https://vyra-azure-iota.vercel.app/` |
+| `VITE_LRCLIB_APP_ID` | Optional public LRCLIB app ID for a higher rate limit |
 
 Public access also requires turning off Vercel Deployment Protection for the production domain. Any Vercel token that was pasted into chat should be rotated in the Vercel dashboard.
 
@@ -91,7 +103,8 @@ Public access also requires turning off Vercel Deployment Protection for the pro
 - Only one audio source at a time: starting Audius/local playback pauses Spotify SDK; Spotify embeds pause VYRA audio
 - Library with liked songs, saved albums/artists, recently played, and local playlists with create/rename/delete/add/remove
 - 26 real CC BY vocal tracks (including 10 Nigerian vocals) as a legal fallback catalogue
-- Official Spotify links and iframes for tracks/albums/playlists; no downloaded or fabricated Spotify audio
+- Official Spotify links and iframes for tracks/artists/albums/playlists; no downloaded or fabricated Spotify audio
+- Synced/plain lyrics from LRCLIB in a full-screen player panel, tied to real playback position with safe exact-version matching
 - Original VYRA design: glassmorphism, animated gradients, sidebar, hero, search, profile, notifications, settings, responsive layout
 
 > **Music credits:** Local tracks are sourced from [ccMixter](https://ccmixter.org) and the [Free Music Archive](https://freemusicarchive.org), credited to their artists and licensed **CC BY 2.5/3.0/4.0**. The Nigerian set is by Ugo Mbaise. Per-track attribution is available in the app footer.
@@ -116,6 +129,8 @@ No credentials are stored in app `localStorage`. The app stores only listener pr
 | `npm run test:routes` | Verify routed pages, SPA fallback, and persistent player mounting |
 | `npm run test:library` | Verify playlist create/add/rename/delete persistence |
 | `npm run test:audio` | Verify real local audio files and actual playback controls |
+| `npm run test:spotify` | Verify guest access, callback errors, PKCE session, Spotify search, direct SDK playback, embeds, and disconnect |
+| `npm run test:lyrics` | Verify LRCLIB matching, real-position sync, track switching, plain lyrics, rejects, and mobile layout |
 | `npm run test:persistence` | Verify listener state survives reloads |
 
 QA scripts serve the built `dist/` themselves, so run `npm run build` first. Puppeteer uses `C:/Program Files/Google/Chrome/Application/chrome.exe` by default.
@@ -128,14 +143,15 @@ src/
   main.jsx                   providers (Spotify → Player → Library), router, global CSS
   context/                   PlayerContext, SpotifyContext, LibraryContext
   services/audius.js         official Audius REST client, caching, normalization, stream resolution
+  services/lyrics.js         LRCLIB client, exact-version matching, LRC parsing
   lib/spotify.js             Spotify PKCE, token refresh, REST helpers
   hooks/useSpotify.js        single Spotify SDK/auth instance
   pages/HomePage.jsx         upgraded homepage composition
-  components/                original VYRA UI + Audius/search/detail/library/embed components
+  components/                original VYRA UI + Audius/search/detail/library/embed/lyrics components
   data/music.js              local catalogue and legacy discovery data
-  styles/                    original styles plus scoped discovery/search/detail/library/embed CSS
+  styles/                    original styles plus scoped discovery/search/detail/library/embed/lyrics CSS
 public/audio/                 26 locally hosted CC BY MP3 tracks
 public/images/                hero art, genre images, covers, favicon
-scripts/                      audio fetch, screenshots, layout audit, persistence and audio tests
+scripts/                      audio fetch, screenshots, layout audit, persistence/audio/Spotify/lyrics tests
 vercel.json                  SPA fallback for client-side routes
 ```

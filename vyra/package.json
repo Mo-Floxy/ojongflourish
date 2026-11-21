@@ -13,6 +13,8 @@
     "test:routes": "node scripts/test-routes.mjs",
     "test:library": "node scripts/test-library.mjs",
     "test:audio": "node scripts/test-audio.mjs",
+    "test:spotify": "node scripts/test-spotify.mjs",
+    "test:lyrics": "node scripts/test-lyrics.mjs",
     "fetch:audio": "node scripts/fetch-audio.mjs"
   },
   "dependencies": {

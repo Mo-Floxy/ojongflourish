@@ -127,7 +127,7 @@ export default function AlbumPage() {
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const spotifyId = cleanSpotifyId(location.state?.spotifyId || searchParams.get("spotify"));
   const requestedType = location.state?.spotifyType || searchParams.get("spotifyType");
-  const spotifyType = ["track", "playlist"].includes(requestedType) ? requestedType : "album";
+  const spotifyType = ["track", "playlist", "artist"].includes(requestedType) ? requestedType : "album";
 
   useEffect(() => {
     if (!supported || !id) return undefined;
@@ -250,6 +250,11 @@ export default function AlbumPage() {
   const spotifySearchUrl = `https://open.spotify.com/search/${encodeURIComponent(
     `${album.title} ${album.artist}`.trim()
   )}`;
+  const suppliedSpotifyUrl = location.state?.spotifyUrl || searchParams.get("spotifyUrl");
+  const officialSpotifyUrl =
+    typeof suppliedSpotifyUrl === "string" && /^https:\/\/open\.spotify\.com\//i.test(suppliedSpotifyUrl)
+      ? suppliedSpotifyUrl
+      : spotifySearchUrl;
 
   return (
     <section className="detail-page detail-page--album">
@@ -315,8 +320,9 @@ export default function AlbumPage() {
               {saved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
               {saved ? "Saved album" : "Save album"}
             </button>
-            <a className="detail-link" href={spotifySearchUrl} target="_blank" rel="noopener noreferrer">
-              Find this album on Spotify <ExternalLink size={13} aria-hidden="true" />
+            <a className="detail-link" href={officialSpotifyUrl} target="_blank" rel="noopener noreferrer">
+              {officialSpotifyUrl === spotifySearchUrl ? "Find this album on Spotify" : "Open in Spotify"}
+              <ExternalLink size={13} aria-hidden="true" />
             </a>
             {album.permalink ? (
               <a className="detail-link detail-link--muted" href={album.permalink} target="_blank" rel="noopener noreferrer">

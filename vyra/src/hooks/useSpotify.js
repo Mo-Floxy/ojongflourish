@@ -13,14 +13,21 @@ import {
   startSpotifyLogin,
 } from "../lib/spotify";
 
-const INITIAL_AUTH = () => (isSpotifyConfigured() ? readAuth() : null);
+const emptyCatalog = () => ({ tracks: [], artists: [], albums: [], playlists: [] });
+const initialAuth = () => (isSpotifyConfigured() ? readAuth() : null);
+
+const friendlyError = (reason) => {
+  if (reason instanceof Error) return reason.message;
+  return reason ? String(reason) : "Spotify could not complete that request.";
+};
 
 export default function useSpotify() {
-  const [auth, setAuth] = useState(INITIAL_AUTH);
+  const [auth, setAuth] = useState(initialAuth);
   const [user, setUser] = useState(null);
-  const [status, setStatus] = useState(() =>
-    !isSpotifyConfigured() ? "unconfigured" : INITIAL_AUTH() ? "connecting" : "logged-out"
-  );
+  const [status, setStatus] = useState(() => {
+    if (!isSpotifyConfigured()) return "unconfigured";
+    return initialAuth() ? "connected" : "logged-out";
+  });
   const [error, setError] = useState("");
   const [deviceId, setDeviceId] = useState(null);
   const [playerState, setPlayerState] = useState(null);
@@ -43,75 +50,105 @@ export default function useSpotify() {
     setAuth(next);
   }, []);
 
+  const clearSession = useCallback(
+    (message = "") => {
+      clearAuth();
+      playerRef.current?.disconnect?.();
+      playerRef.current = null;
+      applyAuth(null);
+      setUser(null);
+      setDeviceId(null);
+      setPlayerState(null);
+      setTrack(null);
+      setPlaying(false);
+      setPosition(0);
+      setDuration(0);
+      setStatus("logged-out");
+      setError(message);
+    },
+    [applyAuth]
+  );
+
   const ensureToken = useCallback(async () => {
     const next = await getValidAuth(authRef.current);
     if (!next) {
-      applyAuth(null);
-      setStatus("logged-out");
+      clearSession("Your Spotify session expired. Connect Spotify again.");
       return "";
     }
     if (next !== authRef.current) applyAuth(next);
     return next.access_token;
-  }, [applyAuth]);
+  }, [applyAuth, clearSession]);
+
+  const handleRequestError = useCallback(
+    (reason) => {
+      if (reason?.authExpired || reason?.status === 401) {
+        clearSession("Your Spotify session expired. Connect Spotify again.");
+        return;
+      }
+      setError(friendlyError(reason));
+    },
+    [clearSession]
+  );
 
   // Handle the redirect from Spotify Accounts (PKCE authorization code).
   useEffect(() => {
     const callback = consumeSpotifyCallback();
-    if (!callback) return;
+    if (!callback) return undefined;
     if (callback.error) {
-      setError(callback.error);
-      setStatus("error");
-      return;
+      clearSession(callback.error);
+      return undefined;
     }
+
     let cancelled = false;
-    setStatus("connecting");
+    setError("");
     exchangeCode(callback)
       .then((next) => {
         if (cancelled) return;
         applyAuth(next);
-        setError("");
-        setStatus("connecting");
+        setStatus("connected");
       })
       .catch((reason) => {
         if (cancelled) return;
-        setError(reason instanceof Error ? reason.message : String(reason));
-        setStatus("error");
+        setStatus("logged-out");
+        setError(friendlyError(reason));
       });
+
     return () => {
       cancelled = true;
     };
-  }, [applyAuth]);
+  }, [applyAuth, clearSession]);
 
   // Keep the access token fresh without restarting the SDK player.
   useEffect(() => {
     if (!auth?.expires_at) return undefined;
     const delay = Math.max(0, auth.expires_at - Date.now() - 60_000);
     const timer = window.setTimeout(async () => {
-      const next = await getValidAuth(auth);
-      if (next) applyAuth(next);
-      else {
-        applyAuth(null);
-        setStatus("logged-out");
-      }
+      const next = await ensureToken();
+      if (next) setStatus((current) => (current === "logged-out" ? "connected" : current));
     }, delay);
     return () => window.clearTimeout(timer);
-  }, [auth, applyAuth]);
+  }, [auth?.expires_at, ensureToken]);
 
   // Load the profile for the connected account.
   useEffect(() => {
-    if (!auth?.access_token) return;
+    if (!auth?.access_token) return undefined;
     let cancelled = false;
-    spotifyFetch("/me", auth.access_token)
-      .then((profile) => {
+    (async () => {
+      try {
+        const token = await ensureToken();
+        if (!token || cancelled) return;
+        const profile = await spotifyFetch("/me", token);
         if (!cancelled) setUser(profile);
-      })
-      .catch(() => {
-        if (!cancelled) setUser(null);
-      });
+      } catch (reason) {
+        if (cancelled) return;
+        if (reason?.authExpired) clearSession("Your Spotify session expired. Connect Spotify again.");
+        else setUser(null);
+      }
+    })();
     return () => {
       cancelled = true;
     };
-  }, [auth?.access_token]);
+  }, [auth?.access_token, ensureToken, clearSession]);
 
   // Create and connect the Web Playback SDK player once per login session.
   const hasAuth = Boolean(auth?.access_token);
@@ -120,8 +157,6 @@ export default function useSpotify() {
     let cancelled = false;
 
     const connect = async () => {
-      setStatus("connecting");
-      setError("");
       try {
         const Spotify = await loadSpotifySdk();
         if (cancelled || !Spotify?.Player) return;
@@ -129,11 +164,8 @@ export default function useSpotify() {
         const player = new Spotify.Player({
           name: "Vyra Web Player",
           getOAuthToken: (callback) => {
-            getValidAuth(authRef.current)
-              .then((next) => {
-                if (next && next !== authRef.current) applyAuth(next);
-                callback(next?.access_token || "");
-              })
+            ensureToken()
+              .then((token) => callback(token || ""))
               .catch(() => callback(""));
           },
           volume: volumeRef.current,
@@ -143,14 +175,14 @@ export default function useSpotify() {
         player.addListener("ready", ({ device_id }) => {
           if (cancelled) return;
           setDeviceId(device_id);
-          setStatus("connected");
           setError("");
         });
+
         player.addListener("not_ready", () => {
           if (cancelled) return;
           setDeviceId(null);
-          setStatus("connecting");
         });
+
         player.addListener("player_state_changed", (state) => {
           if (cancelled || !state) return;
           setPlayerState(state);
@@ -163,27 +195,32 @@ export default function useSpotify() {
           if (typeof state.volume === "number") setVolumeState(state.volume);
         });
 
-        const listener = ({ message }) => {
-          if (cancelled) return;
-          setError(message || "Spotify playback error. A Premium account is required.");
-          setStatus("error");
+        const sdkMessages = {
+          initialization_error: "Spotify’s player could not start in this browser. Search and embeds still work.",
+          authentication_error: "Your Spotify session expired. Connect Spotify again.",
+          account_error: "A Spotify Premium account is required for in-app playback. Use an embed or open in Spotify instead.",
+          playback_error: "Spotify could not start playback here. Use the official embed or open in Spotify.",
         };
-        [
-          "initialization_error",
-          "authentication_error",
-          "account_error",
-          "playback_error",
-        ].forEach((event) => player.addListener(event, listener));
+        // addListener callbacks need the event name; wrap each registration.
+        Object.entries(sdkMessages).forEach(([eventName, fallbackMessage]) => {
+          player.addListener(eventName, ({ message } = {}) => {
+            if (cancelled) return;
+            const text = fallbackMessage || message || "Spotify playback is unavailable.";
+            if (eventName === "authentication_error") clearSession(text);
+            else {
+              setError(text);
+              if (eventName === "account_error") setDeviceId(null);
+            }
+          });
+        });
 
         const connected = await player.connect();
         if (!connected && !cancelled) {
-          setError("Could not connect to Spotify. Check your account and try again.");
-          setStatus("error");
+          setError("Spotify playback is not ready on this device. Search, official links, and embeds still work.");
         }
       } catch (reason) {
         if (cancelled) return;
-        setError(reason instanceof Error ? reason.message : String(reason));
-        setStatus("error");
+        setError(friendlyError(reason));
       }
     };
 
@@ -196,7 +233,7 @@ export default function useSpotify() {
       setTrack(null);
       setPlaying(false);
     };
-  }, [hasAuth, applyAuth]);
+  }, [hasAuth, ensureToken, clearSession]);
 
   // Poll for smooth progress; player_state_changed only fires on state changes.
   useEffect(() => {
@@ -217,25 +254,15 @@ export default function useSpotify() {
 
   const login = useCallback(async () => {
     setError("");
+    setStatus("connecting");
     const started = await startSpotifyLogin();
-    if (!started) setError("Spotify is not configured. Add your client ID to vyra/.env.local.");
+    if (!started) {
+      setStatus("logged-out");
+      setError("Spotify is not configured. Add your client ID to vyra/.env.local.");
+    }
   }, []);
 
-  const logout = useCallback(() => {
-    playerRef.current?.disconnect?.();
-    playerRef.current = null;
-    clearAuth();
-    applyAuth(null);
-    setUser(null);
-    setDeviceId(null);
-    setTrack(null);
-    setPlayerState(null);
-    setPlaying(false);
-    setPosition(0);
-    setDuration(0);
-    setStatus("logged-out");
-    setError("");
-  }, [applyAuth]);
+  const logout = useCallback(() => clearSession(""), [clearSession]);
 
   const search = useCallback(
     async (query) => {
@@ -245,51 +272,50 @@ export default function useSpotify() {
         if (!token) return [];
         return await searchSpotifyTracks(query.trim(), token, 8);
       } catch (reason) {
-        setError(reason instanceof Error ? reason.message : String(reason));
+        handleRequestError(reason);
         return [];
       }
     },
-    [ensureToken]
+    [ensureToken, handleRequestError]
   );
 
   const searchCatalog = useCallback(
     async (query, options = {}) => {
-      if (!query?.trim()) return { tracks: [], artists: [], albums: [], playlists: [] };
+      if (!query?.trim()) return emptyCatalog();
       try {
         const token = await ensureToken();
-        if (!token) return { tracks: [], artists: [], albums: [], playlists: [] };
+        if (!token) return emptyCatalog();
         return await searchSpotifyCatalog(query.trim(), token, options);
       } catch (reason) {
-        setError(reason instanceof Error ? reason.message : String(reason));
-        return { tracks: [], artists: [], albums: [], playlists: [] };
+        handleRequestError(reason);
+        return emptyCatalog();
       }
     },
-    [ensureToken]
+    [ensureToken, handleRequestError]
   );
 
   const playTracks = useCallback(
     async (uris) => {
       if (!uris?.length) return false;
       if (!deviceId) {
-        setError("Spotify player is still connecting. Try again in a moment.");
+        setError("Spotify playback is still starting, or this account is not eligible. You can use an embed or open in Spotify.");
         return false;
       }
       try {
         const token = await ensureToken();
         if (!token) return false;
-        await spotifyFetch(
-          `/me/player/play?device_id=${encodeURIComponent(deviceId)}`,
-          token,
-          { method: "PUT", body: JSON.stringify({ uris, position_ms: 0 }) }
-        );
+        await spotifyFetch(`/me/player/play?device_id=${encodeURIComponent(deviceId)}`, token, {
+          method: "PUT",
+          body: JSON.stringify({ uris, position_ms: 0 }),
+        });
         setError("");
         return true;
       } catch (reason) {
-        setError(reason instanceof Error ? reason.message : String(reason));
+        handleRequestError(reason);
         return false;
       }
     },
-    [deviceId, ensureToken]
+    [deviceId, ensureToken, handleRequestError]
   );
 
   const toggle = useCallback(() => {
@@ -324,6 +350,8 @@ export default function useSpotify() {
   return {
     configured: isSpotifyConfigured(),
     status,
+    authenticated: hasAuth,
+    playerReady: Boolean(deviceId),
     error,
     user,
     deviceId,

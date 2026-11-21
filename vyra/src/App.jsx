@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
 import Player from "./components/Player";
 import SpotifyPlayer from "./components/SpotifyPlayer";
+import SpotifyConnectDialog from "./components/SpotifyConnectDialog";
+import LyricsPanel from "./components/LyricsPanel";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./components/SearchPage";
 import ArtistPage from "./components/ArtistPage";
@@ -24,8 +26,46 @@ export default function App() {
   const player = usePlayer();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGenre, setActiveGenre] = useState(null);
+  const [spotifyDialogOpen, setSpotifyDialogOpen] = useState(false);
+  const [lyricsOpen, setLyricsOpen] = useState(false);
 
   const playerState = player.source === "spotify" && spotify.track ? "spotify" : "local";
+
+  const lyricsTrack = useMemo(() => {
+    if (playerState === "spotify" && spotify.track) {
+      const item = spotify.track;
+      return {
+        key: item.uri || item.id || `spotify:${item.name}`,
+        source: "spotify",
+        title: item.name,
+        artist: item.artists?.map((artist) => artist.name).join(", ") || "Spotify",
+        album: item.album?.name || "",
+        duration: (item.duration_ms || 0) / 1000,
+        art: item.album?.images?.at(-1)?.url || item.album?.images?.[0]?.url || "",
+      };
+    }
+    const item = player.currentTrack;
+    if (!item) return null;
+    return {
+      key: `${item.source || "local"}:${item.id}`,
+      source: item.source || "local",
+      title: item.title,
+      artist: item.artist,
+      album: item.album || "",
+      duration: item.duration || 0,
+      art: item.cover || item.artwork || "",
+    };
+  }, [playerState, spotify.track, player.currentTrack]);
+
+  const lyricsPosition = playerState === "spotify" ? (spotify.position || 0) / 1000 : player.progress || 0;
+
+  const openLyrics = useCallback(() => setLyricsOpen(true), []);
+  const closeLyrics = useCallback(() => setLyricsOpen(false), []);
+
+  const openSpotifyDialog = useCallback(() => {
+    setMenuOpen(false);
+    setSpotifyDialogOpen(true);
+  }, []);
 
   const activeNav = (() => {
     const path = location.pathname;
@@ -123,7 +163,7 @@ export default function App() {
       player.pauseAudio();
       player.setSource("spotify");
     }
-  }, [spotify.track, spotify.playing, player]);
+  }, [spotify.track, spotify.playing, player.pauseAudio, player.setSource]);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -136,7 +176,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [player, spotify.toggle]);
+  }, [player.source, player.togglePlay, spotify.toggle]);
 
   const leaveSpotify = useCallback(() => {
     spotify.pause();
@@ -152,23 +192,37 @@ export default function App() {
         <span className="bg-fx__grain" />
       </div>
 
+      {spotify.error && (
+        <div className="spotify-toast" role="alert">
+          <span className="spotify-toast__dot" aria-hidden="true" />
+          <span className="spotify-toast__message">{spotify.error}</span>
+          {!spotify.authenticated && (
+            <button type="button" onClick={openSpotifyDialog}>Connect</button>
+          )}
+          <button type="button" className="spotify-toast__dismiss" onClick={spotify.clearError}>
+            Dismiss
+          </button>
+        </div>
+      )}
+
       <Sidebar
         active={activeNav}
         onNavigate={handleNavigate}
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         likedCount={player.liked.size}
-        onUpgrade={() => {
-          if (location.pathname !== "/") navigate("/");
-          window.setTimeout(() => scrollToId("spotify"), 120);
-        }}
+        onUpgrade={openSpotifyDialog}
+        spotifyConnected={spotify.authenticated}
+        spotifyName={spotify.user?.display_name || spotify.user?.id || ""}
       />
 
       <main className="main">
         <TopBar
           onMenu={() => setMenuOpen(true)}
           onPlayTrack={player.playTrack}
+          onPlaySpotifyTrack={playSpotifyTrack}
           onGenreSelect={selectGenre}
+          onOpenSpotify={openSpotifyDialog}
         />
 
         <Routes>
@@ -184,11 +238,20 @@ export default function App() {
                 onOpenAlbum={openAlbum}
                 onPlaySpotifyTrack={playSpotifyTrack}
                 onOpenPath={openPath}
+                onOpenSpotify={openSpotifyDialog}
                 spotify={spotify}
               />
             }
           />
-          <Route path="/search" element={<SearchPage />} />
+          <Route
+            path="/search"
+            element={
+              <SearchPage
+                onPlaySpotifyTrack={playSpotifyTrack}
+                onOpenSpotify={openSpotifyDialog}
+              />
+            }
+          />
           <Route path="/library" element={<LibraryPage />} />
           <Route path="/playlists" element={<PlaylistPage />} />
           <Route path="/playlists/:id" element={<PlaylistPage />} />
@@ -203,13 +266,19 @@ export default function App() {
             onOpenAlbum={openAlbum}
             onPlaySpotifyTrack={playSpotifyTrack}
             onOpenPath={openPath}
+            onOpenSpotify={openSpotifyDialog}
             spotify={spotify}
           />} />
         </Routes>
       </main>
 
       {playerState === "spotify" ? (
-        <SpotifyPlayer spotify={spotify} onClose={leaveSpotify} />
+        <SpotifyPlayer
+          spotify={spotify}
+          onClose={leaveSpotify}
+          onOpenLyrics={openLyrics}
+          lyricsOpen={lyricsOpen}
+        />
       ) : (
         <Player
           track={player.currentTrack}
@@ -237,8 +306,25 @@ export default function App() {
           onToggleQueue={() => player.setQueueOpen((open) => !open)}
           onCloseQueue={() => player.setQueueOpen(false)}
           onPlayTrack={player.playTrack}
+          externalActive={player.source === "embed"}
+          onReturnToVyra={leaveSpotify}
+          onOpenLyrics={openLyrics}
+          lyricsOpen={lyricsOpen}
         />
       )}
+
+      <LyricsPanel
+        open={lyricsOpen}
+        onClose={closeLyrics}
+        track={lyricsTrack}
+        position={lyricsPosition}
+      />
+
+      <SpotifyConnectDialog
+        open={spotifyDialogOpen}
+        onClose={() => setSpotifyDialogOpen(false)}
+        spotify={spotify}
+      />
     </div>
   );
 }

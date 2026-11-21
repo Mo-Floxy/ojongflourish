@@ -1,8 +1,8 @@
-import { Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume1, Volume2, VolumeX, X } from "lucide-react";
+import { Pause, Play, Repeat, ScrollText, Shuffle, SkipBack, SkipForward, Volume1, Volume2, VolumeX, X } from "lucide-react";
 import Equalizer from "./Equalizer";
 import { formatTime } from "../data/music";
 
-export default function SpotifyPlayer({ spotify, onClose }) {
+export default function SpotifyPlayer({ spotify, onClose, onOpenLyrics, lyricsOpen = false }) {
   const track = spotify.track;
   if (!track) return null;
 
@@ -99,6 +99,15 @@ export default function SpotifyPlayer({ spotify, onClose }) {
       </div>
 
       <div className="player__right">
+        <button
+          type="button"
+          className={`ctrl player__lyrics-btn ${lyricsOpen ? "is-on" : ""}`}
+          onClick={onOpenLyrics}
+          aria-label="Lyrics"
+          title="Lyrics"
+        >
+          <ScrollText size={19} />
+        </button>
         <button
           type="button"
           className="player__exit"

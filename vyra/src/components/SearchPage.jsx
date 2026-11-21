@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
-import { ExternalLink, Headphones, Play, Search, X } from "lucide-react";
+import { ExternalLink, Play, Search, X } from "lucide-react";
 import { usePlayer } from "../context/PlayerContext";
 import { useSpotifyContext } from "../context/SpotifyContext";
 import { searchAudius } from "../services/audius";
 import { formatTime } from "../data/music";
 import SpotifyEmbed from "./SpotifyEmbed";
+import { SpotifyLogo } from "./SpotifyConnectDialog";
 import "../styles/search.css";
+import "../styles/spotify.css";
 
 const EMPTY_RESULTS = { tracks: [], artists: [], albums: [], playlists: [] };
 
@@ -82,17 +84,30 @@ function AudiusTrackRow({ track, onPlay }) {
   );
 }
 
-function SpotifyTrackRow({ track, onEmbed }) {
+function SpotifyTrackRow({ track, onEmbed, onPlay, playbackReady }) {
   const url = spotifyUrl(track);
   return (
     <div className="search-page__track">
-      <span className="search-page__art--wrap">
-        <img src={spotifyImage(track)} alt="" loading="lazy" />
-      </span>
+      {playbackReady ? (
+        <button
+          type="button"
+          className="search-page__play"
+          onClick={() => onPlay?.(track)}
+          aria-label={`Play ${track.name} on Spotify`}
+        >
+          <Play size={14} fill="currentColor" />
+        </button>
+      ) : (
+        <span className="search-page__art--wrap">
+          <img src={spotifyImage(track)} alt="" loading="lazy" />
+        </span>
+      )}
       <div className="search-page__track-meta">
         <span className="search-page__row-title">{track.name}</span>
         <span className="search-page__row-sub">
           {track.artists?.map((artist) => artist.name).join(", ") || "Unknown artist"} · Spotify
+          {track.album?.name ? ` · ${track.album.name}` : ""}
+          {track.explicit ? " · E" : ""}
         </span>
       </div>
       <div className="search-page__actions">
@@ -171,12 +186,12 @@ function CollectionCard({ item, onEmbed }) {
   );
 }
 
-function ArtistCard({ artist }) {
+function ArtistCard({ artist, onEmbed }) {
   const isAudius = artist.source === "audius";
   const image = isAudius ? artist.coverImage : spotifyImage(artist);
   const subtitle = isAudius
     ? `${artist.followerCount || 0} followers`
-    : `${artist.followers?.total?.toLocaleString?.() || 0} followers · Spotify`;
+    : `Spotify artist${artist.followers?.total ? ` · ${artist.followers.total.toLocaleString()} followers` : ""}`;
   const url = spotifyUrl(artist);
 
   if (isAudius) {
@@ -200,12 +215,26 @@ function ArtistCard({ artist }) {
             Open in Spotify <ExternalLink size={12} />
           </a>
         )}
+        <button
+          type="button"
+          className="search-page__pill search-page__pill--ghost"
+          onClick={() =>
+            onEmbed({
+              type: "artist",
+              id: artist.id,
+              title: artist.name,
+              height: 352,
+            })
+          }
+        >
+          Embed
+        </button>
       </div>
     </div>
   );
 }
 
-export default function SearchPage() {
+export default function SearchPage({ onPlaySpotifyTrack, onOpenSpotify }) {
   const [params, setParams] = useSearchParams();
   const urlQuery = params.get("q") || "";
   const [input, setInput] = useState(urlQuery);
@@ -215,9 +244,11 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(Boolean(urlQuery));
   const [errors, setErrors] = useState({ audius: "", spotify: "" });
   const [embed, setEmbed] = useState(null);
+  const [spotifyNoteDismissed, setSpotifyNoteDismissed] = useState(false);
   const player = usePlayer();
   const spotify = useSpotifyContext();
-  const spotifyReady = spotify.configured && spotify.status === "connected";
+  const spotifyReady = spotify.configured && spotify.authenticated;
+  const playbackReady = spotifyReady && spotify.playerReady;
 
   // Keep the field in sync when the URL changes elsewhere (e.g. TopBar).
   useEffect(() => {
@@ -361,13 +392,23 @@ export default function SearchPage() {
         ))}
       </div>
 
-      {!spotifyReady && (
-        <div className="search-page__note">
-          <Headphones size={16} aria-hidden="true" />
+      {!spotifyReady && !spotifyNoteDismissed && (
+        <div className="search-page__note search-page__note--spotify">
+          <SpotifyLogo size={18} />
           <span>
-            Spotify search needs a connected account. Audius results are shown below; Spotify results
-            will appear once you connect.
+            Spotify search is optional. Connect to see real Spotify tracks, artists, albums and
+            playlists here; Audius results keep working either way.
           </span>
+          <div className="search-page__note-actions">
+            <button type="button" onClick={onOpenSpotify}>Connect Spotify</button>
+            <button
+              type="button"
+              className="is-quiet"
+              onClick={() => setSpotifyNoteDismissed(true)}
+            >
+              Not now
+            </button>
+          </div>
         </div>
       )}
 
@@ -423,6 +464,8 @@ export default function SearchPage() {
                   key={`spotify-track-${track.id}`}
                   track={track}
                   onEmbed={setEmbed}
+                  onPlay={onPlaySpotifyTrack}
+                  playbackReady={playbackReady}
                 />
               )
             )}
@@ -434,7 +477,11 @@ export default function SearchPage() {
         <Section title="Artists" count={`${artists.length} results`}>
           <div className="search-page__grid">
             {artists.map((artist) => (
-              <ArtistCard key={`${artist._source}-artist-${artist.id}`} artist={artist} />
+              <ArtistCard
+                key={`${artist._source}-artist-${artist.id}`}
+                artist={artist}
+                onEmbed={setEmbed}
+              />
             ))}
           </div>
         </Section>

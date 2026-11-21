@@ -553,4 +553,8 @@ export const SPOTIFY_PRESETS = [
   { id: "burna", label: "Burna Boy", query: "Burna Boy", hint: "Last Last, Ye" },
   { id: "wizkid", label: "Wizkid", query: "Wizkid", hint: "Essence, Ojuelegba" },
   { id: "tems", label: "Tems", query: "Tems", hint: "Free Mind, Love Me JeJe" },
+  { id: "olamide", label: "Olamide", query: "Olamide", hint: "Unruly, Infinity" },
+  { id: "tiwa", label: "Tiwa Savage", query: "Tiwa Savage", hint: "Kele Kele, Somebody Special" },
+  { id: "tekno", label: "Tekno", query: "Tekno", hint: "Sku Sku, Wide" },
+  { id: "adekunle", label: "Adekunle Gold", query: "Adekunle Gold", hint: "Sade, Party No Dey Stop" },
 ];
