@@ -30,9 +30,9 @@ npm run preview
 The local CC catalogue works without any configuration. To play official songs by Rema, Davido, Asake, Ayra Starr and others:
 
 1. Create an app in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-2. Add `http://localhost:5173/` as a redirect URI in that app's settings. Use your deployed URL too if you publish the site.
+2. Add `http://127.0.0.1:5173/` as a redirect URI in that app's settings. Use your deployed URL too if you publish the site.
 3. Copy `.env.example` to `.env.local` and set `VITE_SPOTIFY_CLIENT_ID` to your app's **Client ID**. The account overview page does not show this; the Developer Dashboard does.
-4. Restart `npm run dev`, scroll to **Popular Naija**, and choose **Connect Spotify**.
+4. Restart `npm run dev`, open `http://127.0.0.1:5173/`, scroll to **Popular Naija**, and choose **Connect Spotify**. The origin must match the registered redirect URI exactly.
 
 A **Spotify Premium** account is required for Web Playback. The app uses PKCE, so no client secret is stored in the browser. Audio streams from Spotify and is never bundled or saved locally. If the Spotify app is not configured, the section shows setup instructions instead of failing.
 
