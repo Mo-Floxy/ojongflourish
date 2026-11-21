@@ -94,6 +94,30 @@ try {
   check("next track loads a different file", next.sources.some((s) => s.includes("abz-future-the-day.mp3")), next.sources);
   check("player title follows the queue", (await page.$eval(".player__title", (el) => el.textContent)) === "ABZ/Future/the day mix", await page.$eval(".player__title", (el) => el.textContent));
 
+  await waitFor(
+    () => {
+      const el = window.__vyraMedia.element;
+      return Boolean(el && el.src.includes("abz-future-the-day.mp3") && el.readyState >= 1);
+    },
+    20000
+  );
+  const seekTo = (selector, seconds) => page.evaluate((details) => {
+    const input = document.querySelector(details.selector);
+    if (!input) return { found: false };
+    const setValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set;
+    setValue.call(input, String(details.seconds));
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    return { found: true, display: getComputedStyle(input).display, max: Number(input.max) };
+  }, { selector, seconds });
+  const desktopSeek = await seekTo(".range--progress", 60);
+  await waitFor(() => window.__vyraMedia.element?.currentTime >= 55, 10000);
+  check("desktop progress bar seeks", desktopSeek.found && (await page.evaluate(() => window.__vyraMedia.element.currentTime)) >= 55, desktopSeek);
+
+  await page.setViewport({ width: 390, height: 844 });
+  const mobileSeek = await seekTo(".player__mobile-progress", 90);
+  await waitFor(() => window.__vyraMedia.element?.currentTime >= 85, 10000);
+  check("mobile progress bar is visible and seeks", mobileSeek.found && mobileSeek.display !== "none" && (await page.evaluate(() => window.__vyraMedia.element.currentTime)) >= 85, mobileSeek);
+
   check("page remains mounted", (await page.evaluate(() => document.querySelectorAll("body").length)) === 1, null);
   check("no page errors", pageErrors.length === 0, pageErrors);
 } finally {

@@ -72,9 +72,17 @@ export default function Player({
         </p>
       )}
       <span className="player__line" aria-hidden="true" />
-      <span className="player__mobile-progress" aria-hidden="true">
-        <span style={{ width: pct }} />
-      </span>
+      <input
+        type="range"
+        className="player__mobile-progress range"
+        min="0"
+        max={total}
+        step="1"
+        value={Math.min(progress, total)}
+        onChange={(event) => onSeek(Number(event.target.value))}
+        style={{ "--val": pct }}
+        aria-label="Seek"
+      />
 
       <div className="player__now">
         <div className="player__art">
