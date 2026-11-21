@@ -14,6 +14,7 @@ import LibraryPage from "./components/LibraryPage";
 import PlaylistPage from "./components/PlaylistPage";
 import { usePlayer } from "./context/PlayerContext";
 import { useSpotifyContext } from "./context/SpotifyContext";
+import { useTheme } from "./hooks/useTheme";
 
 const scrollToId = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -24,6 +25,7 @@ export default function App() {
   const navigate = useNavigate();
   const spotify = useSpotifyContext();
   const player = usePlayer();
+  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeGenre, setActiveGenre] = useState(null);
   const [spotifyDialogOpen, setSpotifyDialogOpen] = useState(false);
@@ -214,6 +216,8 @@ export default function App() {
         onUpgrade={openSpotifyDialog}
         spotifyConnected={spotify.authenticated}
         spotifyName={spotify.user?.display_name || spotify.user?.id || ""}
+        themeDark={theme === "dark"}
+        onToggleTheme={toggleTheme}
       />
 
       <main className="main">

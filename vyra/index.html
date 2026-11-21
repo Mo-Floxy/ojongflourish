@@ -1,6 +1,17 @@
 <!doctype html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" data-theme="dark">
   <head>
+    <script>
+      try {
+        if (localStorage.getItem("vyra:theme:v1") === "light") {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.dataset.bsTheme = "light";
+          document.documentElement.style.colorScheme = "light";
+        }
+      } catch (error) {
+        /* storage may be unavailable */
+      }
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Home,
@@ -37,9 +36,9 @@ export default function Sidebar({
   onUpgrade,
   spotifyConnected = false,
   spotifyName = "",
+  themeDark = true,
+  onToggleTheme,
 }) {
-  const [themeDark, setThemeDark] = useState(true);
-
   return (
     <>
       <div className={`sidebar-backdrop ${open ? "is-open" : ""}`} onClick={onClose} />
@@ -112,8 +111,8 @@ export default function Sidebar({
           <button
             type="button"
             className={`theme-switch ${themeDark ? "is-dark" : "is-light"}`}
-            onClick={() => setThemeDark((d) => !d)}
-            aria-label="Toggle dark/neon theme"
+            onClick={onToggleTheme}
+            aria-label={themeDark ? "Switch to light theme" : "Switch to dark theme"}
           >
             <motion.span
               className="theme-switch__knob"

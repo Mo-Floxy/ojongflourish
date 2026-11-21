@@ -816,3 +816,17 @@
   cursor: pointer;
 }
 
+@media (max-width: 640px) {
+  .search-page__note--spotify,
+  .search__note--spotify {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .search-page__note-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+}
+

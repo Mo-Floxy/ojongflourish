@@ -79,6 +79,10 @@ The player has a **Lyrics** button on desktop and mobile. It opens a full glassm
 - Supports LRC line timestamps, plain lyrics when no timestamps exist, instrumental/unavailable states, loading/retry errors, active-line auto-scroll, and manual scroll with “Follow playback”.
 - LRCLIB attribution is shown in the panel. See the [API documentation](https://lrclib.net/docs) for terms and implementation requirements.
 
+## Theme
+
+Use the sun/moon switch at the bottom of the sidebar. VYRA applies the choice before first paint, stores only `vyra:theme:v1`, and keeps the original neon identity in both modes. Light mode inverts the dark palette while preserving hue; album art, avatars, and official Spotify embeds are counter-inverted so their colours stay correct.
+
 ## Deployment (Vercel)
 
 The project is linked to Vercel as `vyra`. `vyra/vercel.json` rewrites client-side routes to `index.html` so `/search`, `/library`, `/artist/...`, and `/album/...` work on refresh.
@@ -106,6 +110,7 @@ Public access also requires turning off Vercel Deployment Protection for the pro
 - Official Spotify links and iframes for tracks/artists/albums/playlists; no downloaded or fabricated Spotify audio
 - Synced/plain lyrics from LRCLIB in a full-screen player panel, tied to real playback position with safe exact-version matching
 - Original VYRA design: glassmorphism, animated gradients, sidebar, hero, search, profile, notifications, settings, responsive layout
+- Persistent light/dark neon theme in the sidebar: inverts the palette while preserving hues and keeps artwork, avatars, and embeds in their original colours
 
 > **Music credits:** Local tracks are sourced from [ccMixter](https://ccmixter.org) and the [Free Music Archive](https://freemusicarchive.org), credited to their artists and licensed **CC BY 2.5/3.0/4.0**. The Nigerian set is by Ugo Mbaise. Per-track attribution is available in the app footer.
 
@@ -116,6 +121,7 @@ No credentials are stored in app `localStorage`. The app stores only listener pr
 - `vyra:listener:v1` — last track/position, volume/mute, shuffle/repeat, likes, queue, and normalized track metadata
 - `vyra:library:v1`, `vyra:playlists:v1`, `vyra:recent:v1` — saved albums/artists, playlists, and listening history
 - `vyra:spotify:auth` / `vyra:spotify:pkce` — Spotify PKCE session and short-lived PKCE verifier used by the official SDK integration
+- `vyra:theme:v1` — preferred light/dark neon theme
 
 ## Scripts
 
@@ -131,6 +137,7 @@ No credentials are stored in app `localStorage`. The app stores only listener pr
 | `npm run test:audio` | Verify real local audio files and actual playback controls |
 | `npm run test:spotify` | Verify guest access, callback errors, PKCE session, Spotify search, direct SDK playback, embeds, and disconnect |
 | `npm run test:lyrics` | Verify LRCLIB matching, real-position sync, track switching, plain lyrics, rejects, and mobile layout |
+| `npm run test:theme` | Verify light/dark switching, persistence, artwork colours, lyrics, and mobile layout |
 | `npm run test:persistence` | Verify listener state survives reloads |
 
 QA scripts serve the built `dist/` themselves, so run `npm run build` first. Puppeteer uses `C:/Program Files/Google/Chrome/Application/chrome.exe` by default.
@@ -146,12 +153,13 @@ src/
   services/lyrics.js         LRCLIB client, exact-version matching, LRC parsing
   lib/spotify.js             Spotify PKCE, token refresh, REST helpers
   hooks/useSpotify.js        single Spotify SDK/auth instance
+  hooks/useTheme.js          persisted light/dark theme
   pages/HomePage.jsx         upgraded homepage composition
   components/                original VYRA UI + Audius/search/detail/library/embed/lyrics components
   data/music.js              local catalogue and legacy discovery data
   styles/                    original styles plus scoped discovery/search/detail/library/embed/lyrics CSS
 public/audio/                 26 locally hosted CC BY MP3 tracks
 public/images/                hero art, genre images, covers, favicon
-scripts/                      audio fetch, screenshots, layout audit, persistence/audio/Spotify/lyrics tests
+scripts/                      audio fetch, screenshots, layout audit, persistence/audio/Spotify/lyrics/theme tests
 vercel.json                  SPA fallback for client-side routes
 ```
