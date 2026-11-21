@@ -1,0 +1,514 @@
+/* ================= AUDIUS DISCOVERY ================= */
+/* Only new .audius-* classes live here; existing VYRA variables are reused. */
+
+.audius-discovery,
+.audius-section {
+  min-width: 0;
+}
+
+.audius-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(114, 0, 255, 0.2), rgba(22, 119, 255, 0.12));
+}
+
+/* ---- setup card ---- */
+.audius-setup {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-width: 0;
+  padding: 26px 28px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(100% 150% at 100% 0%, rgba(176, 38, 255, 0.2), transparent 62%),
+    var(--glass);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 56px -32px rgba(0, 0, 0, 0.9);
+}
+
+.audius-setup__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 14px 30px -12px rgba(114, 0, 255, 0.9);
+}
+
+.audius-setup__body {
+  min-width: 0;
+}
+
+.audius-setup h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.audius-setup p {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #c9c4de;
+  overflow-wrap: anywhere;
+}
+
+.audius-setup code {
+  padding: 2px 7px;
+  border-radius: 7px;
+  border: 1px solid rgba(176, 38, 255, 0.26);
+  background: rgba(114, 0, 255, 0.14);
+  color: #e7d4ff;
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.audius-setup .audius-setup__note {
+  color: var(--muted-2);
+  font-size: 0.78rem;
+}
+
+.audius-setup__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.audius-source {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(176, 38, 255, 0.3);
+  background: rgba(114, 0, 255, 0.12);
+  color: #e2d2ff;
+  font-size: 0.68rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.audius-refresh {
+  flex-shrink: 0;
+}
+
+/* ---- compact track rows ---- */
+.audius-track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.audius-track {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto 38px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition: background 0.22s, border-color 0.22s;
+}
+
+.audius-track:hover {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.audius-track.is-active {
+  background: rgba(114, 0, 255, 0.13);
+  border-color: rgba(176, 38, 255, 0.28);
+}
+
+.audius-track__art {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: var(--bg-2);
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.audius-track__art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 16, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.audius-track:hover .audius-track__art::after,
+.audius-track.is-active .audius-track__art::after {
+  opacity: 1;
+}
+
+.audius-track__meta {
+  min-width: 0;
+}
+
+.audius-track__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audius-track__title-btn {
+  min-width: 0;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.audius-track__title {
+  display: block;
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audius-track.is-active .audius-track__title {
+  color: #e3cdff;
+}
+
+.audius-track__eq {
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.audius-track__artist {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.73rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audius-track__time {
+  font-size: 0.72rem;
+  color: var(--muted-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.audius-track__play {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e9e2ff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.22s, border-color 0.22s, transform 0.22s;
+}
+
+.audius-track__play:hover,
+.audius-track.is-active .audius-track__play {
+  border-color: transparent;
+  background: var(--grad);
+  color: #fff;
+}
+
+.audius-track__play:hover {
+  transform: scale(1.06);
+}
+
+/* ---- artist and album cards ---- */
+.audius-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  gap: 16px;
+  min-width: 0;
+}
+
+.audius-card {
+  display: block;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  color: inherit;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease), border-color 0.3s, box-shadow 0.3s;
+}
+
+.audius-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(176, 38, 255, 0.45);
+  box-shadow: 0 24px 48px -26px rgba(114, 0, 255, 0.7);
+}
+
+.audius-card__art {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg-2);
+}
+
+.audius-card__art .audius-img {
+  transition: transform 0.6s var(--ease);
+}
+
+.audius-card:hover .audius-card__art .audius-img {
+  transform: scale(1.06);
+}
+
+.audius-card--artist .audius-card__art .audius-img {
+  border-radius: 50%;
+}
+
+.audius-card__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(5, 5, 16, 0.72) 100%);
+  opacity: 0.8;
+}
+
+.audius-card__tag {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  max-width: calc(100% - 20px);
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(5, 5, 16, 0.55);
+  backdrop-filter: blur(10px);
+  font-size: 0.66rem;
+  font-weight: 500;
+  color: #eee7ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audius-card__body {
+  display: block;
+  padding: 12px 14px 14px;
+}
+
+.audius-card--artist .audius-card__body {
+  text-align: center;
+}
+
+.audius-card__title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.audius-card__sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.73rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- skeletons and inline states ---- */
+.audius-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  gap: 16px;
+  min-width: 0;
+}
+
+.audius-skeleton-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.audius-skeleton {
+  min-width: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.04) 20%,
+    rgba(176, 38, 255, 0.14) 45%,
+    rgba(255, 255, 255, 0.04) 70%
+  );
+  background-size: 220% 100%;
+  animation: audius-shimmer 1.5s linear infinite;
+}
+
+.audius-skeleton--row {
+  height: 62px;
+}
+
+.audius-skeleton--card {
+  aspect-ratio: 0.78 / 1;
+}
+
+@keyframes audius-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+.audius-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  min-height: 96px;
+  padding: 22px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: rgba(13, 11, 32, 0.45);
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.84rem;
+}
+
+.audius-state p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.audius-state--error {
+  border-color: rgba(255, 61, 139, 0.3);
+  color: #ffd0e2;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 1279px) {
+  .audius-track-list {
+    gap: 4px;
+  }
+  .audius-card-grid,
+  .audius-skeleton-grid {
+    grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+    gap: 14px;
+  }
+  .audius-setup {
+    padding: 22px 24px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .audius-track {
+    grid-template-columns: 42px minmax(0, 1fr) auto 36px;
+    gap: 10px;
+    padding: 7px 10px;
+  }
+  .audius-track__art {
+    width: 42px;
+    height: 42px;
+  }
+  .audius-track__play {
+    width: 36px;
+    height: 36px;
+  }
+  .audius-card-grid,
+  .audius-skeleton-grid {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .audius-setup {
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+  }
+  .audius-card-grid,
+  .audius-skeleton-grid {
+    grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+    gap: 12px;
+  }
+  .audius-card__body {
+    padding: 10px 11px 12px;
+  }
+  .audius-track {
+    grid-template-columns: 40px minmax(0, 1fr) 34px;
+    gap: 10px;
+  }
+  .audius-track__art {
+    width: 40px;
+    height: 40px;
+  }
+  .audius-track__time {
+    display: none;
+  }
+}
+
+@media (max-width: 559px) {
+  .audius-card-grid,
+  .audius-skeleton-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .audius-track {
+    grid-template-columns: 38px minmax(0, 1fr) 32px;
+    gap: 8px;
+    padding: 7px 8px;
+  }
+  .audius-track__art {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+  }
+  .audius-track__play {
+    width: 32px;
+    height: 32px;
+  }
+  .audius-track__title {
+    font-size: 0.82rem;
+  }
+  .audius-track__artist {
+    font-size: 0.7rem;
+  }
+  .audius-source {
+    white-space: normal;
+    text-align: center;
+  }
+  .audius-state {
+    padding: 18px 14px;
+  }
+}

@@ -24,6 +24,7 @@ export default function Player({
   progress,
   duration,
   error,
+  loading,
   onToggle,
   onNext,
   onPrev,
@@ -47,7 +48,8 @@ export default function Player({
   const pct = `${Math.min(100, (progress / total) * 100)}%`;
   const volPct = `${(muted ? 0 : volume) * 100}%`;
   const VolIcon = muted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
-  const currentIndex = queue.findIndex((t) => t.id === track.id);
+  const keyFor = (item) => `${item.source || "local"}:${item.id}`;
+  const currentIndex = queue.findIndex((t) => keyFor(t) === keyFor(track));
   const upNext = [...queue.slice(currentIndex + 1), ...queue.slice(0, Math.max(0, currentIndex))].slice(0, 6);
 
   const goFullscreen = () => {
@@ -64,9 +66,9 @@ export default function Player({
 
   return (
     <footer className="player" aria-label="Music player">
-      {error && (
+      {(error || loading) && (
         <p className="player__error" role="status">
-          {error}
+          {error || (loading ? "Resolving the Audius stream…" : "")}
         </p>
       )}
       <span className="player__line" aria-hidden="true" />
@@ -88,7 +90,7 @@ export default function Player({
         <button
           type="button"
           className={`player__like ${liked.has(track.id) ? "is-liked" : ""}`}
-          onClick={() => onToggleLike(track.id)}
+          onClick={() => onToggleLike(track)}
           aria-label={liked.has(track.id) ? "Remove from liked songs" : "Like song"}
           title="Like"
         >
@@ -219,10 +221,10 @@ export default function Player({
               <div className="queue__list">
                 {upNext.map((t) => (
                   <button
-                    key={t.id}
+                    key={keyFor(t)}
                     type="button"
                     className="queue__row"
-                    onClick={() => onPlayTrack(t.id)}
+                    onClick={() => onPlayTrack(t)}
                   >
                     <img src={t.cover} alt="" />
                     <span className="queue__meta">

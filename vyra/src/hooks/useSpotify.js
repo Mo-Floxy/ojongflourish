@@ -7,6 +7,7 @@ import {
   isSpotifyConfigured,
   loadSpotifySdk,
   readAuth,
+  searchSpotifyCatalog,
   searchSpotifyTracks,
   spotifyFetch,
   startSpotifyLogin,
@@ -251,6 +252,21 @@ export default function useSpotify() {
     [ensureToken]
   );
 
+  const searchCatalog = useCallback(
+    async (query, options = {}) => {
+      if (!query?.trim()) return { tracks: [], artists: [], albums: [], playlists: [] };
+      try {
+        const token = await ensureToken();
+        if (!token) return { tracks: [], artists: [], albums: [], playlists: [] };
+        return await searchSpotifyCatalog(query.trim(), token, options);
+      } catch (reason) {
+        setError(reason instanceof Error ? reason.message : String(reason));
+        return { tracks: [], artists: [], albums: [], playlists: [] };
+      }
+    },
+    [ensureToken]
+  );
+
   const playTracks = useCallback(
     async (uris) => {
       if (!uris?.length) return false;
@@ -323,6 +339,7 @@ export default function useSpotify() {
     login,
     logout,
     search,
+    searchCatalog,
     playTracks,
     toggle,
     next,

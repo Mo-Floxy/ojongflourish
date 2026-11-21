@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Search,
   Bell,
@@ -11,11 +12,32 @@ import {
   Headphones,
   Check,
   Crown,
+  ExternalLink,
 } from "lucide-react";
-import { TRACKS, GENRES, NOTIFICATIONS, formatTime } from "../data/music";
+import { GENRES, NOTIFICATIONS } from "../data/music";
+import { searchAudius } from "../services/audius";
+import { useSpotifyContext } from "../context/SpotifyContext";
+import "../styles/search.css";
+
+const EMPTY_RESULTS = { tracks: [], artists: [], albums: [], playlists: [] };
+
+const spotifyImage = (item) =>
+  item?.images?.[0]?.url ||
+  item?.album?.images?.at(-1)?.url ||
+  item?.album?.images?.[0]?.url ||
+  "";
+
+const spotifyUrl = (item) => item?.external_urls?.spotify || "";
 
 export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
+  const navigate = useNavigate();
+  const spotify = useSpotifyContext();
+
   const [query, setQuery] = useState("");
+  const [term, setTerm] = useState("");
+  const [results, setResults] = useState(EMPTY_RESULTS);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [panel, setPanel] = useState(null);
   const [lossless, setLossless] = useState(true);
@@ -23,24 +45,78 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
   const inputRef = useRef(null);
   const wrapRef = useRef(null);
 
-  const q = query.trim().toLowerCase();
-  const trackHits = useMemo(
-    () =>
-      q
-        ? TRACKS.filter((t) => `${t.title} ${t.artist} ${t.genre}`.toLowerCase().includes(q)).slice(0, 4)
-        : [],
-    [q]
-  );
+  const q = query.trim();
+  const spotifyReady = spotify.configured && spotify.status === "connected";
+
   const genreHits = useMemo(
-    () => (q ? GENRES.filter((g) => g.name.toLowerCase().includes(q)).slice(0, 3) : []),
+    () => (q ? GENRES.filter((g) => g.name.toLowerCase().includes(q.toLowerCase())).slice(0, 3) : []),
     [q]
   );
+
+  // Debounce typing so we only hit Audius / Spotify after a 300ms pause.
+  useEffect(() => {
+    const timer = window.setTimeout(() => setTerm(q), 300);
+    return () => window.clearTimeout(timer);
+  }, [q]);
+
+  // Each new term cancels the previous request so stale results never win.
+  useEffect(() => {
+    if (!term) {
+      setResults(EMPTY_RESULTS);
+      setLoading(false);
+      setError("");
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    let active = true;
+    setLoading(true);
+    setError("");
+
+    const audiusRequest = searchAudius(term, { kind: "all", limit: 4, signal: controller.signal })
+      .then((value) => ({ value, error: "" }))
+      .catch((reason) => ({
+        value: EMPTY_RESULTS,
+        error: reason instanceof Error ? reason.message : String(reason),
+      }));
+
+    const spotifyRequest = spotifyReady
+      ? spotify
+          .searchCatalog(term, { limit: 4, signal: controller.signal })
+          .then((value) => ({ value, error: "" }))
+          .catch((reason) => ({
+            value: EMPTY_RESULTS,
+            error: reason instanceof Error ? reason.message : String(reason),
+          }))
+      : Promise.resolve({ value: EMPTY_RESULTS, error: "" });
+
+    Promise.all([audiusRequest, spotifyRequest]).then(([audius, spotifyResult]) => {
+      if (!active || controller.signal.aborted) return;
+      setResults({
+        tracks: [...(audius.value?.tracks || []), ...(spotifyResult.value?.tracks || [])],
+        artists: [...(audius.value?.artists || []), ...(spotifyResult.value?.artists || [])],
+        albums: [...(audius.value?.albums || []), ...(spotifyResult.value?.albums || [])],
+        playlists: [...(audius.value?.playlists || []), ...(spotifyResult.value?.playlists || [])],
+      });
+      const messages = [];
+      if (audius.error) messages.push(`Audius: ${audius.error}`);
+      if (spotifyResult.error) messages.push(`Spotify: ${spotifyResult.error}`);
+      setError(messages.join(" · "));
+      setLoading(false);
+    });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [term, spotifyReady, spotify.searchCatalog]);
 
   useEffect(() => {
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         inputRef.current?.focus();
+        setSearchOpen(true);
       }
       if (e.key === "Escape") {
         setSearchOpen(false);
@@ -59,21 +135,42 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
     };
   }, []);
 
-  const pickTrack = (id) => {
-    onPlayTrack(id);
+  const closeSearch = () => {
     setQuery("");
+    setTerm("");
     setSearchOpen(false);
     inputRef.current?.blur();
+  };
+
+  const pickTrack = (track) => {
+    // Local tracks need an explicit source/src for PlayerContext; Audius
+    // results already arrive normalized from searchAudius().
+    const normalized =
+      track?.source === "audius" ? track : { ...track, source: "local", src: track.src };
+    onPlayTrack(normalized);
+    closeSearch();
   };
 
   const pickGenre = (id) => {
     onGenreSelect(id);
-    setQuery("");
+    closeSearch();
+  };
+
+  const goTo = (path) => {
+    navigate(path);
     setSearchOpen(false);
+    setPanel(null);
     inputRef.current?.blur();
   };
 
   const togglePanel = (name) => setPanel((p) => (p === name ? null : name));
+
+  const hasResults =
+    results.tracks.length +
+      results.artists.length +
+      results.albums.length +
+      results.playlists.length >
+    0;
 
   return (
     <header className="topbar">
@@ -129,53 +226,246 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
               exit={{ opacity: 0, y: 6, scale: 0.99 }}
               transition={{ duration: 0.18, ease: "easeOut" }}
             >
-              {trackHits.length === 0 && genreHits.length === 0 && (
-                <div className="search__empty">
-                  No matches for “{query}”. Try an artist or genre.
+              {loading && (
+                <div className="search__status">
+                  <span className="search__spinner" aria-hidden="true" />
+                  Searching Audius{spotifyReady ? " & Spotify" : ""}…
                 </div>
               )}
-              {trackHits.length > 0 && (
+              {error && (
+                <p className="search__error" role="alert">
+                  {error}
+                </p>
+              )}
+              {!spotifyReady && (
+                <p className="search__note">Spotify search needs a connected account — showing Audius results.</p>
+              )}
+
+              {results.tracks.length > 0 && (
                 <div className="search__group">
-                  <p className="search__group-label">Tracks</p>
-                  {trackHits.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      className="search__row"
-                      onClick={() => pickTrack(t.id)}
-                    >
-                      <img src={t.cover} alt="" className="search__art" />
-                      <span className="search__meta">
-                        <span className="search__title">{t.title}</span>
-                        <span className="search__sub">
-                          {t.artist} · {formatTime(t.duration)}
+                  <p className="search__group-label">Songs</p>
+                  {results.tracks.slice(0, 4).map((track) => {
+                    const isAudius = track.source === "audius";
+                    const content = (
+                      <>
+                        <img src={isAudius ? track.cover : spotifyImage(track)} alt="" className="search__art" />
+                        <span className="search__meta">
+                          <span className="search__title">{isAudius ? track.title : track.name}</span>
+                          <span className="search__sub">
+                            {isAudius
+                              ? `${track.artist}${track.album ? ` · ${track.album}` : ""}`
+                              : `${track.artists?.map((a) => a.name).join(", ") || "Unknown artist"} · Spotify`}
+                          </span>
                         </span>
-                      </span>
-                      <span className="search__play">
-                        <Play size={13} fill="currentColor" />
-                      </span>
-                    </button>
-                  ))}
+                      </>
+                    );
+                    if (isAudius) {
+                      return (
+                        <button
+                          key={track.id}
+                          type="button"
+                          className="search__row"
+                          onClick={() => pickTrack(track)}
+                        >
+                          {content}
+                          <span className="search__play">
+                            <Play size={13} fill="currentColor" />
+                          </span>
+                        </button>
+                      );
+                    }
+                    const url = spotifyUrl(track);
+                    return (
+                      <a
+                        key={track.id}
+                        href={url || undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="search__row search__row--external"
+                        onClick={url ? undefined : (e) => e.preventDefault()}
+                      >
+                        {content}
+                        <span className="search__badge">Spotify</span>
+                      </a>
+                    );
+                  })}
                 </div>
               )}
+
+              {results.artists.length > 0 && (
+                <div className="search__group">
+                  <p className="search__group-label">Artists</p>
+                  {results.artists.slice(0, 3).map((artist) => {
+                    const isAudius = artist.source === "audius";
+                    const content = (
+                      <>
+                        <img
+                          src={isAudius ? artist.coverImage : spotifyImage(artist)}
+                          alt=""
+                          className="search__art"
+                        />
+                        <span className="search__meta">
+                          <span className="search__title">{artist.name}</span>
+                          <span className="search__sub">
+                            {isAudius ? `${artist.followerCount || 0} followers · Audius` : "Spotify artist"}
+                          </span>
+                        </span>
+                      </>
+                    );
+                    if (isAudius) {
+                      return (
+                        <button
+                          key={artist.id}
+                          type="button"
+                          className="search__row"
+                          onClick={() => goTo(`/artist/audius/${artist.id}`)}
+                        >
+                          {content}
+                        </button>
+                      );
+                    }
+                    const url = spotifyUrl(artist);
+                    return (
+                      <a
+                        key={artist.id}
+                        href={url || undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="search__row search__row--external"
+                        onClick={url ? undefined : (e) => e.preventDefault()}
+                      >
+                        {content}
+                        <span className="search__badge">Spotify</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+
+              {results.albums.length > 0 && (
+                <div className="search__group">
+                  <p className="search__group-label">Albums</p>
+                  {results.albums.slice(0, 3).map((album) => {
+                    const isAudius = album.source === "audius";
+                    const content = (
+                      <>
+                        <img src={isAudius ? album.cover : spotifyImage(album)} alt="" className="search__art" />
+                        <span className="search__meta">
+                          <span className="search__title">{isAudius ? album.title : album.name}</span>
+                          <span className="search__sub">
+                            {isAudius
+                              ? `${album.artist || "Unknown artist"} · Audius`
+                              : `${album.artists?.map((a) => a.name).join(", ") || "Unknown artist"} · Spotify`}
+                          </span>
+                        </span>
+                      </>
+                    );
+                    if (isAudius) {
+                      return (
+                        <button
+                          key={album.id}
+                          type="button"
+                          className="search__row"
+                          onClick={() => goTo(`/album/audius/${album.id}`)}
+                        >
+                          {content}
+                        </button>
+                      );
+                    }
+                    const url = spotifyUrl(album);
+                    return (
+                      <a
+                        key={album.id}
+                        href={url || undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="search__row search__row--external"
+                        onClick={url ? undefined : (e) => e.preventDefault()}
+                      >
+                        {content}
+                        <span className="search__badge">Spotify</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+
+              {results.playlists.length > 0 && (
+                <div className="search__group">
+                  <p className="search__group-label">Playlists</p>
+                  {results.playlists.slice(0, 3).map((playlist) => {
+                    const isAudius = playlist.source === "audius";
+                    const content = (
+                      <>
+                        <img src={isAudius ? playlist.cover : spotifyImage(playlist)} alt="" className="search__art" />
+                        <span className="search__meta">
+                          <span className="search__title">{isAudius ? playlist.title : playlist.name}</span>
+                          <span className="search__sub">
+                            {isAudius
+                              ? `${playlist.artist || "VYRA"} · Audius`
+                              : `${playlist.owner?.display_name || "Spotify"} · Spotify`}
+                          </span>
+                        </span>
+                      </>
+                    );
+                    if (isAudius) {
+                      return (
+                        <button
+                          key={playlist.id}
+                          type="button"
+                          className="search__row"
+                          onClick={() => goTo(`/album/audius/${playlist.id}`)}
+                        >
+                          {content}
+                        </button>
+                      );
+                    }
+                    const url = spotifyUrl(playlist);
+                    return (
+                      <a
+                        key={playlist.id}
+                        href={url || undefined}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="search__row search__row--external"
+                        onClick={url ? undefined : (e) => e.preventDefault()}
+                      >
+                        {content}
+                        <span className="search__badge">Spotify</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+
               {genreHits.length > 0 && (
                 <div className="search__group">
                   <p className="search__group-label">Genres</p>
-                  {genreHits.map((g) => (
+                  {genreHits.map((genre) => (
                     <button
-                      key={g.id}
+                      key={genre.id}
                       type="button"
                       className="search__row search__row--genre"
-                      onClick={() => pickGenre(g.id)}
+                      onClick={() => pickGenre(genre.id)}
                     >
-                      <span className="search__art search__art--genre" style={{ backgroundImage: `url(${g.image})` }} />
+                      <span className="search__art search__art--genre" style={{ backgroundImage: `url(${genre.image})` }} />
                       <span className="search__meta">
-                        <span className="search__title">{g.name}</span>
-                        <span className="search__sub">{g.count}</span>
+                        <span className="search__title">{genre.name}</span>
+                        <span className="search__sub">{genre.count}</span>
                       </span>
                     </button>
                   ))}
                 </div>
+              )}
+
+              {!loading && !hasResults && genreHits.length === 0 && (
+                <div className="search__empty">No matches for “{query}”. Try an artist or genre.</div>
+              )}
+
+              {hasResults && (
+                <button type="button" className="search__view-all" onClick={() => goTo(`/search?q=${encodeURIComponent(q)}`)}>
+                  View all results <ExternalLink size={13} />
+                </button>
               )}
             </motion.div>
           )}
@@ -313,7 +603,7 @@ export default function TopBar({ onMenu, onPlayTrack, onGenreSelect }) {
                       <p className="profile-pop__plan">Free plan · 14-day streak</p>
                     </div>
                   </div>
-                  <button type="button" className="profile-pop__item" onClick={() => setPanel(null)}>
+                  <button type="button" className="profile-pop__item" onClick={() => goTo("/library")}>
                     <Check size={15} /> Your Library
                   </button>
                   <button type="button" className="profile-pop__item" onClick={() => setPanel(null)}>

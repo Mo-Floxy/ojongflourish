@@ -1,336 +1,148 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import TopBar from "./components/TopBar";
-import Hero from "./components/Hero";
-import GenreSection from "./components/GenreSection";
-import TrendingSection from "./components/TrendingSection";
-import MadeForYou from "./components/MadeForYou";
-import TopCharts from "./components/TopCharts";
 import Player from "./components/Player";
-import SpotifySection from "./components/SpotifySection";
 import SpotifyPlayer from "./components/SpotifyPlayer";
-import Footer from "./components/Footer";
-import useSpotify from "./hooks/useSpotify";
-import { TRACKS } from "./data/music";
-
-const STORAGE_KEY = "vyra:listener:v1";
-const DEFAULT_LIKED = ["t1", "t5"];
-
-const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-const readSavedState = () => {
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" ? parsed : null;
-  } catch {
-    return null;
-  }
-};
+import HomePage from "./pages/HomePage";
+import SearchPage from "./components/SearchPage";
+import ArtistPage from "./components/ArtistPage";
+import AlbumPage from "./components/AlbumPage";
+import LibraryPage from "./components/LibraryPage";
+import PlaylistPage from "./components/PlaylistPage";
+import { usePlayer } from "./context/PlayerContext";
+import { useSpotifyContext } from "./context/SpotifyContext";
 
 const scrollToId = (id) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 export default function App() {
-  const saved = useMemo(readSavedState, []);
-  const initialTrack = TRACKS.find((t) => t.id === saved?.currentId) ?? TRACKS[0];
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const spotify = useSpotifyContext();
+  const player = usePlayer();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("home");
   const [activeGenre, setActiveGenre] = useState(null);
 
-  const [queue] = useState(TRACKS);
-  const [currentId, setCurrentId] = useState(initialTrack.id);
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(() =>
-    Number.isFinite(saved?.progress) ? clamp(saved.progress, 0, initialTrack.duration) : 0
-  );
-  const [duration, setDuration] = useState(initialTrack.duration);
-  const [audioError, setAudioError] = useState("");
-  const [liked, setLiked] = useState(() =>
-    new Set(Array.isArray(saved?.liked) ? saved.liked : DEFAULT_LIKED)
-  );
-  const [shuffle, setShuffle] = useState(() => Boolean(saved?.shuffle));
-  const [repeat, setRepeat] = useState(() => Boolean(saved?.repeat));
-  const [volume, setVolume] = useState(() =>
-    Number.isFinite(saved?.volume) ? clamp(saved.volume, 0, 1) : 0.72
-  );
-  const [muted, setMuted] = useState(() => Boolean(saved?.muted));
-  const [queueOpen, setQueueOpen] = useState(false);
-  const spotify = useSpotify();
-  const [spotifyActive, setSpotifyActive] = useState(false);
+  const playerState = player.source === "spotify" && spotify.track ? "spotify" : "local";
 
-  const currentTrack = useMemo(
-    () => queue.find((t) => t.id === currentId) ?? queue[0],
-    [queue, currentId]
-  );
-
-  const audioRef = useRef(null);
-  const pendingSeekRef = useRef(null);
-  const pendingPlayRef = useRef(false);
-  const attemptPlayRef = useRef(null);
-  const endedHandlerRef = useRef(null);
-  const playingRef = useRef(playing);
-  const progressRef = useRef(progress);
-  const currentTrackRef = useRef(currentTrack);
-  const currentIdRef = useRef(currentId);
-  const repeatRef = useRef(repeat);
-  playingRef.current = playing;
-  progressRef.current = progress;
-  currentTrackRef.current = currentTrack;
-  currentIdRef.current = currentId;
-  repeatRef.current = repeat;
-
-  useEffect(() => {
-    if (spotify.track) setSpotifyActive(true);
-  }, [spotify.track]);
-
-  useEffect(() => {
-    if (!spotifyActive) return;
-    audioRef.current?.pause();
-    setPlaying(false);
-  }, [spotifyActive]);
-
-  const ensureAudio = useCallback(() => {
-    if (audioRef.current) return audioRef.current;
-
-    const audio = new Audio();
-    audio.preload = "auto";
-    audio.volume = muted ? 0 : volume;
-
-    const attemptPlay = () => {
-      const pending = audio.play();
-      if (pending && typeof pending.catch === "function") {
-        pending.catch((error) => {
-          if (error?.name !== "AbortError") {
-            setAudioError("Playback was blocked. Press play again.");
-            setPlaying(false);
-          }
-        });
-      }
-    };
-    attemptPlayRef.current = attemptPlay;
-
-    audio.addEventListener("timeupdate", () => setProgress(audio.currentTime));
-    audio.addEventListener("loadedmetadata", () => {
-      if (Number.isFinite(audio.duration) && audio.duration > 0) setDuration(audio.duration);
-      if (pendingSeekRef.current !== null) {
-        const target = clamp(pendingSeekRef.current, 0, audio.duration || pendingSeekRef.current);
-        if (target > 0) audio.currentTime = target;
-        pendingSeekRef.current = null;
-      }
-      if (pendingPlayRef.current) {
-        pendingPlayRef.current = false;
-        attemptPlay();
-      }
-    });
-    audio.addEventListener("ended", () => endedHandlerRef.current?.());
-    audio.addEventListener("error", () => {
-      setAudioError("That track could not be loaded. Try another song.");
-      setPlaying(false);
-    });
-    audioRef.current = audio;
-    return audio;
-  }, [muted, volume]);
-
-  const startAudio = useCallback(
-    (track, position = 0) => {
-      const audio = ensureAudio();
-      setAudioError("");
-
-      if (audio.dataset.trackId !== track.id) {
-        audio.dataset.trackId = track.id;
-        audio.src = track.src;
-        setDuration(track.duration);
-        pendingSeekRef.current = position;
-        pendingPlayRef.current = true;
-        audio.load();
-      } else if (audio.readyState >= 1) {
-        if (position > 0) audio.currentTime = clamp(position, 0, audio.duration || position);
-        attemptPlayRef.current?.();
-      } else {
-        pendingSeekRef.current = position;
-        pendingPlayRef.current = true;
-      }
-    },
-    [ensureAudio]
-  );
-
-  const togglePlay = useCallback(() => {
-    if (playingRef.current) {
-      audioRef.current?.pause();
-      setPlaying(false);
-    } else {
-      setPlaying(true);
-      startAudio(currentTrackRef.current, progressRef.current);
+  const activeNav = (() => {
+    const path = location.pathname;
+    if (path === "/") return "home";
+    if (path === "/search") return "search";
+    if (path.startsWith("/playlists")) return "playlists";
+    if (path.startsWith("/artist")) return "artists";
+    if (path.startsWith("/album")) return "albums";
+    if (path === "/library") {
+      const tab = new URLSearchParams(location.search).get("tab");
+      return tab === "artists" || tab === "albums" || tab === "recent" ? tab : "liked";
     }
-  }, [startAudio]);
+    return "home";
+  })();
 
-  const handleSeek = useCallback((value) => {
-    setProgress(value);
-    const audio = audioRef.current;
-    if (!audio || audio.dataset.trackId !== currentIdRef.current) return;
-    if (audio.readyState >= 1) audio.currentTime = clamp(value, 0, audio.duration || value);
-    else pendingSeekRef.current = value;
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) audio.volume = muted ? 0 : volume;
-  }, [volume, muted]);
-
-  useEffect(
-    () => () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
+  const openPath = useCallback(
+    (path) => {
+      setMenuOpen(false);
+      if (location.pathname === path) return;
+      navigate(path);
     },
-    []
+    [location.pathname, navigate]
   );
 
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          currentId,
-          progress,
-          volume,
-          muted,
-          shuffle,
-          repeat,
-          liked: [...liked],
-        })
-      );
-    } catch {
-      // Storage can be unavailable in private mode; playback still works in memory.
-    }
-  }, [currentId, progress, volume, muted, shuffle, repeat, liked]);
-
-  const playTrack = useCallback(
+  const handleNavigate = useCallback(
     (id) => {
-      if (spotifyActive) {
-        spotify.pause();
-        setSpotifyActive(false);
-      }
-      if (id === currentId) {
-        togglePlay();
+      setMenuOpen(false);
+      const targets = {
+        home: "/",
+        search: "/search",
+        library: "/library?tab=liked",
+        playlists: "/playlists",
+        artists: "/library?tab=artists",
+        albums: "/library?tab=albums",
+        liked: "/library?tab=liked",
+      };
+      const target = targets[id];
+      if (!target) return;
+      if (id === "home" && location.pathname === "/") {
+        scrollToId("top");
         return;
       }
-      const track = queue.find((t) => t.id === id);
-      setCurrentId(id);
-      setProgress(0);
-      setPlaying(true);
-      if (track) startAudio(track, 0);
+      if (location.pathname + location.search === target) {
+        setActiveGenre(null);
+        return;
+      }
+      navigate(target);
     },
-    [currentId, queue, togglePlay, startAudio, spotifyActive, spotify.pause]
+    [location.pathname, location.search, navigate]
+  );
+
+  const selectGenre = useCallback(
+    (id) => {
+      setActiveGenre(id);
+      if (location.pathname !== "/") navigate("/");
+      window.setTimeout(() => scrollToId("trending"), 120);
+    },
+    [location.pathname, navigate]
   );
 
   const playSpotifyTrack = useCallback(
     async (item) => {
+      if (!item?.uri) return;
       const started = await spotify.playTracks([item.uri]);
       if (started) {
-        audioRef.current?.pause();
-        setPlaying(false);
-        setSpotifyActive(true);
+        player.pauseAudio();
+        player.setSource("spotify");
       }
     },
-    [spotify.playTracks]
+    [spotify, player]
   );
 
-  const nextTrack = useCallback(() => {
-    const index = queue.findIndex((t) => t.id === currentId);
-    let next;
-    if (shuffle && queue.length > 1) {
-      do {
-        next = queue[Math.floor(Math.random() * queue.length)];
-      } while (next.id === currentId);
-    } else {
-      next = queue[(index + 1) % queue.length];
-    }
-    setCurrentId(next.id);
-    setProgress(0);
-    setPlaying(true);
-    startAudio(next, 0);
-  }, [queue, currentId, shuffle, startAudio]);
+  const openArtist = useCallback(
+    (artist) => {
+      if (!artist?.id) return;
+      navigate(`/artist/audius/${encodeURIComponent(artist.id)}`, {
+        state: { artist },
+      });
+    },
+    [navigate]
+  );
 
-  const prevTrack = useCallback(() => {
-    if (progress > 5) {
-      handleSeek(0);
-      return;
-    }
-    const index = queue.findIndex((t) => t.id === currentId);
-    const prev = queue[(index - 1 + queue.length) % queue.length];
-    setCurrentId(prev.id);
-    setProgress(0);
-    setPlaying(true);
-    startAudio(prev, 0);
-  }, [queue, currentId, progress, handleSeek, startAudio]);
-
-  endedHandlerRef.current = () => {
-    if (repeatRef.current) {
-      handleSeek(0);
-      startAudio(currentTrackRef.current, 0);
-    } else {
-      nextTrack();
-    }
-  };
-
-  const toggleLike = (id) => {
-    setLiked((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const changeVolume = (value) => {
-    setVolume(value);
-    setMuted(value === 0);
-  };
-
-  const selectGenre = (id) => {
-    setActiveGenre(id);
-    if (id) scrollToId("trending");
-  };
-
-  const handleNavigate = (id) => {
-    setActiveNav(id);
-    setMenuOpen(false);
-    if (id === "search") {
-      scrollToId("top");
-      window.setTimeout(() => document.getElementById("vyra-search")?.focus(), 350);
-      return;
-    }
-    const targets = {
-      home: "top",
-      library: "made-for-you",
-      playlists: "made-for-you",
-      artists: "trending",
-      albums: "genres",
-      liked: "charts",
-    };
-    scrollToId(targets[id] ?? "top");
-  };
+  const openAlbum = useCallback(
+    (album) => {
+      if (!album?.id) return;
+      navigate(`/album/audius/${encodeURIComponent(album.id)}`, {
+        state: { album },
+      });
+    },
+    [navigate]
+  );
 
   useEffect(() => {
-    const onKey = (e) => {
-      const tag = e.target.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || e.target.isContentEditable) return;
-      if (e.code === "Space") {
-        e.preventDefault();
-        if (spotifyActive) spotify.toggle();
-        else togglePlay();
-      }
+    if (spotify.track && spotify.playing) {
+      player.pauseAudio();
+      player.setSource("spotify");
+    }
+  }, [spotify.track, spotify.playing, player]);
+
+  useEffect(() => {
+    const onKey = (event) => {
+      const tag = event.target.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || event.target.isContentEditable) return;
+      if (event.code !== "Space") return;
+      event.preventDefault();
+      if (player.source === "spotify") spotify.toggle();
+      else if (player.source !== "embed") player.togglePlay();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [togglePlay, spotifyActive, spotify.toggle]);
+  }, [player, spotify.toggle]);
+
+  const leaveSpotify = useCallback(() => {
+    spotify.pause();
+    player.setSource("local");
+    player.playTrack(player.currentTrack);
+  }, [spotify, player]);
 
   return (
     <div className="app">
@@ -345,88 +157,86 @@ export default function App() {
         onNavigate={handleNavigate}
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
-        likedCount={liked.size}
-        onUpgrade={() => scrollToId("spotify")}
+        likedCount={player.liked.size}
+        onUpgrade={() => {
+          if (location.pathname !== "/") navigate("/");
+          window.setTimeout(() => scrollToId("spotify"), 120);
+        }}
       />
 
       <main className="main">
         <TopBar
           onMenu={() => setMenuOpen(true)}
-          onPlayTrack={playTrack}
+          onPlayTrack={player.playTrack}
           onGenreSelect={selectGenre}
         />
 
-        <div className="page">
-          <Hero
-            onStart={() => playTrack("t1")}
-            onExplore={() => scrollToId("genres")}
-            nowPlaying={currentTrack}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                activeGenre={activeGenre}
+                onSelectGenre={selectGenre}
+                onPlayTrack={player.playTrack}
+                onPlayTracks={player.playTracks}
+                onOpenArtist={openArtist}
+                onOpenAlbum={openAlbum}
+                onPlaySpotifyTrack={playSpotifyTrack}
+                onOpenPath={openPath}
+                spotify={spotify}
+              />
+            }
           />
-
-          <GenreSection
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/playlists" element={<PlaylistPage />} />
+          <Route path="/playlists/:id" element={<PlaylistPage />} />
+          <Route path="/artist/:source/:id" element={<ArtistPage />} />
+          <Route path="/album/:source/:id" element={<AlbumPage />} />
+          <Route path="*" element={<HomePage
             activeGenre={activeGenre}
-            onSelect={selectGenre}
-            onSeeAll={() => scrollToId("trending")}
-          />
-
-          <TrendingSection
-            activeGenre={activeGenre}
-            onPlay={playTrack}
-            currentId={currentId}
-            playing={playing}
-            onStartMixing={() => scrollToId("made-for-you")}
-          />
-
-          <SpotifySection spotify={spotify} onPlayTrack={playSpotifyTrack} />
-
-          <MadeForYou onPlay={playTrack} currentId={currentId} playing={playing} onSeeAll={() => scrollToId("charts")} />
-
-          <TopCharts
-            onPlay={playTrack}
-            currentId={currentId}
-            playing={playing}
-            liked={liked}
-            onToggleLike={toggleLike}
-          />
-
-          <Footer />
-        </div>
+            onSelectGenre={selectGenre}
+            onPlayTrack={player.playTrack}
+            onPlayTracks={player.playTracks}
+            onOpenArtist={openArtist}
+            onOpenAlbum={openAlbum}
+            onPlaySpotifyTrack={playSpotifyTrack}
+            onOpenPath={openPath}
+            spotify={spotify}
+          />} />
+        </Routes>
       </main>
 
-      {spotifyActive && spotify.track ? (
-        <SpotifyPlayer
-          spotify={spotify}
-          onClose={() => {
-            spotify.pause();
-            setSpotifyActive(false);
-          }}
-        />
+      {playerState === "spotify" ? (
+        <SpotifyPlayer spotify={spotify} onClose={leaveSpotify} />
       ) : (
         <Player
-          track={currentTrack}
-          queue={queue}
-          playing={playing}
-          progress={progress}
-          duration={duration}
-          error={audioError}
-          onToggle={togglePlay}
-          onNext={nextTrack}
-          onPrev={prevTrack}
-          onSeek={handleSeek}
-          volume={volume}
-          muted={muted}
-          onVolume={changeVolume}
-          onToggleMute={() => setMuted((m) => !m)}
-          shuffle={shuffle}
-          repeat={repeat}
-          onShuffle={() => setShuffle((s) => !s)}
-          onRepeat={() => setRepeat((r) => !r)}
-          liked={liked}
-          onToggleLike={toggleLike}
-          queueOpen={queueOpen}
-          onToggleQueue={() => setQueueOpen((q) => !q)}
-          onCloseQueue={() => setQueueOpen(false)}
-          onPlayTrack={playTrack}
+          track={player.currentTrack}
+          queue={player.queue}
+          playing={player.playing}
+          progress={player.progress}
+          duration={player.duration}
+          error={player.audioError}
+          loading={player.loadingStream}
+          onToggle={player.togglePlay}
+          onNext={player.nextTrack}
+          onPrev={player.prevTrack}
+          onSeek={player.handleSeek}
+          volume={player.volume}
+          muted={player.muted}
+          onVolume={player.changeVolume}
+          onToggleMute={player.toggleMute}
+          shuffle={player.shuffle}
+          repeat={player.repeat}
+          onShuffle={player.toggleShuffle}
+          onRepeat={player.toggleRepeat}
+          liked={player.liked}
+          onToggleLike={player.toggleLike}
+          queueOpen={player.queueOpen}
+          onToggleQueue={() => player.setQueueOpen((open) => !open)}
+          onCloseQueue={() => player.setQueueOpen(false)}
+          onPlayTrack={player.playTrack}
         />
       )}
     </div>

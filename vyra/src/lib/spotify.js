@@ -208,6 +208,30 @@ export async function searchSpotifyTracks(query, token, limit = 8) {
   return data?.tracks?.items || [];
 }
 
+export async function searchSpotifyCatalog(query, token, options = {}) {
+  const {
+    limit = 8,
+    types = ["track", "artist", "album", "playlist"],
+    signal,
+  } = options;
+  if (!query?.trim()) {
+    return { tracks: [], artists: [], albums: [], playlists: [] };
+  }
+  const params = new URLSearchParams({
+    q: query.trim(),
+    type: types.join(","),
+    limit: String(Math.min(Math.max(limit, 1), 10)),
+    market: "NG",
+  });
+  const data = await spotifyFetch(`/search?${params}`, token, { signal });
+  return {
+    tracks: data?.tracks?.items || [],
+    artists: data?.artists?.items || [],
+    albums: data?.albums?.items || [],
+    playlists: data?.playlists?.items || [],
+  };
+}
+
 let sdkPromise = null;
 export function loadSpotifySdk() {
   if (typeof window === "undefined") return Promise.reject(new Error("No browser"));

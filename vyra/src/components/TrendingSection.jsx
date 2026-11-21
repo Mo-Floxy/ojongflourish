@@ -125,7 +125,7 @@ export default function TrendingSection({
                   key={mix.id}
                   artist={mix}
                   onPlay={onPlay}
-                  active={currentId === artist.trackId}
+                  active={currentId === mix.trackId}
                   playing={playing}
                 />
               ))}
