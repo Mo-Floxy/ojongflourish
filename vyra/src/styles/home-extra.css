@@ -195,6 +195,11 @@
   .home-row__art { width: 50px; height: 50px; }
 }
 
+.trending__show-all {
+  display: flex;
+  margin: 22px auto 0;
+}
+
 @media (max-width: 767px) {
   .home-row {
     grid-template-columns: 48px minmax(0, 1fr) 46px 34px;

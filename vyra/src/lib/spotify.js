@@ -83,6 +83,8 @@ export const clearAuth = () => {
 
 export async function startSpotifyLogin() {
   if (!isSpotifyConfigured()) return false;
+  // A fresh PKCE flow must always bind to the account that signs in now.
+  clearAuth();
   const verifier = randomString();
   const state = randomString();
   try {

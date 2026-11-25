@@ -143,6 +143,9 @@ export default function SpotifyConnectDialog({ open, onClose, spotify }) {
                     ? "In-app playback is ready. Spotify audio always plays through Spotify’s own player."
                     : "Search, official links, and embeds are ready. Premium in-app playback may take a moment or require account approval."}
                 </p>
+                <p className="spotify-dialog__hint">
+                  Not your account? Disconnect below, then connect again with the Spotify account you want to use.
+                </p>
                 <div className="spotify-dialog__actions">
                   <button type="button" className="btn-vyra btn-vyra--sm" onClick={onClose}>
                     Done

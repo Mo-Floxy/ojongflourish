@@ -8,7 +8,11 @@ const EXE = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHOTS = path.join(ROOT, ".shots");
 const staticServer = await serveDist();
-const browser = await puppeteer.launch({ executablePath: EXE, headless: "new" });
+const browser = await puppeteer.launch({
+  executablePath: EXE,
+  headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-theme",
+});
 const page = await browser.newPage();
 const pageErrors = [];
 page.on("pageerror", (error) => pageErrors.push(String(error)));
@@ -44,6 +48,11 @@ try {
     "switch applies a light palette",
     light.theme === "light" && light.bsTheme === "light" && light.colorScheme === "light" && light.filter.includes("invert"),
     light
+  );
+  check(
+    "light palette is softened",
+    light.filter.includes("brightness(0.86)") && light.filter.includes("sepia(0.1)"),
+    light.filter
   );
   check("real artwork keeps original colours", light.mediaFilter.includes("invert"), light.mediaFilter);
   check(

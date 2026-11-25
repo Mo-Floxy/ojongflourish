@@ -6,7 +6,7 @@ export default function TrackCard({ track, onPlay, active, playing }) {
   return (
     <motion.article
       className={`track-card ${active ? "is-active" : ""}`}
-      onClick={() => onPlay(track.id)}
+      onClick={() => onPlay(track)}
       whileHover={{ y: -7 }}
       transition={{ type: "spring", stiffness: 320, damping: 24 }}
     >
@@ -25,7 +25,7 @@ export default function TrackCard({ track, onPlay, active, playing }) {
           className="play-fab"
           onClick={(e) => {
             e.stopPropagation();
-            onPlay(track.id);
+            onPlay(track);
           }}
           aria-label={`${active && playing ? "Pause" : "Play"} ${track.title}`}
         >

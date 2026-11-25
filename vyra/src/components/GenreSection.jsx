@@ -3,12 +3,12 @@ import { ArrowUpRight, X } from "lucide-react";
 import SectionHead from "./SectionHead";
 import { GENRES, genreLabel } from "../data/music";
 
-export default function GenreSection({ activeGenre, onSelect, onSeeAll }) {
+export default function GenreSection({ activeGenre, onSelect, onSeeAll, counts = {} }) {
   return (
     <section className="section" id="genres">
       <SectionHead
         title="Browse by genre"
-        subtitle={`${GENRES.length} worlds of sound. Find the one that matches your mood.`}
+        subtitle={`${GENRES.length} worlds of sound, with 50+ real popular tracks in every genre.`}
         action="See all"
         onAction={onSeeAll}
       >
@@ -42,7 +42,9 @@ export default function GenreSection({ activeGenre, onSelect, onSeeAll }) {
               <span className="genre-card__scrim" />
               <span className="genre-card__glow" />
               <span className="genre-card__name">{g.name}</span>
-              <span className="genre-card__count">{g.count}</span>
+              <span className="genre-card__count">
+                {counts[g.id]?.length ? `${counts[g.id].length} popular tracks` : g.count}
+              </span>
               <span className="genre-card__icon">
                 <ArrowUpRight size={16} />
               </span>

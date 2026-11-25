@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Hero from "../components/Hero";
 import GenreSection from "../components/GenreSection";
 import TrendingSection from "../components/TrendingSection";
@@ -13,6 +14,7 @@ import {
   RecommendedForYou,
 } from "../components/HomeExtras";
 import { usePlayer } from "../context/PlayerContext";
+import { usePopularMusic } from "../hooks/usePopularMusic";
 import { TRACKS } from "../data/music";
 
 const localTracks = TRACKS.map((track) => ({ ...track, source: "local", src: track.src }));
@@ -30,13 +32,24 @@ export default function HomePage({
   spotify,
 }) {
   const { currentId, playing, currentTrack, liked, toggleLike } = usePlayer();
+  const { byGenre, globalPopular, dailyMixes, loading: popularLoading } = usePopularMusic();
   const scrollToId = (id) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Popular Audius tracks replace the old demo catalogue on the home page.
+  // Local CC tracks are kept only as an offline fallback so playback never breaks.
+  const popularTracks = useMemo(
+    () => (globalPopular.length ? globalPopular : localTracks),
+    [globalPopular]
+  );
+  const genreTracks = activeGenre && byGenre[activeGenre]?.length
+    ? byGenre[activeGenre]
+    : popularTracks;
 
   return (
     <div className="page">
       <Hero
-        onStart={() => onPlayTrack(localTracks[0])}
+        onStart={() => onPlayTrack(popularTracks[0])}
         onExplore={() => scrollToId("genres")}
         nowPlaying={currentTrack}
       />
@@ -45,6 +58,7 @@ export default function HomePage({
         activeGenre={activeGenre}
         onSelect={onSelectGenre}
         onSeeAll={() => scrollToId("trending")}
+        counts={byGenre}
       />
 
       <div id="audius">
@@ -60,7 +74,9 @@ export default function HomePage({
 
       <TrendingSection
         activeGenre={activeGenre}
-        onPlay={(input) => onPlayTrack(typeof input === "string" ? input : input)}
+        tracks={genreTracks}
+        loading={popularLoading && !globalPopular.length}
+        onPlay={onPlayTrack}
         currentId={currentId}
         playing={playing}
         onStartMixing={() => onOpenPath("/playlists")}
@@ -87,14 +103,17 @@ export default function HomePage({
       />
 
       <MadeForYou
-        onPlay={(input) => onPlayTrack(input)}
+        dailyMixes={dailyMixes}
+        onPlay={onPlayTrack}
+        onPlayPlaylist={(playlist) => onPlayTracks(playlist.tracks, 0)}
         currentId={currentId}
         playing={playing}
         onSeeAll={() => onOpenPath("/playlists")}
       />
 
       <TopCharts
-        onPlay={(input) => onPlayTrack(input)}
+        tracks={globalPopular.slice(0, 10)}
+        onPlay={onPlayTrack}
         currentId={currentId}
         playing={playing}
         liked={liked}

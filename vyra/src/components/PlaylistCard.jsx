@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
 import { Play, Pause, Music2 } from "lucide-react";
 
-export default function PlaylistCard({ playlist, onPlay, active, playing }) {
+export default function PlaylistCard({ playlist, onPlay, onPlayPlaylist, active, playing }) {
+  const play = () => {
+    if (onPlayPlaylist) onPlayPlaylist(playlist);
+    else onPlay(playlist.trackId);
+  };
+
   return (
     <motion.article
       className={`playlist-card ${active ? "is-active" : ""}`}
       style={{ "--accent": playlist.accent }}
-      onClick={() => onPlay(playlist.trackId)}
+      onClick={play}
       whileHover={{ y: -7 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
@@ -21,7 +26,7 @@ export default function PlaylistCard({ playlist, onPlay, active, playing }) {
           className="play-fab play-fab--lg"
           onClick={(e) => {
             e.stopPropagation();
-            onPlay(playlist.trackId);
+            play();
           }}
           aria-label={`Play ${playlist.title}`}
         >

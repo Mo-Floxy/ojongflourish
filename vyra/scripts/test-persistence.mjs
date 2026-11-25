@@ -3,7 +3,11 @@ import { serveDist } from "./serve-dist.mjs";
 
 const EXE = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const staticServer = await serveDist();
-const browser = await puppeteer.launch({ executablePath: EXE, headless: "new" });
+const browser = await puppeteer.launch({
+  executablePath: EXE,
+  headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-persistence",
+});
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 900 });
 

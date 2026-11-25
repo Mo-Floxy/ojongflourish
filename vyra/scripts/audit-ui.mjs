@@ -171,6 +171,7 @@ const audit = () => {
 const browser = await puppeteer.launch({
   executablePath: EXE,
   headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-audit",
   args: ["--hide-scrollbars", "--force-color-profile=srgb"],
 });
 

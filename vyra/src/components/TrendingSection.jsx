@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Flame, Play, ArrowRight, Sparkles } from "lucide-react";
 import SectionHead from "./SectionHead";
@@ -20,13 +20,22 @@ export default function TrendingSection({
   currentId,
   playing,
   onStartMixing,
+  tracks,
+  loading = false,
+  playlists = PLAYLISTS,
 }) {
   const [tab, setTab] = useState("tracks");
+  const [showAll, setShowAll] = useState(false);
 
-  const filtered = activeGenre
-    ? TRACKS.filter((t) => t.genre === genreLabel(activeGenre))
-    : TRACKS;
-  const visibleTracks = filtered.slice(0, 5);
+  const source = tracks?.length ? tracks : TRACKS;
+  const filtered = !tracks?.length && activeGenre
+    ? source.filter((track) => track.genre === genreLabel(activeGenre))
+    : source;
+  const visibleTracks = showAll ? filtered : filtered.slice(0, 12);
+
+  useEffect(() => {
+    setShowAll(false);
+  }, [activeGenre]);
 
   const trackActive = (id) => currentId === id;
 
@@ -75,19 +84,32 @@ export default function TrendingSection({
           {tab === "tracks" && (
             <>
               {visibleTracks.length === 0 ? (
-                <div className="empty-state">No tracks in this genre yet. Try another vibe.</div>
-              ) : (
-                <div className={`track-grid ${activeGenre ? "track-grid--filtered" : ""}`}>
-                  {visibleTracks.map((track) => (
-                    <TrackCard
-                      key={track.id}
-                      track={track}
-                      onPlay={onPlay}
-                      active={trackActive(track.id)}
-                      playing={playing}
-                    />
-                  ))}
+                <div className="empty-state">
+                  {loading ? "Loading popular tracks…" : "No tracks in this genre yet. Try another vibe."}
                 </div>
+              ) : (
+                <>
+                  <div className={`track-grid ${activeGenre ? "track-grid--filtered" : ""}`}>
+                    {visibleTracks.map((track) => (
+                      <TrackCard
+                        key={`${track.source}-${track.id}`}
+                        track={track}
+                        onPlay={onPlay}
+                        active={trackActive(track.id)}
+                        playing={playing}
+                      />
+                    ))}
+                  </div>
+                  {filtered.length > 12 && (
+                    <button
+                      type="button"
+                      className="btn-ghost btn-ghost--sm trending__show-all"
+                      onClick={() => setShowAll((value) => !value)}
+                    >
+                      {showAll ? "Show less" : `Show all ${filtered.length} popular tracks`}
+                    </button>
+                  )}
+                </>
               )}
 
               <motion.div className="promo" whileHover={{ y: -4 }}>
@@ -134,7 +156,7 @@ export default function TrendingSection({
 
           {tab === "playlists" && (
             <div className="playlist-grid playlist-grid--four">
-              {PLAYLISTS.map((playlist) => (
+              {playlists.map((playlist) => (
                 <PlaylistCard
                   key={playlist.id}
                   playlist={playlist}

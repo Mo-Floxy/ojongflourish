@@ -16,6 +16,7 @@
     "test:spotify": "node scripts/test-spotify.mjs",
     "test:lyrics": "node scripts/test-lyrics.mjs",
     "test:theme": "node scripts/test-theme.mjs",
+    "test:all": "node scripts/run-qa.mjs",
     "fetch:audio": "node scripts/fetch-audio.mjs"
   },
   "dependencies": {

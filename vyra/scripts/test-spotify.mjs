@@ -6,6 +6,7 @@ const staticServer = await serveDist();
 const browser = await puppeteer.launch({
   executablePath: EXE,
   headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-spotify",
   args: ["--autoplay-policy=no-user-gesture-required"],
 });
 

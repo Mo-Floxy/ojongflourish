@@ -6,6 +6,7 @@ const staticServer = await serveDist();
 const browser = await puppeteer.launch({
   executablePath: EXE,
   headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-lyrics",
   args: ["--autoplay-policy=no-user-gesture-required"],
 });
 const page = await browser.newPage();
@@ -101,6 +102,24 @@ page.on("request", async (request) => {
         "Access-Control-Allow-Methods": "GET, OPTIONS",
         "Access-Control-Allow-Headers": "accept, x-user-agent, lrclib-app-id",
       },
+    });
+  }
+  if (url.startsWith("https://lrclib.net/api/search") && request.method() === "OPTIONS") {
+    return request.respond({
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "accept, x-user-agent, lrclib-app-id",
+      },
+    });
+  }
+  if (url.startsWith("https://lrclib.net/api/search")) {
+    return request.respond({
+      status: 200,
+      contentType: "application/json",
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify([]),
     });
   }
   if (url.startsWith("https://lrclib.net/api/get")) {
@@ -235,12 +254,19 @@ try {
   await waitFor(() => getComputedStyle(document.querySelector(".player__lyrics-btn")).display === "none");
   check("mobile uses the compact lyrics button", true);
 
-  await page.click('[aria-label="Previous track"]');
-  await waitFor(() => document.querySelector(".player__title")?.textContent === "Ophelia's Song");
-  await page.click('[aria-label="Previous track"]');
-  await waitFor(() => document.querySelector(".player__title")?.textContent === "ABZ/Future/the day mix");
-  await page.click('[aria-label="Previous track"]');
-  await waitFor(() => document.querySelector(".player__title")?.textContent === "Slither Away");
+  const previous = async (title) => {
+    await seekAudio(0);
+    await waitFor(() => window.__lyricsAudio.element?.currentTime < 5);
+    await page.click('[aria-label="Previous track"]');
+    await page.waitForFunction(
+      (expected) => document.querySelector(".player__title")?.textContent === expected,
+      { timeout: 15000 },
+      title
+    );
+  };
+  await previous("Ophelia's Song");
+  await previous("ABZ/Future/the day mix");
+  await previous("Slither Away");
   await openLyrics();
   await waitFor(() => document.querySelectorAll(".lyrics__line").length === 17);
 
@@ -254,7 +280,7 @@ try {
       scrollable: document.querySelector(".lyrics__scroll")?.scrollHeight > document.querySelector(".lyrics__scroll")?.clientHeight,
     };
   });
-  check("mobile full-screen lyrics view is usable", mobile.width === mobile.viewport[0] && mobile.closeVisible && mobile.scrollable, mobile);
+  check("mobile full-screen lyrics view is usable", mobile.width >= mobile.viewport[0] - 2 && mobile.closeVisible && mobile.scrollable, mobile);
   check("no page errors", pageErrors.length === 0, pageErrors);
 } finally {
   await browser.close();

@@ -23,20 +23,31 @@
 }
 
 /*
- * Light mode inverts the neon-on-dark palette while preserving hue, then
- * restores real media so artwork, avatars and official embeds keep their
- * original colours. This keeps the existing design and player untouched.
+ * Light mode maps the neon-on-dark palette onto a soft paper-white canvas.
+ * Hue is preserved and brightness is pulled down so it never feels clinical;
+ * media is counter-filtered so artwork, avatars and embeds stay true colour.
  */
 html[data-theme="light"] {
   color-scheme: light;
-  filter: invert(1) hue-rotate(180deg);
+  filter: invert(1) hue-rotate(180deg) brightness(0.86) sepia(0.1) saturate(0.92);
 }
 
 html[data-theme="light"] img,
 html[data-theme="light"] iframe,
 html[data-theme="light"] video,
 html[data-theme="light"] canvas {
-  filter: invert(1) hue-rotate(180deg);
+  filter: brightness(1.163) invert(1) hue-rotate(180deg) saturate(1.09);
+}
+
+/* Calm the ambient glows in light mode so the layout stays readable. */
+html[data-theme="light"] .bg-fx__blob,
+html[data-theme="light"] .hero__aurora,
+html[data-theme="light"] .lyrics__glow {
+  opacity: 0.28;
+}
+
+html[data-theme="light"] .hero__grain {
+  opacity: 0.16;
 }
 
 *,

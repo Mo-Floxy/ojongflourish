@@ -253,14 +253,15 @@ export default function useSpotify() {
   }, [playing]);
 
   const login = useCallback(async () => {
-    setError("");
+    // Never let a previous account linger in the UI while a new login starts.
+    clearSession("");
     setStatus("connecting");
     const started = await startSpotifyLogin();
     if (!started) {
       setStatus("logged-out");
       setError("Spotify is not configured. Add your client ID to vyra/.env.local.");
     }
-  }, []);
+  }, [clearSession]);
 
   const logout = useCallback(() => clearSession(""), [clearSession]);
 

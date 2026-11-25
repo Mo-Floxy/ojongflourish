@@ -8,6 +8,7 @@ const URL = process.env.VYRA_URL || staticServer.url;
 const browser = await puppeteer.launch({
   executablePath: EXE,
   headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-screenshots",
   args: ["--hide-scrollbars", "--force-color-profile=srgb"],
 });
 

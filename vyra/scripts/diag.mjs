@@ -7,6 +7,7 @@ const URL = process.env.VYRA_URL || staticServer.url;
 const browser = await puppeteer.launch({
   executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
   headless: "new",
+  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-diag",
   args: ["--hide-scrollbars"],
 });
 const page = await browser.newPage();

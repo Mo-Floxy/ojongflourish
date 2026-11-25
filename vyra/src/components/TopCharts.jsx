@@ -11,8 +11,20 @@ import {
 import SectionHead from "./SectionHead";
 import { CHARTS, formatTime } from "../data/music";
 
-export default function TopCharts({ onPlay, currentId, playing, liked, onToggleLike }) {
-  const top = CHARTS[0];
+export default function TopCharts({ tracks, onPlay, currentId, playing, liked, onToggleLike }) {
+  const source = tracks?.length ? tracks : CHARTS;
+  const chartTracks = source.map((track, index) => ({
+    ...track,
+    id: String(track.id),
+    rank: index + 1,
+    plays: Number(track.playCount ?? track.plays) || 0,
+    change: Number(track.change) || 0,
+    cover: track.cover || "",
+    album: track.album || track.artist,
+    duration: Number(track.duration) || 0,
+    genre: track.genre || "Popular",
+  }));
+  const top = chartTracks[0];
 
   return (
     <section className="section" id="charts">
@@ -23,7 +35,7 @@ export default function TopCharts({ onPlay, currentId, playing, liked, onToggleL
           </span>
         }
         title="Top charts"
-        subtitle="The tracks everyone has on repeat this week."
+        subtitle="Audius' real weekly trending order — no invented chart positions."
       />
 
       <div className="charts-layout">
@@ -36,13 +48,14 @@ export default function TopCharts({ onPlay, currentId, playing, liked, onToggleL
             <span />
           </div>
 
-          {CHARTS.map((track, i) => {
+          {chartTracks.map((track, i) => {
             const active = currentId === track.id;
+            const isLiked = liked?.has?.(track.id);
             return (
               <motion.div
-                key={track.id}
+                key={`${track.source || "local"}-${track.id}`}
                 className={`chart-row ${active ? "is-active" : ""}`}
-                onClick={() => onPlay(track.id)}
+                onClick={() => onPlay(track)}
                 initial={{ opacity: 0, x: -14 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -79,65 +92,71 @@ export default function TopCharts({ onPlay, currentId, playing, liked, onToggleL
                   )}
                   {track.change === 0 ? "0" : Math.abs(track.change)}
                 </span>
-                <span className="chart-row__plays">{(track.plays / 1_000_000).toFixed(1)}M</span>
+                <span className="chart-row__plays">
+                  {track.plays >= 1_000_000
+                    ? `${(track.plays / 1_000_000).toFixed(1)}M`
+                    : track.plays.toLocaleString()}
+                </span>
                 <span className="chart-row__dur">{formatTime(track.duration)}</span>
                 <button
                   type="button"
-                  className={`chart-row__like ${liked.has(track.id) ? "is-liked" : ""}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onToggleLike(track.id);
+                  className={`chart-row__like ${isLiked ? "is-liked" : ""}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onToggleLike(track);
                   }}
-                  aria-label={liked.has(track.id) ? "Remove from liked songs" : "Like song"}
+                  aria-label={isLiked ? "Remove from liked songs" : "Like song"}
                 >
-                  <Heart size={16} fill={liked.has(track.id) ? "currentColor" : "none"} />
+                  <Heart size={16} fill={isLiked ? "currentColor" : "none"} />
                 </button>
               </motion.div>
             );
           })}
         </div>
 
-        <motion.aside
-          className="spotlight"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <img className="spotlight__bg" src={top.cover} alt="" aria-hidden="true" />
-          <span className="spotlight__scrim" aria-hidden="true" />
-          <div className="spotlight__head">
-            <span className="spotlight__rank">
-              <ArrowUpRight size={13} /> #1 this week
-            </span>
-            <span className="spotlight__badge">VYRA Charts</span>
-          </div>
-          <div className="spotlight__art">
-            <img src={top.cover} alt={`${top.title} cover`} />
-            <span className="spotlight__pulse" aria-hidden="true" />
-          </div>
-          <h3 className="spotlight__title">{top.title}</h3>
-          <p className="spotlight__artist">
-            {top.artist} · {top.album}
-          </p>
-          <div className="spotlight__meta">
-            <span>{top.plays.toLocaleString()} plays</span>
-            <span className="spotlight__dot" />
-            <span>{top.genre}</span>
-            <span className="spotlight__dot" />
-            <span>{formatTime(top.duration)}</span>
-          </div>
-          <button type="button" className="btn-vyra spotlight__cta" onClick={() => onPlay(top.id)}>
-            <span className="btn-vyra__icon">
-              {currentId === top.id && playing ? (
-                <Pause size={14} fill="currentColor" />
-              ) : (
-                <Play size={14} fill="currentColor" />
-              )}
-            </span>
-            {currentId === top.id && playing ? "Pause" : "Play now"}
-          </button>
-        </motion.aside>
+        {top && (
+          <motion.aside
+            className="spotlight"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <img className="spotlight__bg" src={top.cover} alt="" aria-hidden="true" />
+            <span className="spotlight__scrim" aria-hidden="true" />
+            <div className="spotlight__head">
+              <span className="spotlight__rank">
+                <ArrowUpRight size={13} /> #1 this week
+              </span>
+              <span className="spotlight__badge">VYRA Charts</span>
+            </div>
+            <div className="spotlight__art">
+              <img src={top.cover} alt={`${top.title} cover`} />
+              <span className="spotlight__pulse" aria-hidden="true" />
+            </div>
+            <h3 className="spotlight__title">{top.title}</h3>
+            <p className="spotlight__artist">
+              {top.artist} · {top.album}
+            </p>
+            <div className="spotlight__meta">
+              <span>{top.plays.toLocaleString()} plays</span>
+              <span className="spotlight__dot" />
+              <span>{top.genre}</span>
+              <span className="spotlight__dot" />
+              <span>{formatTime(top.duration)}</span>
+            </div>
+            <button type="button" className="btn-vyra spotlight__cta" onClick={() => onPlay(top)}>
+              <span className="btn-vyra__icon">
+                {currentId === top.id && playing ? (
+                  <Pause size={14} fill="currentColor" />
+                ) : (
+                  <Play size={14} fill="currentColor" />
+                )}
+              </span>
+              {currentId === top.id && playing ? "Pause" : "Play now"}
+            </button>
+          </motion.aside>
+        )}
       </div>
     </section>
   );

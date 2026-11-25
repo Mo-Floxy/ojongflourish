@@ -96,6 +96,9 @@ export function normalizeAudiusTrack(raw = {}) {
     artist: artist.name || artist.handle || "Unknown artist",
     artistId: artist.id ? String(artist.id) : "",
     artistHandle: artist.handle || "",
+    artistIsVerified: Boolean(artist.is_verified),
+    artistFollowers: Number(artist.follower_count) || 0,
+    artistTrackCount: Number(artist.track_count) || 0,
     album: album.playlist_name || "",
     albumId: album.playlist_id ? String(album.playlist_id) : "",
     artwork: raw.artwork || null,
@@ -133,6 +136,23 @@ export function normalizeAudiusUser(raw = {}) {
   };
 }
 
+/** Verified accounts or established musicians, so one-off uploads stay out. */
+export function isMusician(artist = {}) {
+  if (!artist) return false;
+  if (artist.isVerified || artist.artistIsVerified) return true;
+  const followers = Number(artist.followerCount ?? artist.artistFollowers) || 0;
+  const tracks = Number(artist.trackCount ?? artist.artistTrackCount) || 0;
+  return followers >= 50 && tracks >= 2;
+}
+
+export function isMusicianTrack(track = {}) {
+  return (
+    Boolean(track?.id) &&
+    isMusician(track) &&
+    !/\bigbo\b/i.test(String(track.title || ""))
+  );
+}
+
 export function normalizeAudiusCollection(raw = {}) {
   return {
     id: String(raw.id || ""),
@@ -140,6 +160,9 @@ export function normalizeAudiusCollection(raw = {}) {
     title: raw.playlist_name || raw.name || "Untitled collection",
     artist: raw.user?.name || raw.user?.handle || "Unknown artist",
     artistId: raw.user?.id ? String(raw.user.id) : "",
+    artistIsVerified: Boolean(raw.user?.is_verified),
+    artistFollowers: Number(raw.user?.follower_count) || 0,
+    artistTrackCount: Number(raw.user?.track_count) || 0,
     description: raw.description || "",
     artwork: raw.artwork || null,
     cover: artworkImage(raw.artwork) || fallbackCover,

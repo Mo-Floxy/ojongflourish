@@ -9,8 +9,10 @@ import {
   getTrendingCollections,
   getTrendingTracks,
   isAudiusConfigured,
-  searchAudius,
+  isMusician,
+  isMusicianTrack,
 } from "../services/audius";
+import { getTrendingAfrobeats } from "../services/popular";
 import "../styles/discovery.css";
 
 const formatDuration = (seconds) => {
@@ -235,39 +237,30 @@ function AudiusEntityGrid({ items, variant, onOpen }) {
 
 export default function AudiusSection({ onPlayTrack, onPlayTracks, currentId, playing, onOpenArtist, onOpenAlbum }) {
   const loadTrending = useCallback(
-    ({ signal }) => getTrendingTracks({ time: "week", limit: 8, signal }),
+    async ({ signal }) =>
+      (await getTrendingTracks({ time: "week", limit: 50, signal })).filter(isMusicianTrack).slice(0, 8),
     []
   );
 
-  const loadAfrobeats = useCallback(async ({ signal }) => {
-    const searchNigeria = async () => {
-      const result = await searchAudius("Nigeria", { kind: "tracks", limit: 8, signal });
-      return result?.tracks || [];
-    };
+  const loadAfrobeats = useCallback(
+    ({ signal }) => getTrendingAfrobeats({ limit: 8, signal }),
+    []
+  );
 
-    let items = [];
-    let viaSearch = false;
-
-    try {
-      items = await getTrendingTracks({ genre: "Afrobeats", time: "week", limit: 8, signal });
-    } catch (error) {
-      if (signal.aborted || error?.name === "AbortError") throw error;
-      viaSearch = true;
-      items = await searchNigeria();
-    }
-
-    if (!items.length) {
-      viaSearch = true;
-      items = await searchNigeria();
-    }
-
-    return { items, meta: viaSearch ? { viaSearch: true, query: "Nigeria" } : null };
-  }, []);
-
-  const loadLatest = useCallback(({ signal }) => getLatestTracks({ limit: 8, signal }), []);
-  const loadArtists = useCallback(({ signal }) => getPopularArtists({ limit: 6, signal }), []);
+  const loadLatest = useCallback(
+    async ({ signal }) =>
+      (await getLatestTracks({ limit: 50, signal })).filter(isMusicianTrack).slice(0, 8),
+    []
+  );
+  const loadArtists = useCallback(
+    async ({ signal }) => (await getPopularArtists({ limit: 12, signal })).filter(isMusician).slice(0, 6),
+    []
+  );
   const loadAlbums = useCallback(
-    ({ signal }) => getTrendingCollections({ type: "album", time: "week", limit: 6, signal }),
+    async ({ signal }) =>
+      (await getTrendingCollections({ type: "album", time: "week", limit: 12, signal }))
+        .filter(isMusician)
+        .slice(0, 6),
     []
   );
 
@@ -367,12 +360,10 @@ export default function AudiusSection({ onPlayTrack, onPlayTracks, currentId, pl
               <AudioLines size={19} />
             </span>
           }
-          title="Naija & Afrobeats"
-          subtitle="Provider-based Audius picks for Afrobeats and Nigerian artists — not an official chart."
+          title="Trending Afrobeats"
+          subtitle="Audius genre trending from real artists — Afrobeats, world and reggae. Not an official chart."
         >
-          <span className="audius-source">
-            {afrobeats.meta?.viaSearch ? "Nigeria search · provider-based" : "Audius genre results · provider-based"}
-          </span>
+          <span className="audius-source">Verified/established artists · provider-based</span>
           <RefreshButton feed={afrobeats} label="Audius Afrobeats picks" />
         </SectionHead>
         {tracksFor(afrobeats, "No Afrobeats tracks are available from Audius right now.")}
@@ -400,8 +391,8 @@ export default function AudiusSection({ onPlayTrack, onPlayTracks, currentId, pl
               <AudioLines size={19} />
             </span>
           }
-          title="Popular artists on Audius"
-          subtitle="Artists ranked by Audius, based on real provider data."
+          title="Musicians on Audius"
+          subtitle="Verified and established artists ranked by Audius — not one-off uploads."
         >
           <RefreshButton feed={artists} label="Audius popular artists" />
         </SectionHead>

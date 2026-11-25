@@ -262,12 +262,12 @@ export const TRACKS = [
     licenseUrl: BY_25,
   },
 
-  // Ugo Mbaise — Nigerian/Igbo vocals, Free Music Archive, CC BY 4.0.
+  // Ugo Mbaise — Nigerian vocals, Free Music Archive, CC BY 4.0.
   {
     id: "t17",
     title: "Ndi Nne",
     artist: "Ugo Mbaise",
-    album: "Igbo Vocal Singles",
+    album: "Nigerian Vocal Singles",
     genre: "Afrobeats",
     cover: "/images/genres/afrobeats.jpg",
     src: "/audio/ndi-nne.mp3",
@@ -426,15 +426,15 @@ export const TRACKS = [
 ];
 
 export const GENRES = [
-  { id: "afrobeats", name: "Afrobeats", image: "/images/genres/afrobeats.jpg", count: "10 tracks", accent: "#FF6B2C" },
-  { id: "hiphop", name: "Hip-Hop", image: "/images/genres/hiphop.jpg", count: "2.4k tracks", accent: "#7200FF" },
-  { id: "chill", name: "Chill", image: "/images/genres/rnb.jpg", count: "1.6k tracks", accent: "#00D9FF" },
-  { id: "indie", name: "Indie", image: "/images/genres/pop.jpg", count: "2.1k tracks", accent: "#FF2A85" },
-  { id: "dance", name: "Dance", image: "/images/genres/edm.jpg", count: "2.9k tracks", accent: "#B026FF" },
-  { id: "jazz", name: "Jazz", image: "/images/genres/jazz.jpg", count: "860 tracks", accent: "#FFB020" },
-  { id: "rock", name: "Rock", image: "/images/genres/rock.jpg", count: "1.8k tracks", accent: "#1677FF" },
-  { id: "soul", name: "Soul", image: "/images/genres/afrobeats.jpg", count: "1.5k tracks", accent: "#FF8C00" },
-  { id: "latin", name: "Latin", image: "/images/genres/classical.jpg", count: "1.1k tracks", accent: "#5B4DFF" },
+  { id: "afrobeats", name: "Afrobeats", image: "/images/genres/afrobeats.jpg", count: "50+ popular tracks", audiusGenres: ["Afrobeats"], accent: "#FF6B2C" },
+  { id: "hiphop", name: "Hip-Hop", image: "/images/genres/hiphop.jpg", count: "50+ popular tracks", audiusGenres: ["Hip-Hop/Rap"], accent: "#7200FF" },
+  { id: "chill", name: "Chill", image: "/images/genres/rnb.jpg", count: "50+ popular tracks", audiusGenres: ["Chill"], accent: "#00D9FF" },
+  { id: "indie", name: "Indie", image: "/images/genres/pop.jpg", count: "50+ popular tracks", audiusGenres: ["Indie"], accent: "#FF2A85" },
+  { id: "dance", name: "Dance", image: "/images/genres/edm.jpg", count: "50+ popular tracks", audiusGenres: ["Dance"], accent: "#B026FF" },
+  { id: "jazz", name: "Jazz", image: "/images/genres/jazz.jpg", count: "50+ popular tracks", audiusGenres: ["Jazz"], accent: "#FFB020" },
+  { id: "rock", name: "Rock", image: "/images/genres/rock.jpg", count: "50+ popular tracks", audiusGenres: ["Rock"], accent: "#1677FF" },
+  { id: "soul", name: "Soul", image: "/images/genres/afrobeats.jpg", count: "50+ popular tracks", audiusGenres: ["R&B/Soul", "Soul"], accent: "#FF8C00" },
+  { id: "latin", name: "Latin", image: "/images/genres/classical.jpg", count: "50+ popular tracks", audiusGenres: ["Latin"], accent: "#5B4DFF" },
 ];
 
 const GENRE_LABEL = {
@@ -519,7 +519,7 @@ export const PLAYLISTS = [
   {
     id: "p6",
     title: "Naija Now",
-    subtitle: "Nigerian vocals, highlife grooves and Igbo classics.",
+    subtitle: "Nigerian vocals, highlife grooves and modern Afrobeats classics.",
     cover: "/images/genres/afrobeats.jpg",
     count: 10,
     trackId: "t17",
