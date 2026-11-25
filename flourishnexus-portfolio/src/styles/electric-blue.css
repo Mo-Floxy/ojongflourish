@@ -1,34 +1,34 @@
 /* Electric glass blue theme, sampled from the supplied reference image. */
 
 :root {
-  /* Sampled from the reference: saturated core #0049FC, bright core #0066FD, highlight #0276FC. */
+  /* Deeper sampled range: core #0049FC, bright #0066FD, glass #001A65. */
   --blue: #0049fc;
   --blue-bright: #0066fd;
-  --blue-electric: #0276fc;
-  --purple: #0276fc;
+  --blue-electric: #0066fd;
+  --purple: #0066fd;
 
-  --glass: rgba(0, 26, 101, 0.56);
-  --glass-strong: rgba(0, 20, 78, 0.86);
-  --glass-border: rgba(0, 102, 253, 0.42);
-  --glass-border-bright: rgba(2, 118, 252, 0.82);
+  --glass: rgba(0, 26, 101, 0.68);
+  --glass-strong: rgba(0, 16, 64, 0.9);
+  --glass-border: rgba(0, 73, 252, 0.5);
+  --glass-border-bright: rgba(0, 102, 253, 0.75);
 
-  --shadow-blue: 0 18px 60px rgba(0, 73, 252, 0.38);
-  --shadow-deep: 0 28px 90px rgba(0, 10, 46, 0.58);
+  --shadow-blue: 0 18px 60px rgba(0, 73, 252, 0.42);
+  --shadow-deep: 0 28px 90px rgba(0, 8, 36, 0.68);
 }
 
 body {
   background:
-    radial-gradient(circle at 12% 4%, rgba(0, 73, 252, 0.3), transparent 36%),
-    radial-gradient(circle at 88% 12%, rgba(0, 102, 253, 0.22), transparent 32%),
-    radial-gradient(circle at 50% 100%, rgba(0, 26, 101, 0.58), transparent 44%),
+    radial-gradient(circle at 12% 4%, rgba(0, 73, 252, 0.22), transparent 34%),
+    radial-gradient(circle at 88% 12%, rgba(0, 102, 253, 0.14), transparent 30%),
+    radial-gradient(circle at 50% 100%, rgba(0, 26, 101, 0.7), transparent 42%),
     var(--black);
 }
 
 ::selection {
-  background: rgba(2, 118, 252, 0.45);
+  background: rgba(0, 102, 253, 0.42);
 }
 
-/* Stronger blue glass surfaces without changing layout. */
+/* Stronger, deeper blue glass surfaces without changing layout. */
 .glass-panel,
 .nav-shell,
 .btn--ghost,
@@ -44,50 +44,50 @@ body {
 .journey-card,
 .skill-card {
   background:
-    linear-gradient(145deg, rgba(0, 102, 253, 0.18), rgba(0, 73, 252, 0.06) 42%, transparent 68%),
+    linear-gradient(145deg, rgba(0, 73, 252, 0.16), rgba(0, 26, 101, 0.12) 42%, transparent 68%),
     var(--glass);
   border-color: var(--glass-border);
-  box-shadow: var(--shadow-deep), inset 0 1px 0 rgba(180, 225, 255, 0.1), inset 0 0 34px rgba(0, 73, 252, 0.08);
+  box-shadow: var(--shadow-deep), inset 0 1px 0 rgba(120, 190, 255, 0.08), inset 0 0 34px rgba(0, 73, 252, 0.1);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
 }
 
 .glass-panel::after {
-  background: linear-gradient(115deg, transparent 32%, rgba(2, 118, 252, 0.14) 50%, transparent 68%);
+  background: linear-gradient(115deg, transparent 32%, rgba(0, 102, 253, 0.12) 50%, transparent 68%);
 }
 
 .glass-panel:hover::after {
   opacity: 1;
 }
 
-/* Atmosphere: sampled electric-blue field. */
+/* Atmosphere: deeper sampled electric-blue field. */
 .atmosphere__grid {
   background-image:
-    linear-gradient(rgba(0, 102, 253, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 102, 253, 0.09) 1px, transparent 1px);
+    linear-gradient(rgba(0, 73, 252, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 73, 252, 0.07) 1px, transparent 1px);
 }
 
 .atmosphere__orb--one {
-  background: rgba(0, 73, 252, 0.55);
+  background: rgba(0, 73, 252, 0.5);
 }
 
 .atmosphere__orb--two {
-  background: rgba(0, 102, 253, 0.38);
+  background: rgba(0, 102, 253, 0.3);
 }
 
 .atmosphere__orb--three,
 .atmosphere__shape {
-  background: rgba(0, 73, 252, 0.3);
-  border-color: rgba(2, 118, 252, 0.28);
+  background: rgba(0, 73, 252, 0.38);
+  border-color: rgba(0, 102, 253, 0.24);
 }
 
 .atmosphere__beam {
-  background: linear-gradient(90deg, transparent, rgba(2, 118, 252, 0.16), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 102, 253, 0.12), transparent);
 }
 
 .atmosphere__dot {
-  background: rgba(180, 225, 255, 0.8);
-  box-shadow: 0 0 16px rgba(0, 102, 253, 0.95);
+  background: rgba(120, 190, 255, 0.7);
+  box-shadow: 0 0 16px rgba(0, 102, 253, 0.9);
 }
 
 /* Typography and accents. */
@@ -99,28 +99,28 @@ body {
 
 .section-title span {
   color: var(--blue-electric);
-  text-shadow: 0 0 46px rgba(2, 118, 252, 0.7);
+  text-shadow: 0 0 46px rgba(0, 102, 253, 0.6);
 }
 
 .status-dot {
   background: var(--blue-electric);
-  box-shadow: 0 0 0 4px rgba(2, 118, 252, 0.18), 0 0 20px rgba(2, 118, 252, 1);
+  box-shadow: 0 0 0 4px rgba(0, 102, 253, 0.14), 0 0 20px rgba(0, 102, 253, 0.9);
 }
 
 .btn--glow {
-  background: linear-gradient(135deg, #0049fc, #0276fc);
-  border-color: rgba(150, 210, 255, 0.58);
+  background: linear-gradient(135deg, #0038d8, #0066fd);
+  border-color: rgba(120, 190, 255, 0.5);
   box-shadow:
-    0 10px 36px rgba(0, 73, 252, 0.5),
-    0 0 24px rgba(2, 118, 252, 0.32),
-    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+    0 10px 36px rgba(0, 73, 252, 0.55),
+    0 0 24px rgba(0, 102, 253, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn--glow:hover {
   box-shadow:
-    0 14px 48px rgba(2, 118, 252, 0.66),
-    0 0 36px rgba(2, 118, 252, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+    0 14px 48px rgba(0, 102, 253, 0.58),
+    0 0 36px rgba(0, 102, 253, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .brand__logo,
@@ -128,27 +128,27 @@ body {
 .home-split__contact-mark,
 .skills-cta__mark,
 .contact-panel__logo {
-  border-color: rgba(0, 102, 253, 0.62);
-  box-shadow: 0 0 28px rgba(2, 118, 252, 0.34);
+  border-color: rgba(0, 73, 252, 0.6);
+  box-shadow: 0 0 28px rgba(0, 102, 253, 0.3);
 }
 
-/* Splash and footer follow the same sampled blue glass language. */
+/* Splash and footer follow the same deeper blue glass language. */
 .splash {
   background:
-    radial-gradient(circle at 50% 44%, rgba(0, 73, 252, 0.36), transparent 44%),
-    radial-gradient(circle at 50% 100%, rgba(2, 118, 252, 0.2), transparent 42%),
+    radial-gradient(circle at 50% 44%, rgba(0, 73, 252, 0.3), transparent 44%),
+    radial-gradient(circle at 50% 100%, rgba(0, 102, 253, 0.14), transparent 42%),
     #03050b;
 }
 
 .splash__grid {
   background-image:
-    linear-gradient(rgba(0, 102, 253, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 102, 253, 0.09) 1px, transparent 1px);
+    linear-gradient(rgba(0, 73, 252, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 73, 252, 0.07) 1px, transparent 1px);
 }
 
 .site-footer {
-  background: linear-gradient(to bottom, rgba(0, 26, 101, 0.32), rgba(3, 5, 11, 0.9));
-  border-top-color: rgba(0, 102, 253, 0.3);
+  background: linear-gradient(to bottom, rgba(0, 26, 101, 0.4), rgba(3, 5, 11, 0.92));
+  border-top-color: rgba(0, 73, 252, 0.3);
 }
 
 /* Rounded blue borders on every image. */
@@ -162,8 +162,8 @@ img {
 .skills-cta__mark img,
 .contact-panel__logo img {
   border-radius: 16px;
-  border: 1px solid rgba(0, 102, 253, 0.62);
-  box-shadow: 0 0 24px rgba(2, 118, 252, 0.34);
+  border: 1px solid rgba(0, 73, 252, 0.7);
+  box-shadow: 0 0 24px rgba(0, 102, 253, 0.28);
 }
 
 .splash__mascot,
@@ -172,10 +172,10 @@ img {
 .timeline-aside__visual img,
 .contact-side__visual img {
   border-radius: 50%;
-  border: 2px solid rgba(2, 118, 252, 0.68);
+  border: 2px solid rgba(0, 102, 253, 0.65);
   padding: 4px;
-  background: rgba(0, 26, 101, 0.4);
-  box-shadow: 0 0 0 6px rgba(0, 73, 252, 0.1), 0 0 44px rgba(2, 118, 252, 0.42);
+  background: rgba(0, 26, 101, 0.5);
+  box-shadow: 0 0 0 6px rgba(0, 73, 252, 0.1), 0 0 44px rgba(0, 102, 253, 0.32);
 }
 
 .project-card__media,
