@@ -4,8 +4,8 @@ import SectionHead from "./SectionHead";
 import Equalizer from "./Equalizer";
 import AudiusImage from "./AudiusImage";
 import {
+  getFeaturedAudiusArtists,
   getLatestTracks,
-  getPopularArtists,
   getTrendingCollections,
   getTrendingTracks,
   isAudiusConfigured,
@@ -206,7 +206,7 @@ function AudiusEntityGrid({ items, variant, onOpen }) {
         const sub = isArtist ? (item.handle ? `@${item.handle}` : "Audius artist") : item.artist;
         const followers = formatCount(item.followerCount);
         const meta = isArtist
-          ? (followers ? `${followers} followers` : "")
+          ? [followers ? `${followers} followers` : "", item.location].filter(Boolean).join(" · ")
           : [item.isAlbum ? "Album" : "Collection", item.trackCount ? `${item.trackCount} tracks` : ""]
               .filter(Boolean)
               .join(" · ");
@@ -253,7 +253,7 @@ export default function AudiusSection({ onPlayTrack, onPlayTracks, currentId, pl
     []
   );
   const loadArtists = useCallback(
-    async ({ signal }) => (await getPopularArtists({ limit: 12, signal })).filter(isMusician).slice(0, 6),
+    ({ signal }) => getFeaturedAudiusArtists({ limit: 6, signal }),
     []
   );
   const loadAlbums = useCallback(
@@ -391,8 +391,8 @@ export default function AudiusSection({ onPlayTrack, onPlayTracks, currentId, pl
               <AudioLines size={19} />
             </span>
           }
-          title="Musicians on Audius"
-          subtitle="Verified and established artists ranked by Audius — not one-off uploads."
+          title="Popular Artists on Audius"
+          subtitle="Nigerian and Afrobeats musicians with real profile images — not one-off uploads."
         >
           <RefreshButton feed={artists} label="Audius popular artists" />
         </SectionHead>

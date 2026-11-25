@@ -132,6 +132,7 @@ export function normalizeAudiusUser(raw = {}) {
     isVerified: Boolean(raw.is_verified),
     followerCount: Number(raw.follower_count) || 0,
     trackCount: Number(raw.track_count) || 0,
+    location: String(raw.location || ""),
     raw,
   };
 }
@@ -151,6 +152,21 @@ export function isMusicianTrack(track = {}) {
     isMusician(track) &&
     !/\bigbo\b/i.test(String(track.title || ""))
   );
+}
+
+const NIGERIAN_LOCATION = /\b(nigeria|nigerian|naija|lagos|abuja|port harcourt|phc|ibadan|enugu|kano|kogi|oyo|benin city)\b/i;
+
+export function isNigerianArtist(artist = {}) {
+  return NIGERIAN_LOCATION.test(String(artist?.location || ""));
+}
+
+export function hasArtistImage(artist = {}) {
+  return Boolean(artist?.coverImage || artworkImage(artist?.artwork));
+}
+
+/** Popular, established artists with a real profile image. */
+export function isFeaturedMusician(artist = {}) {
+  return Boolean(artist?.id) && isMusician(artist) && hasArtistImage(artist);
 }
 
 export function normalizeAudiusCollection(raw = {}) {
@@ -226,6 +242,65 @@ export async function getPopularArtists(options = {}) {
   const path = genre ? "/users/genre/top" : "/users/top";
   const params = genre ? { genre: [genre], limit } : { limit };
   return usersFrom(await audiusFetch(path, { params, signal }));
+}
+
+/**
+ * Nigerian and Afrobeats musicians first, then other established artists.
+ * Audius exposes artist location and profile pictures, so the card shows a
+ * real face/artwork instead of a random one-off upload.
+ */
+export async function getFeaturedAudiusArtists(options = {}) {
+  const { limit = 6, signal } = options;
+  const sources = [
+    ["Afrobeats", 5],
+    ["World", 4],
+    ["Reggae", 3],
+    ["R&B/Soul", 2],
+    ["Pop", 1],
+  ];
+  const collected = [];
+
+  for (const [genre, weight] of sources) {
+    if (signal?.aborted) return [];
+    try {
+      const response = await audiusFetch("/users/genre/top", {
+        params: { genre, limit: 50 },
+        signal,
+      });
+      usersFrom(response).forEach((artist) => {
+        collected.push({ ...artist, sourceWeight: weight });
+      });
+    } catch {
+      /* keep the remaining genre sources rather than dropping the whole feed */
+    }
+  }
+
+  try {
+    usersFrom(await audiusFetch("/users/top", { params: { limit: 30 }, signal })).forEach((artist) => {
+      collected.push({ ...artist, sourceWeight: 0 });
+    });
+  } catch {
+    /* genre sources are enough when the global list is unavailable */
+  }
+
+  const seen = new Set();
+  const artists = collected.filter((artist) => {
+    if (!artist.id || seen.has(artist.id) || !isFeaturedMusician(artist)) return false;
+    seen.add(artist.id);
+    return true;
+  });
+
+  const score = (artist) => {
+    const followers = Math.max(0, Number(artist.followerCount) || 0);
+    return (
+      (isNigerianArtist(artist) ? 1000 : 0) +
+      (Number(artist.sourceWeight) || 0) * 100 +
+      (artist.isVerified ? 80 : 0) +
+      Math.min(60, Math.log10(followers + 1) * 20)
+    );
+  };
+
+  return artists.sort((a, b) => score(b) - score(a)).slice(0, limit);
 }
 
 export async function getArtistProfile(id, options = {}) {
