@@ -3,6 +3,8 @@ import {
   clearAuth,
   consumeSpotifyCallback,
   exchangeCode,
+  getSpotifyArtist,
+  getSpotifyArtistTopTracks,
   getValidAuth,
   isSpotifyConfigured,
   loadSpotifySdk,
@@ -295,6 +297,34 @@ export default function useSpotify() {
     [ensureToken, handleRequestError]
   );
 
+  const fetchArtist = useCallback(
+    async (artistId) => {
+      try {
+        const token = await ensureToken();
+        if (!token) return null;
+        return await getSpotifyArtist(artistId, token);
+      } catch (reason) {
+        handleRequestError(reason);
+        return null;
+      }
+    },
+    [ensureToken, handleRequestError]
+  );
+
+  const fetchArtistTopTracks = useCallback(
+    async (artistId) => {
+      try {
+        const token = await ensureToken();
+        if (!token) return [];
+        return await getSpotifyArtistTopTracks(artistId, token);
+      } catch (reason) {
+        handleRequestError(reason);
+        return [];
+      }
+    },
+    [ensureToken, handleRequestError]
+  );
+
   const playTracks = useCallback(
     async (uris) => {
       if (!uris?.length) return false;
@@ -369,6 +399,8 @@ export default function useSpotify() {
     logout,
     search,
     searchCatalog,
+    fetchArtist,
+    fetchArtistTopTracks,
     playTracks,
     toggle,
     next,

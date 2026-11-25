@@ -337,6 +337,22 @@ export async function searchSpotifyCatalog(query, token, options = {}) {
   };
 }
 
+const SPOTIFY_ID_PATTERN = /^[A-Za-z0-9]{22}$/;
+
+// Exact-ID lookups for the curated official artist allowlist. Search results
+// are deliberately never used to identify a featured artist.
+export async function getSpotifyArtist(artistId, token) {
+  if (!SPOTIFY_ID_PATTERN.test(artistId || "")) return null;
+  return spotifyFetch(`/artists/${artistId}`, token);
+}
+
+export async function getSpotifyArtistTopTracks(artistId, token, market = "NG") {
+  if (!SPOTIFY_ID_PATTERN.test(artistId || "")) return [];
+  const params = new URLSearchParams({ market });
+  const data = await spotifyFetch(`/artists/${artistId}/top-tracks?${params}`, token);
+  return data?.tracks || [];
+}
+
 let sdkPromise = null;
 export function loadSpotifySdk() {
   if (typeof window === "undefined") return Promise.reject(new Error("No browser"));

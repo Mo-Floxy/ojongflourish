@@ -545,17 +545,22 @@ export const NOTIFICATIONS = [
   { id: "n3", title: "Naija Now just dropped", body: "10 Nigerian vocal tracks, one non-stop set.", time: "3h", cover: "/images/genres/afrobeats.jpg" },
 ];
 
+// Pinned Spotify artist IDs. These are the real, verified accounts — never
+// label-only search results, which can resolve to fan or duplicate profiles.
 export const SPOTIFY_PRESETS = [
-  { id: "burna", label: "Burna Boy", query: "Burna Boy", hint: "Last Last, Ye" },
-  { id: "davido", label: "Davido", query: "Davido", hint: "Unavailable, Fall" },
-  { id: "wizkid", label: "Wizkid", query: "Wizkid", hint: "Essence, Ojuelegba" },
-  { id: "mavo", label: "Mavo", query: "Mavo", hint: "Personality, Your Body" },
-  { id: "rema", label: "Rema", query: "Rema", hint: "Calm Down, Bounce" },
-  { id: "asake", label: "Asake", query: "Asake", hint: "Amapiano, Lonely At The Top" },
-  { id: "ayra", label: "Ayra Starr", query: "Ayra Starr", hint: "Rush, Sability" },
-  { id: "tems", label: "Tems", query: "Tems", hint: "Free Mind, Love Me JeJe" },
-  { id: "olamide", label: "Olamide", query: "Olamide", hint: "Unruly, Infinity" },
-  { id: "tiwa", label: "Tiwa Savage", query: "Tiwa Savage", hint: "Kele Kele, Somebody Special" },
-  { id: "tekno", label: "Tekno", query: "Tekno", hint: "Sku Sku, Wide" },
-  { id: "adekunle", label: "Adekunle Gold", query: "Adekunle Gold", hint: "Sade, Party No Dey Stop" },
+  { id: "burna", label: "Burna Boy", spotifyId: "3wcj11K77LjEY1PkEazffa", query: "Burna Boy", hint: "Last Last, Ye" },
+  { id: "davido", label: "Davido", spotifyId: "0Y3agQaa6g2r0YmHPOO9rh", query: "Davido", hint: "Unavailable, Fall" },
+  { id: "wizkid", label: "Wizkid", spotifyId: "3tVQdUvClmAT7URs9V3rsp", query: "Wizkid", hint: "Essence, Ojuelegba" },
+  { id: "mavo", label: "Mavo", spotifyId: "1VBjib1ykqXxss9Tw5YuR9", query: "Mavo", hint: "Personality, Your Body" },
+  { id: "rema", label: "Rema", spotifyId: "46pWGuE3dSwY3bMMXGBvVS", query: "Rema", hint: "Calm Down, Bounce" },
+  { id: "asake", label: "Asake", spotifyId: "3a1tBryiczPAZpgoZN9Rzg", query: "Asake", hint: "Amapiano, Lonely At The Top" },
+  { id: "ayra", label: "Ayra Starr", spotifyId: "3ZpEKRjHaHANcpk10u6Ntq", query: "Ayra Starr", hint: "Rush, Sability" },
+  { id: "tems", label: "Tems", spotifyId: "687cZJR45JO7jhk1LHIbgq", query: "Tems", hint: "Free Mind, Love Me JeJe" },
+  { id: "olamide", label: "Olamide", spotifyId: "4ovtyvs7j1jSmwhkBGHqSr", query: "Olamide", hint: "Unruly, Infinity" },
+  { id: "tiwa", label: "Tiwa Savage", spotifyId: "1hNaHKp2Za5YdOAG0WnRbc", query: "Tiwa Savage", hint: "Kele Kele, Somebody Special" },
+  { id: "tekno", label: "Tekno", spotifyId: "6IhG3Yxm3UW98jhyBvrIut", query: "Tekno", hint: "Sku Sku, Wide" },
+  { id: "adekunle", label: "Adekunle Gold", spotifyId: "2IK173RXLiCSQ8fhDlAb3s", query: "Adekunle Gold", hint: "Sade, Party No Dey Stop" },
 ];
+
+export const officialSpotifyArtistUrl = (artistId) =>
+  artistId ? `https://open.spotify.com/artist/${artistId}` : "";

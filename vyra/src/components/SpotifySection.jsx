@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   AudioLines,
+  BadgeCheck,
   ExternalLink,
   LoaderCircle,
   LogOut,
@@ -13,7 +14,7 @@ import SectionHead from "./SectionHead";
 import Equalizer from "./Equalizer";
 import { SpotifyLogo } from "./SpotifyConnectDialog";
 import { spotifyRedirectUri } from "../lib/spotify";
-import { formatTime, SPOTIFY_PRESETS } from "../data/music";
+import { formatTime, officialSpotifyArtistUrl, SPOTIFY_PRESETS } from "../data/music";
 import "../styles/spotify.css";
 
 export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) {
@@ -38,13 +39,27 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
     }
   };
 
+  // Preset clicks use the pinned artist ID, so tracks come from the real
+  // account instead of a same-named fan upload matched by label search.
+  const runPreset = async (preset) => {
+    setQuery(preset.query);
+    setLoading(true);
+    try {
+      const tracks = await spotify.fetchArtistTopTracks(preset.spotifyId);
+      setResults(tracks || []);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!authenticated || autoSearched.current) return;
     autoSearched.current = true;
-    runSearch(SPOTIFY_PRESETS[0].query);
+    runPreset(SPOTIFY_PRESETS[0]);
   }, [authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Official artist photos come from Spotify, never from fake Audius uploads.
+  // Artist photos and links come only from an exact official-ID lookup.
+  // A mismatched ID or name is discarded — no "first search result" fallback.
   useEffect(() => {
     if (!authenticated) return undefined;
     let cancelled = false;
@@ -53,20 +68,17 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
       const entries = await Promise.all(
         SPOTIFY_PRESETS.map(async (preset) => {
           try {
-            const { artists } = await spotify.searchCatalog(preset.label, {
-              types: ["artist"],
-              limit: 5,
-            });
-            const artist =
-              artists.find((item) => item.name?.trim().toLowerCase() === preset.label.toLowerCase()) ||
-              artists[0];
+            const artist = await spotify.fetchArtist(preset.spotifyId);
+            const exact =
+              artist?.id === preset.spotifyId &&
+              artist.name?.trim().toLowerCase() === preset.label.toLowerCase();
             return [
               preset.id,
-              artist
+              exact
                 ? {
                     name: artist.name,
                     image: artist.images?.[0]?.url || "",
-                    url: artist.external_urls?.spotify || "",
+                    url: officialSpotifyArtistUrl(preset.spotifyId),
                   }
                 : null,
             ];
@@ -81,7 +93,7 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
     return () => {
       cancelled = true;
     };
-  }, [authenticated, spotify.searchCatalog]);
+  }, [authenticated, spotify.fetchArtist]);
 
   const headActions = authenticated ? (
     spotify.user ? (
@@ -108,7 +120,7 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
           </span>
         }
         title="Popular Naija"
-        subtitle="Burna Boy, Davido, Wizkid, Mavo and more — official artist photos and hits through Spotify."
+        subtitle="Burna Boy, Davido, Wizkid, Mavo and more — pinned to verified Spotify artist profiles, never fan uploads."
       >
         {headActions}
       </SectionHead>
@@ -179,11 +191,11 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
                 key={preset.id}
                 type="button"
                 className={`spotify-preset ${query === preset.query ? "is-active" : ""}`}
+                data-artist-id={preset.spotifyId}
+                data-official-url={officialSpotifyArtistUrl(preset.spotifyId)}
+                aria-label={`${preset.label} — official Spotify artist`}
                 whileHover={{ y: -3 }}
-                onClick={() => {
-                  setQuery(preset.query);
-                  runSearch(preset.query);
-                }}
+                onClick={() => runPreset(preset)}
               >
                 {artistMeta[preset.id]?.image ? (
                   <img
@@ -200,6 +212,9 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
                 <span className="spotify-preset__copy">
                   <span className="spotify-preset__name">{preset.label}</span>
                   <span className="spotify-preset__hint">{preset.hint}</span>
+                  <span className="spotify-preset__official">
+                    <BadgeCheck size={11} /> Official artist
+                  </span>
                 </span>
               </motion.button>
             ))}

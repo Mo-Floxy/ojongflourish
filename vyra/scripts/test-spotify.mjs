@@ -1,12 +1,13 @@
 import puppeteer from "puppeteer-core";
 import { serveDist } from "./serve-dist.mjs";
+import { SPOTIFY_PRESETS } from "../src/data/music.js";
 
 const EXE = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const staticServer = await serveDist();
 const browser = await puppeteer.launch({
   executablePath: EXE,
   headless: "new",
-  userDataDir: "C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-spotify",
+  userDataDir: `C:/Users/HP/AppData/Local/Temp/opencode/vyra-qa-spotify-${Date.now()}`,
   args: ["--autoplay-policy=no-user-gesture-required"],
 });
 
@@ -148,6 +149,8 @@ try {
   {
     const page = await browser.newPage();
     const playbackRequests = [];
+    const topTracksRequests = [];
+    const searchRequests = [];
     await page.setViewport({ width: 1440, height: 900 });
     await page.evaluateOnNewDocument(() => {
       window.localStorage.setItem("vyra:spotify:auth", JSON.stringify({
@@ -191,7 +194,33 @@ try {
           images: [],
         });
       }
-      if (url.includes("api.spotify.com/v1/search")) return json(request.respond.bind(request), catalog);
+      const artistRequest = url.match(/api\.spotify\.com\/v1\/artists\/([A-Za-z0-9]{22})(?:\/top-tracks)?/);
+      if (artistRequest) {
+        const preset = SPOTIFY_PRESETS.find((item) => item.spotifyId === artistRequest[1]);
+        if (url.includes("/top-tracks")) {
+          topTracksRequests.push(url);
+          return json(request.respond.bind(request), { tracks: catalog.tracks.items });
+        }
+        // Burna Boy is a deliberate fan-account trap: the app must reject it.
+        if (preset?.id === "burna") {
+          return json(request.respond.bind(request), {
+            id: "fanaccountfakeid0000000000",
+            name: "Burna Boy Fan Page",
+            images: [{ url: "https://example.test/fan.jpg" }],
+            external_urls: { spotify: "https://open.spotify.com/artist/fanaccountfakeid0000000000" },
+          });
+        }
+        return json(request.respond.bind(request), {
+          id: preset?.spotifyId || artistRequest[1],
+          name: preset?.label || "Unknown Artist",
+          images: [{ url: `https://example.test/${artistRequest[1]}.jpg` }],
+          external_urls: { spotify: `https://open.spotify.com/artist/${artistRequest[1]}` },
+        });
+      }
+      if (url.includes("api.spotify.com/v1/search")) {
+        searchRequests.push(url);
+        return json(request.respond.bind(request), catalog);
+      }
       if (url.includes("api.spotify.com/")) return json(request.respond.bind(request), {});
       if (url.includes("api.audius.co/v1/search/full")) {
         return json(request.respond.bind(request), { data: { tracks: [], users: [], albums: [], playlists: [] } });
@@ -240,22 +269,64 @@ try {
     );
     check("official artist embed is supported", true);
 
+    topTracksRequests.length = 0;
+    searchRequests.length = 0;
     await page.goto(staticServer.url, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".spotify-preset");
-    const presetLabels = await page.evaluate(() =>
-      [...document.querySelectorAll(".spotify-preset__name")].map((node) => node.textContent.trim())
+    await page.waitForFunction(
+      (count) => document.querySelectorAll(".spotify-preset__img").length >= count,
+      {},
+      SPOTIFY_PRESETS.length - 1
     );
+    const presetMeta = await page.evaluate(() =>
+      [...document.querySelectorAll(".spotify-preset")].map((card) => ({
+        name: card.querySelector(".spotify-preset__name")?.textContent.trim() || "",
+        id: card.dataset.artistId || "",
+        url: card.dataset.officialUrl || "",
+        official: Boolean(card.querySelector(".spotify-preset__official")),
+        aria: card.getAttribute("aria-label") || "",
+        image: card.querySelector(".spotify-preset__img")?.src || "",
+        visual: Boolean(card.querySelector(".spotify-preset__img, .spotify-preset__avatar")),
+      }))
+    );
+    const labels = presetMeta.map((item) => item.name);
     check(
       "featured Nigerian artists are shown",
-      ["Burna Boy", "Davido", "Wizkid", "Mavo"].every((name) => presetLabels.includes(name)),
-      presetLabels.slice(0, 6)
+      ["Burna Boy", "Davido", "Wizkid", "Mavo"].every((name) => labels.includes(name)),
+      labels.slice(0, 6)
     );
-    const artistVisuals = await page.evaluate(() =>
-      [...document.querySelectorAll(".spotify-preset")]
-        .slice(0, 4)
-        .map((card) => Boolean(card.querySelector(".spotify-preset__img, .spotify-preset__avatar")))
+    check(
+      "featured artists are pinned to exact official Spotify IDs",
+      SPOTIFY_PRESETS.every(
+        (preset, index) =>
+          presetMeta[index]?.id === preset.spotifyId &&
+          presetMeta[index]?.url === `https://open.spotify.com/artist/${preset.spotifyId}`
+      ),
+      presetMeta.map(({ id, url }) => ({ id, url })).slice(0, 4)
     );
-    check("artist profile visuals render", artistVisuals.every(Boolean), artistVisuals);
+    check(
+      "official artist badge is shown for every preset",
+      presetMeta.length === SPOTIFY_PRESETS.length &&
+        presetMeta.every((item) => item.official && item.aria.endsWith("official Spotify artist")),
+      presetMeta.map(({ official, aria }) => ({ official, aria })).slice(0, 3)
+    );
+    check(
+      "fan-account metadata is rejected instead of displayed",
+      presetMeta[0]?.name === "Burna Boy" &&
+        presetMeta[0]?.image === "" &&
+        presetMeta[0]?.id === SPOTIFY_PRESETS[0].spotifyId,
+      presetMeta[0]
+    );
+    check("artist profile visuals render", presetMeta.every((item) => item.visual));
+
+    await page.click(`[data-artist-id="${SPOTIFY_PRESETS[0].spotifyId}"]`);
+    await waitFor(page, () => document.body.innerText.includes("QA Track"));
+    check(
+      "preset tracks come from the official artist ID, not label search",
+      topTracksRequests.some((url) => url.includes(`/artists/${SPOTIFY_PRESETS[0].spotifyId}/top-tracks`)) &&
+        !searchRequests.some((url) => url.includes("q=Burna")),
+      { topTracksRequests: topTracksRequests.slice(0, 2), searchRequests }
+    );
 
     await page.click(".premium__cta");
     await page.waitForSelector(".spotify-dialog__panel");
