@@ -546,12 +546,13 @@ export const NOTIFICATIONS = [
 ];
 
 export const SPOTIFY_PRESETS = [
-  { id: "rema", label: "Rema", query: "Rema", hint: "Calm Down, Bounce" },
+  { id: "burna", label: "Burna Boy", query: "Burna Boy", hint: "Last Last, Ye" },
   { id: "davido", label: "Davido", query: "Davido", hint: "Unavailable, Fall" },
+  { id: "wizkid", label: "Wizkid", query: "Wizkid", hint: "Essence, Ojuelegba" },
+  { id: "mavo", label: "Mavo", query: "Mavo", hint: "Personality, Your Body" },
+  { id: "rema", label: "Rema", query: "Rema", hint: "Calm Down, Bounce" },
   { id: "asake", label: "Asake", query: "Asake", hint: "Amapiano, Lonely At The Top" },
   { id: "ayra", label: "Ayra Starr", query: "Ayra Starr", hint: "Rush, Sability" },
-  { id: "burna", label: "Burna Boy", query: "Burna Boy", hint: "Last Last, Ye" },
-  { id: "wizkid", label: "Wizkid", query: "Wizkid", hint: "Essence, Ojuelegba" },
   { id: "tems", label: "Tems", query: "Tems", hint: "Free Mind, Love Me JeJe" },
   { id: "olamide", label: "Olamide", query: "Olamide", hint: "Unruly, Infinity" },
   { id: "tiwa", label: "Tiwa Savage", query: "Tiwa Savage", hint: "Kele Kele, Somebody Special" },

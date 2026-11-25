@@ -240,6 +240,23 @@ try {
     );
     check("official artist embed is supported", true);
 
+    await page.goto(staticServer.url, { waitUntil: "domcontentloaded" });
+    await page.waitForSelector(".spotify-preset");
+    const presetLabels = await page.evaluate(() =>
+      [...document.querySelectorAll(".spotify-preset__name")].map((node) => node.textContent.trim())
+    );
+    check(
+      "featured Nigerian artists are shown",
+      ["Burna Boy", "Davido", "Wizkid", "Mavo"].every((name) => presetLabels.includes(name)),
+      presetLabels.slice(0, 6)
+    );
+    const artistVisuals = await page.evaluate(() =>
+      [...document.querySelectorAll(".spotify-preset")]
+        .slice(0, 4)
+        .map((card) => Boolean(card.querySelector(".spotify-preset__img, .spotify-preset__avatar")))
+    );
+    check("artist profile visuals render", artistVisuals.every(Boolean), artistVisuals);
+
     await page.click(".premium__cta");
     await page.waitForSelector(".spotify-dialog__panel");
     const accountText = await bodyText(page);

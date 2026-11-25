@@ -21,6 +21,7 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [guestMode, setGuestMode] = useState(false);
+  const [artistMeta, setArtistMeta] = useState({});
   const autoSearched = useRef(false);
 
   const authenticated = Boolean(spotify.configured && spotify.authenticated);
@@ -42,6 +43,45 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
     autoSearched.current = true;
     runSearch(SPOTIFY_PRESETS[0].query);
   }, [authenticated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Official artist photos come from Spotify, never from fake Audius uploads.
+  useEffect(() => {
+    if (!authenticated) return undefined;
+    let cancelled = false;
+
+    (async () => {
+      const entries = await Promise.all(
+        SPOTIFY_PRESETS.map(async (preset) => {
+          try {
+            const { artists } = await spotify.searchCatalog(preset.label, {
+              types: ["artist"],
+              limit: 5,
+            });
+            const artist =
+              artists.find((item) => item.name?.trim().toLowerCase() === preset.label.toLowerCase()) ||
+              artists[0];
+            return [
+              preset.id,
+              artist
+                ? {
+                    name: artist.name,
+                    image: artist.images?.[0]?.url || "",
+                    url: artist.external_urls?.spotify || "",
+                  }
+                : null,
+            ];
+          } catch {
+            return [preset.id, null];
+          }
+        })
+      );
+      if (!cancelled) setArtistMeta(Object.fromEntries(entries.filter(Boolean)));
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [authenticated, spotify.searchCatalog]);
 
   const headActions = authenticated ? (
     spotify.user ? (
@@ -68,7 +108,7 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
           </span>
         }
         title="Popular Naija"
-        subtitle="Official hits from Rema, Davido, Asake, Ayra Starr and more — discover through Spotify."
+        subtitle="Burna Boy, Davido, Wizkid, Mavo and more — official artist photos and hits through Spotify."
       >
         {headActions}
       </SectionHead>
@@ -145,8 +185,22 @@ export default function SpotifySection({ spotify, onPlayTrack, onOpenSpotify }) 
                   runSearch(preset.query);
                 }}
               >
-                <span className="spotify-preset__name">{preset.label}</span>
-                <span className="spotify-preset__hint">{preset.hint}</span>
+                {artistMeta[preset.id]?.image ? (
+                  <img
+                    className="spotify-preset__img"
+                    src={artistMeta[preset.id].image}
+                    alt=""
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="spotify-preset__avatar" aria-hidden="true">
+                    {preset.label.charAt(0)}
+                  </span>
+                )}
+                <span className="spotify-preset__copy">
+                  <span className="spotify-preset__name">{preset.label}</span>
+                  <span className="spotify-preset__hint">{preset.hint}</span>
+                </span>
               </motion.button>
             ))}
           </div>
