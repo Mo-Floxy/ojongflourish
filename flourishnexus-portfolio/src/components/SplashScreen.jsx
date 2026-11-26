@@ -15,13 +15,13 @@ export default function SplashScreen({ onComplete }) {
   const { play } = useSound()
   const [leaving, setLeaving] = useState(false)
 
-  const duration = reduceMotion ? 700 : 2800
+  const duration = reduceMotion ? 450 : 1400
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setLeaving(true)
       play('startup')
-      window.setTimeout(onComplete, reduceMotion ? 180 : 420)
+      window.setTimeout(onComplete, reduceMotion ? 90 : 220)
     }, duration)
     return () => window.clearTimeout(timer)
   }, [duration, onComplete, play, reduceMotion])
@@ -29,7 +29,7 @@ export default function SplashScreen({ onComplete }) {
   const skip = () => {
     play('startup')
     setLeaving(true)
-    window.setTimeout(onComplete, reduceMotion ? 80 : 240)
+    window.setTimeout(onComplete, reduceMotion ? 60 : 140)
   }
 
   const particles = useMemo(() => PARTICLES, [])
@@ -66,7 +66,7 @@ export default function SplashScreen({ onComplete }) {
         className="splash__stage"
         initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.88 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: reduceMotion ? 0.2 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduceMotion ? 0.12 : 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="splash__glow" aria-hidden="true" />
         <img
@@ -82,7 +82,7 @@ export default function SplashScreen({ onComplete }) {
         className="splash__brand"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: reduceMotion ? 0.1 : 0.9, duration: 0.5 }}
+        transition={{ delay: reduceMotion ? 0.05 : 0.3, duration: reduceMotion ? 0.12 : 0.3 }}
       >
         <p className="splash__name">FlourishNexus</p>
         <p className="splash__tagline">Dream. Code. Innovate.</p>
