@@ -6,7 +6,6 @@ import {
   Server, Sparkles, TerminalSquare,
 } from 'lucide-react'
 import girlDesktop from '../assets/images/girl3.webp'
-import girlMobile from '../assets/images/girl2.webp'
 import logo from '../assets/logo/fn-logo.webp'
 import { PROJECTS, SKILL_GROUPS, SOCIALS } from '../data'
 import ProjectCard from '../components/ProjectCard'
@@ -94,17 +93,14 @@ export default function Home() {
               <span />
             </div>
             <div className="hero__ai-frame">
-              <picture>
-                <source media="(max-width: 640px)" srcSet={girlMobile} />
-                <img
-                  src={girlDesktop}
-                  alt="Flourish portrait"
-                  className="hero__ai-image"
-                  draggable="false"
-                  loading="eager"
-                  fetchPriority="high"
-                />
-              </picture>
+              <img
+                src={girlDesktop}
+                alt="Flourish portrait"
+                className="hero__ai-image"
+                draggable="false"
+                loading="eager"
+                fetchPriority="high"
+              />
             </div>
             <div className="hero__holo" aria-hidden="true">
               <img src={logo} alt="" />

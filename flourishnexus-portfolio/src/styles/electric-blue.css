@@ -200,10 +200,6 @@ img {
   -webkit-backdrop-filter: blur(16px);
 }
 
-.hero__ai-frame picture {
-  display: block;
-}
-
 .hero__ai-image {
   display: block;
   width: 100%;
