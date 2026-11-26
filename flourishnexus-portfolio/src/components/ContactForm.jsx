@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, CheckCircle2, LoaderCircle, TriangleAlert } from 'lucide-react'
 import { SOCIALS } from '../data'
-import { useSound } from './SoundController'
 
 const EMPTY = { name: '', email: '', subject: '', message: '' }
 
@@ -28,7 +27,6 @@ export default function ContactForm() {
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState({ type: '', message: '' })
   const [sending, setSending] = useState(false)
-  const { play } = useSound()
   const web3formsKey = import.meta.env.VITE_WEB3FORMS_KEY || ''
 
   const update = (field) => (e) => {
@@ -39,7 +37,6 @@ export default function ContactForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    play('click')
 
     const nextErrors = validate(values)
     setErrors(nextErrors)
@@ -82,7 +79,6 @@ export default function ContactForm() {
         throw new Error(data.message || 'The message could not be sent.')
       }
 
-      play('success')
       setValues(EMPTY)
       setStatus({ type: 'success', message: 'Message sent. I will get back to you soon.' })
     } catch (error) {

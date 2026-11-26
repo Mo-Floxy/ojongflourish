@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom'
 import { ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
 import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS, SOCIALS } from '../data'
-import { useSound } from './SoundController'
 
 export default function Footer() {
-  const { play } = useSound()
   const year = new Date().getFullYear()
 
   return (
@@ -13,7 +11,7 @@ export default function Footer() {
       <div className="footer-glow" aria-hidden="true" />
       <div className="container footer-grid">
         <div className="footer-brand">
-          <Link to="/" className="brand" onClick={() => play('click')} aria-label="FlourishNexus home">
+          <Link to="/" className="brand" aria-label="FlourishNexus home">
             <img src={logo} alt="FlourishNexus FN logo" className="brand__logo" />
             <span className="brand__text">Flourish<b>Nexus</b></span>
           </Link>
@@ -24,7 +22,7 @@ export default function Footer() {
         <div className="footer-column">
           <h3>Explore</h3>
           {NAV_LINKS.map((link) => (
-            <Link key={link.to} to={link.to} onClick={() => play('click')}>
+            <Link key={link.to} to={link.to}>
               {link.label}
             </Link>
           ))}
@@ -32,18 +30,18 @@ export default function Footer() {
 
         <div className="footer-column">
           <h3>Connect</h3>
-          <a href={`mailto:${SOCIALS.email}`} onClick={() => play('click')}>
+          <a href={`mailto:${SOCIALS.email}`}>
             <Mail size={14} /> {SOCIALS.email}
           </a>
-          <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" onClick={() => play('click')}>
+          <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer">
             <Github size={14} /> GitHub
           </a>
           {SOCIALS.linkedin && (
-            <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => play('click')}>
+            <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer">
               <Linkedin size={14} /> LinkedIn
             </a>
           )}
-          <a href={SOCIALS.portfolio} target="_blank" rel="noopener noreferrer" onClick={() => play('click')}>
+          <a href={SOCIALS.portfolio} target="_blank" rel="noopener noreferrer">
             <ArrowUpRight size={14} /> Live portfolio
           </a>
         </div>

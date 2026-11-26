@@ -3,7 +3,6 @@ import { ArrowUpRight, Award, BookOpen, GraduationCap, FolderGit2, Sparkles } fr
 import logo from '../assets/logo/fn-logo.webp'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
-import { useSound } from '../components/SoundController'
 
 const TIMELINE = [
   {
@@ -49,8 +48,6 @@ const TIMELINE = [
 ]
 
 export default function Experience() {
-  const { play } = useSound()
-
   return (
     <>
       <PageHeader
@@ -101,7 +98,7 @@ export default function Experience() {
             <Reveal className="glass-panel timeline-aside__card timeline-aside__card--cta" delay={0.25}>
               <p className="eyebrow">Next chapter</p>
               <p>Interested in what I&apos;m building now?</p>
-              <Link to="/projects" className="btn btn--glow btn--small" onClick={() => play('nav')}>
+              <Link to="/projects" className="btn btn--glow btn--small">
                 View projects <ArrowUpRight size={14} />
               </Link>
             </Reveal>

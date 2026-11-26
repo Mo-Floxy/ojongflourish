@@ -5,13 +5,10 @@ import { SKILL_GROUPS } from '../data'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import SkillCard from '../components/SkillCard'
-import { useSound } from '../components/SoundController'
 
 const ALL = SKILL_GROUPS.flatMap((group) => group.items)
 
 export default function Skills() {
-  const { play } = useSound()
-
   return (
     <>
       <PageHeader
@@ -65,10 +62,10 @@ export default function Skills() {
               <p>I&apos;m strengthening my backend and database skills while continuing to sharpen the interfaces I build.</p>
             </div>
             <div className="skills-cta__actions">
-              <Link to="/projects" className="btn btn--glow" onClick={() => play('nav')}>
+              <Link to="/projects" className="btn btn--glow">
                 See skills in action <ArrowRight size={16} />
               </Link>
-              <Link to="/contact" className="text-link" onClick={() => play('nav')}>
+              <Link to="/contact" className="text-link">
                 Connect <ArrowUpRight size={14} />
               </Link>
             </div>

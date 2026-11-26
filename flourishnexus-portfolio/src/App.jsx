@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Atmosphere from './components/Atmosphere'
 import Footer from './components/Footer'
+import InteractionScanner from './components/InteractionScanner'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import SplashScreen from './components/SplashScreen'
@@ -36,6 +37,7 @@ export default function App() {
     <>
       <a className="skip-link" href="#main">Skip to content</a>
       <Atmosphere />
+      <InteractionScanner />
 
       <AnimatePresence>
         {showSplash && <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />}

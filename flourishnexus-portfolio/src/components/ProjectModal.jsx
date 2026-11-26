@@ -1,19 +1,14 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, Github, X } from 'lucide-react'
-import { useSound } from './SoundController'
 
 export default function ProjectModal({ project, onClose }) {
-  const { play } = useSound()
   const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     if (!project) return undefined
     const onKey = (e) => {
-      if (e.key === 'Escape') {
-        play('click')
-        onClose()
-      }
+      if (e.key === 'Escape') onClose()
     }
     document.body.classList.add('modal-open')
     window.addEventListener('keydown', onKey)
@@ -21,12 +16,9 @@ export default function ProjectModal({ project, onClose }) {
       document.body.classList.remove('modal-open')
       window.removeEventListener('keydown', onKey)
     }
-  }, [project, onClose, play])
+  }, [project, onClose])
 
-  const close = () => {
-    play('click')
-    onClose()
-  }
+  const close = () => onClose()
 
   return (
     <AnimatePresence>
@@ -89,7 +81,7 @@ export default function ProjectModal({ project, onClose }) {
 
               <div className="project-modal__actions">
                 {project.repo && (
-                  <a className="btn btn--glow" href={project.repo} target="_blank" rel="noopener noreferrer" onClick={() => play('click')}>
+                  <a className="btn btn--glow" href={project.repo} target="_blank" rel="noopener noreferrer">
                     Open repository <ArrowUpRight size={15} />
                   </a>
                 )}

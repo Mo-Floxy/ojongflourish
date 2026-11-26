@@ -6,15 +6,13 @@ import './styles/global.css'
 import './styles/animations.css'
 import './styles/responsive.css'
 import './styles/electric-blue.css'
+import './styles/interaction-scanner.css'
 import App from './App'
-import { SoundProvider } from './components/SoundController'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
-      <SoundProvider>
-        <App />
-      </SoundProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>,
 )

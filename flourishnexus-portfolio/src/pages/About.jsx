@@ -3,7 +3,6 @@ import { ArrowRight, ArrowUpRight, Compass, GraduationCap, Lightbulb, Target } f
 import logo from '../assets/logo/fn-logo.webp'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
-import { useSound } from '../components/SoundController'
 
 const JOURNEY = [
   {
@@ -44,8 +43,6 @@ const VALUES = [
 ]
 
 export default function About() {
-  const { play } = useSound()
-
   return (
     <>
       <PageHeader
@@ -67,7 +64,7 @@ export default function About() {
             <p>
               I care about the details that make technology feel approachable: readable interfaces, thoughtful interactions and code that stays understandable as it grows.
             </p>
-            <Link to="/projects" className="text-link" onClick={() => play('nav')}>
+            <Link to="/projects" className="text-link">
               See what I&apos;ve built <ArrowRight size={14} />
             </Link>
           </Reveal>
@@ -115,7 +112,7 @@ export default function About() {
             <p className="education-card__text">
               My training covers software development fundamentals, web technologies, programming languages and database concepts — the foundation I continue to build on through projects.
             </p>
-            <Link to="/experience" className="text-link" onClick={() => play('nav')}>
+            <Link to="/experience" className="text-link">
               View my journey <ArrowUpRight size={14} />
             </Link>
           </Reveal>
@@ -146,7 +143,7 @@ export default function About() {
               <p>Build projects with clear purpose and thoughtful user experience.</p>
               <p>Develop the habit of testing, documenting and improving every build.</p>
             </div>
-            <Link to="/contact" className="btn btn--glow" onClick={() => play('nav')}>
+            <Link to="/contact" className="btn btn--glow">
               Let&apos;s talk <ArrowUpRight size={16} />
             </Link>
           </Reveal>

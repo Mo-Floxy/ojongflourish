@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Github, Home, Mail, UserRound, Layers3, FolderGit2, X } from 'lucide-react'
 import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS, SOCIALS } from '../data'
-import { SoundToggle, useSound } from './SoundController'
 
 const BOTTOM = [
   { to: '/', label: 'Home', icon: Home },
@@ -15,8 +14,6 @@ const BOTTOM = [
 ]
 
 export default function MobileNavigation({ open, onClose, onNavigate }) {
-  const { play } = useSound()
-
   useEffect(() => {
     const close = (e) => {
       if (e.key === 'Escape') onClose()
@@ -25,10 +22,7 @@ export default function MobileNavigation({ open, onClose, onNavigate }) {
     return () => window.removeEventListener('keydown', close)
   }, [onClose])
 
-  const handle = () => {
-    play('click')
-    onNavigate()
-  }
+  const handle = () => onNavigate()
 
   return (
     <>
@@ -72,8 +66,7 @@ export default function MobileNavigation({ open, onClose, onNavigate }) {
             </nav>
 
             <div className="mobile-menu__footer">
-              <SoundToggle />
-              <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" className="glass-chip" onClick={() => play('click')}>
+              <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" className="glass-chip">
                 <Github size={15} /> GitHub
               </a>
             </div>
@@ -87,7 +80,6 @@ export default function MobileNavigation({ open, onClose, onNavigate }) {
             key={to}
             to={to}
             end={to === '/'}
-            onClick={() => play('click')}
             className={({ isActive }) => `bottom-nav__item ${isActive ? 'is-active' : ''}`}
           >
             <Icon size={19} />

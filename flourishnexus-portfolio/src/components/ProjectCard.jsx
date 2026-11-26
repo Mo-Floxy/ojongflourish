@@ -1,10 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Github, Layers3 } from 'lucide-react'
-import { useSound } from './SoundController'
 
 export default function ProjectCard({ project, index, onOpen }) {
-  const { play } = useSound()
-
   return (
     <motion.article
       className="glass-panel project-card"
@@ -12,7 +9,6 @@ export default function ProjectCard({ project, index, onOpen }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.18 }}
       transition={{ duration: 0.5, delay: (index % 3) * 0.07 }}
-      whileHover={{ y: -6 }}
       style={{ '--accent': project.accent }}
     >
       <div className="project-card__media">
@@ -47,10 +43,7 @@ export default function ProjectCard({ project, index, onOpen }) {
           <button
             type="button"
             className="btn btn--glow btn--small"
-            onClick={() => {
-              play('blip')
-              onOpen(project)
-            }}
+            onClick={() => onOpen(project)}
           >
             View Project <ArrowUpRight size={14} />
           </button>
@@ -61,7 +54,6 @@ export default function ProjectCard({ project, index, onOpen }) {
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn--ghost btn--small"
-              onClick={() => play('click')}
             >
               <Github size={15} /> GitHub
             </a>

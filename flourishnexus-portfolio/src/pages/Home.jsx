@@ -5,13 +5,13 @@ import {
   ArrowRight, ArrowUpRight, Braces, Database, Github, Layers3, Mail,
   Server, Sparkles, TerminalSquare,
 } from 'lucide-react'
-import aiHero from '../assets/images/ai-hero.webp'
+import girlDesktop from '../assets/images/girl3.webp'
+import girlMobile from '../assets/images/girl2.webp'
 import logo from '../assets/logo/fn-logo.webp'
 import { PROJECTS, SKILL_GROUPS, SOCIALS } from '../data'
 import ProjectCard from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
 import Reveal from '../components/Reveal'
-import { useSound } from '../components/SoundController'
 
 const STACK = [
   { label: 'HTML', icon: Braces },
@@ -25,7 +25,6 @@ const STACK = [
 ]
 
 export default function Home() {
-  const { play } = useSound()
   const reduceMotion = useReducedMotion()
   const [selectedProject, setSelectedProject] = useState(null)
   const featured = PROJECTS.slice(0, 3)
@@ -57,23 +56,23 @@ export default function Home() {
             </p>
 
             <div className="hero__actions">
-              <Link to="/projects" className="btn btn--glow" onClick={() => play('nav')}>
+              <Link to="/projects" className="btn btn--glow">
                 Explore My Work <ArrowRight size={16} />
               </Link>
-              <Link to="/contact" className="btn btn--ghost" onClick={() => play('nav')}>
+              <Link to="/contact" className="btn btn--ghost">
                 Contact Me <ArrowUpRight size={16} />
               </Link>
             </div>
 
             <div className="hero__socials" aria-label="Social links">
-              <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" onClick={() => play('click')} aria-label="GitHub">
+              <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                 <Github size={18} />
               </a>
-              <a href={`mailto:${SOCIALS.email}`} onClick={() => play('click')} aria-label="Email">
+              <a href={`mailto:${SOCIALS.email}`} aria-label="Email">
                 <Mail size={18} />
               </a>
               {SOCIALS.linkedin && (
-                <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => play('click')} aria-label="LinkedIn">
+                <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
                   <ArrowUpRight size={18} />
                 </a>
               )}
@@ -95,14 +94,17 @@ export default function Home() {
               <span />
             </div>
             <div className="hero__ai-frame">
-              <motion.img
-                src={aiHero}
-                alt="Futuristic FlourishNexus portfolio concept"
-                className="hero__ai-image"
-                draggable="false"
-                animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-              />
+              <picture>
+                <source media="(max-width: 640px)" srcSet={girlMobile} />
+                <img
+                  src={girlDesktop}
+                  alt="Flourish portrait"
+                  className="hero__ai-image"
+                  draggable="false"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+              </picture>
             </div>
             <div className="hero__holo" aria-hidden="true">
               <img src={logo} alt="" />
@@ -127,7 +129,7 @@ export default function Home() {
                 <p className="eyebrow"><span className="status-dot" aria-hidden="true" /> Technology stack</p>
                 <h2>Tools I use to bring ideas to life</h2>
               </div>
-              <Link to="/skills" className="text-link" onClick={() => play('click')}>
+              <Link to="/skills" className="text-link">
                 All skills <ArrowUpRight size={14} />
               </Link>
             </div>
@@ -140,7 +142,6 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.4 }}
                   transition={{ delay: i * 0.035, duration: 0.35 }}
-                  whileHover={{ y: -4 }}
                 >
                   <Icon size={18} />
                   <span>{label}</span>
@@ -171,7 +172,7 @@ export default function Home() {
           </div>
 
           <Reveal className="center-cta">
-            <Link to="/projects" className="btn btn--glow" onClick={() => play('nav')}>
+            <Link to="/projects" className="btn btn--glow">
               View all projects <ArrowRight size={16} />
             </Link>
           </Reveal>
@@ -191,7 +192,7 @@ export default function Home() {
               <span>Continuous learning</span>
               <span>User-focused design</span>
             </div>
-            <Link to="/about" className="text-link" onClick={() => play('nav')}>
+            <Link to="/about" className="text-link">
               More about me <ArrowRight size={14} />
             </Link>
           </Reveal>
@@ -203,7 +204,7 @@ export default function Home() {
             <p className="eyebrow">Let&apos;s connect / 03</p>
             <h2>Have something in mind?</h2>
             <p>I&apos;m always open to interesting ideas, collaborations and conversations about technology.</p>
-            <Link to="/contact" className="btn btn--glow" onClick={() => play('nav')}>
+            <Link to="/contact" className="btn btn--glow">
               Start a conversation <ArrowUpRight size={16} />
             </Link>
           </Reveal>

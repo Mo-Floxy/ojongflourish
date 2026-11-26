@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import mascot from '../assets/images/splash-mascot.webp'
-import { useSound } from './SoundController'
 
 const PARTICLES = [
   [8, 18, 3, 0], [18, 72, 2, 1.2], [27, 30, 4, 0.6], [38, 84, 2, 1.8],
@@ -12,7 +11,6 @@ const PARTICLES = [
 
 export default function SplashScreen({ onComplete }) {
   const reduceMotion = useReducedMotion()
-  const { play } = useSound()
   const [leaving, setLeaving] = useState(false)
 
   const duration = reduceMotion ? 450 : 1400
@@ -20,14 +18,12 @@ export default function SplashScreen({ onComplete }) {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setLeaving(true)
-      play('startup')
       window.setTimeout(onComplete, reduceMotion ? 90 : 220)
     }, duration)
     return () => window.clearTimeout(timer)
-  }, [duration, onComplete, play, reduceMotion])
+  }, [duration, onComplete, reduceMotion])
 
   const skip = () => {
-    play('startup')
     setLeaving(true)
     window.setTimeout(onComplete, reduceMotion ? 60 : 140)
   }

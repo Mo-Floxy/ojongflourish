@@ -3,7 +3,6 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS } from '../data'
-import { SoundToggle, useSound } from './SoundController'
 import MobileNavigation from './MobileNavigation'
 
 export default function Navbar() {
@@ -11,7 +10,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const { play } = useSound()
 
   useEffect(() => setOpen(false), [location.pathname])
 
@@ -27,15 +25,9 @@ export default function Navbar() {
     return () => document.body.classList.remove('menu-open')
   }, [open])
 
-  const handleNav = (sound = 'nav') => {
-    play(sound)
-    setOpen(false)
-  }
+  const handleNav = () => setOpen(false)
 
-  const goContact = () => {
-    play('nav')
-    navigate('/contact')
-  }
+  const goContact = () => navigate('/contact')
 
   return (
     <>
@@ -61,17 +53,13 @@ export default function Navbar() {
           </nav>
 
           <div className="nav-actions">
-            <SoundToggle className="sound-toggle--nav" />
             <button type="button" className="btn btn--glow nav-cta" onClick={goContact}>
               Let&apos;s Talk <ArrowUpRight size={15} />
             </button>
             <button
               type="button"
               className="menu-button"
-              onClick={() => {
-                play('menu')
-                setOpen((v) => !v)
-              }}
+              onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-navigation"
               aria-label={open ? 'Close navigation' : 'Open navigation'}

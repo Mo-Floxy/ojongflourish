@@ -1,26 +1,20 @@
 import { useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Filter } from 'lucide-react'
 import { PROJECT_CATEGORIES, PROJECTS } from '../data'
 import PageHeader from '../components/PageHeader'
 import ProjectCard from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
-import { useSound } from '../components/SoundController'
 
 export default function Projects() {
   const [filter, setFilter] = useState('All')
   const [selected, setSelected] = useState(null)
-  const { play } = useSound()
 
   const visible = useMemo(
     () => (filter === 'All' ? PROJECTS : PROJECTS.filter((p) => p.categories.includes(filter))),
     [filter],
   )
 
-  const chooseFilter = (category) => {
-    play('blip')
-    setFilter(category)
-  }
+  const chooseFilter = (category) => setFilter(category)
 
   return (
     <>
@@ -52,22 +46,11 @@ export default function Projects() {
             <span className="filter-bar__count">{visible.length} shown</span>
           </div>
 
-          <motion.div className="project-grid" layout>
-            <AnimatePresence mode="popLayout">
-              {visible.map((project, i) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.97 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.28 }}
-                >
-                  <ProjectCard project={project} index={i} onOpen={() => setSelected(project)} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <div className="project-grid">
+            {visible.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} onOpen={() => setSelected(project)} />
+            ))}
+          </div>
 
           {visible.length === 0 && (
             <p className="empty-state">No projects in this category yet.</p>
