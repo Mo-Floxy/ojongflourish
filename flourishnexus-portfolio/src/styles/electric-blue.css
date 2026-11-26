@@ -209,6 +209,26 @@ img {
   box-shadow: 0 0 32px rgba(0, 73, 201, 0.26);
 }
 
+/* Mobile-only concept layer, kept behind all hero content. */
+.hero__concept-bg {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .hero__concept-bg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+}
+
 /* Non-mascot brand emblems on the inner pages. */
 .visual-emblem {
   position: relative;

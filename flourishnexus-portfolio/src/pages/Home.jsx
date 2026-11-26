@@ -5,6 +5,7 @@ import {
   ArrowRight, ArrowUpRight, Braces, Database, Github, Layers3, Mail,
   Server, Sparkles, TerminalSquare,
 } from 'lucide-react'
+import aiHero from '../assets/images/ai-hero.webp'
 import girlDesktop from '../assets/images/girl3.webp'
 import logo from '../assets/logo/fn-logo.webp'
 import { PROJECTS, SKILL_GROUPS, SOCIALS } from '../data'
@@ -33,6 +34,7 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero__aurora" aria-hidden="true" />
+        <img src={aiHero} alt="" className="hero__concept-bg" aria-hidden="true" />
         <div className="container hero__grid">
           <motion.div
             className="hero__copy"
