@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, Layers3 } from 'lucide-react'
-import logo from '../assets/logo/fn-logo.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import { SKILL_GROUPS } from '../data'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'

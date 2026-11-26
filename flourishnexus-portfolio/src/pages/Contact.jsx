@@ -1,6 +1,5 @@
 import { ArrowUpRight, Github, Linkedin, Mail, MapPin, Sparkles } from 'lucide-react'
-import mascot from '../assets/images/splash-mascot.jpeg'
-import logo from '../assets/logo/fn-logo.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import { SOCIALS } from '../data'
 import ContactForm from '../components/ContactForm'
 import PageHeader from '../components/PageHeader'
@@ -102,7 +101,9 @@ export default function Contact() {
 
             <Reveal className="contact-side__visual" delay={0.2}>
               <div className="contact-side__glow" aria-hidden="true" />
-              <img src={mascot} alt="Official FlourishNexus mascot" draggable="false" />
+              <div className="visual-emblem" aria-hidden="true">
+                <img src={logo} alt="" />
+              </div>
               <span>Dream. Code. Innovate.</span>
             </Reveal>
           </aside>

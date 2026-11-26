@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, Github, Linkedin, Mail } from 'lucide-react'
-import logo from '../assets/logo/fn-logo.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS, SOCIALS } from '../data'
 import { useSound } from './SoundController'
 

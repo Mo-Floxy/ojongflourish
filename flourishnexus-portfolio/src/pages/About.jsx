@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, Compass, GraduationCap, Lightbulb, Target } from 'lucide-react'
-import mascot from '../assets/images/splash-mascot.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { useSound } from '../components/SoundController'
@@ -74,7 +74,9 @@ export default function About() {
 
           <Reveal className="about-intro__visual" delay={0.1}>
             <div className="about-intro__visual-glow" aria-hidden="true" />
-            <img src={mascot} alt="Official FlourishNexus mascot" draggable="false" />
+            <div className="visual-emblem" aria-hidden="true">
+              <img src={logo} alt="" />
+            </div>
             <span className="about-intro__tag">Always learning</span>
           </Reveal>
         </div>

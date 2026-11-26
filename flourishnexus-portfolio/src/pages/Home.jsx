@@ -5,8 +5,8 @@ import {
   ArrowRight, ArrowUpRight, Braces, Database, Github, Layers3, Mail,
   Server, Sparkles, TerminalSquare,
 } from 'lucide-react'
-import mascot from '../assets/images/splash-mascot.jpeg'
-import logo from '../assets/logo/fn-logo.jpeg'
+import aiHero from '../assets/images/ai-hero.webp'
+import logo from '../assets/logo/fn-logo.webp'
 import { PROJECTS, SKILL_GROUPS, SOCIALS } from '../data'
 import ProjectCard from '../components/ProjectCard'
 import ProjectModal from '../components/ProjectModal'
@@ -94,14 +94,16 @@ export default function Home() {
               <span />
               <span />
             </div>
-            <motion.img
-              src={mascot}
-              alt="Official FlourishNexus mascot with glowing blue hair and FN emblem"
-              className="hero__mascot"
-              draggable="false"
-              animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            />
+            <div className="hero__ai-frame">
+              <motion.img
+                src={aiHero}
+                alt="Futuristic FlourishNexus portfolio concept"
+                className="hero__ai-image"
+                draggable="false"
+                animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </div>
             <div className="hero__holo" aria-hidden="true">
               <img src={logo} alt="" />
             </div>

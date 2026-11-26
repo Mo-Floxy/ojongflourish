@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import mascot from '../assets/images/splash-mascot.jpeg'
+import mascot from '../assets/images/splash-mascot.webp'
 import { useSound } from './SoundController'
 
 const PARTICLES = [

@@ -1,6 +1,6 @@
 import vyra from './assets/projects/vyra.jpg'
 import codeher from './assets/projects/codeher.png'
-import jobhive from './assets/projects/jobhive.png'
+import jobhive from './assets/projects/jobhive.webp'
 import jenkinson from './assets/projects/jenkinson.jpg'
 
 export const SOCIALS = {

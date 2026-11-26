@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Github, Home, Mail, UserRound, Layers3, FolderGit2, X } from 'lucide-react'
-import logo from '../assets/logo/fn-logo.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS, SOCIALS } from '../data'
 import { SoundToggle, useSound } from './SoundController'
 

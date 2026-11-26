@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, Award, BookOpen, GraduationCap, FolderGit2, Sparkles } from 'lucide-react'
-import mascot from '../assets/images/splash-mascot.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import { useSound } from '../components/SoundController'
@@ -92,7 +92,9 @@ export default function Experience() {
 
             <Reveal className="timeline-aside__visual" delay={0.2}>
               <div className="timeline-aside__glow" aria-hidden="true" />
-              <img src={mascot} alt="Official FlourishNexus mascot" draggable="false" />
+              <div className="visual-emblem" aria-hidden="true">
+                <img src={logo} alt="" />
+              </div>
               <span>Building the future, one skill at a time.</span>
             </Reveal>
 

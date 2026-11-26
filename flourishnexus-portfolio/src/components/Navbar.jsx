@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
-import logo from '../assets/logo/fn-logo.jpeg'
+import logo from '../assets/logo/fn-logo.webp'
 import { NAV_LINKS } from '../data'
 import { SoundToggle, useSound } from './SoundController'
 import MobileNavigation from './MobileNavigation'
