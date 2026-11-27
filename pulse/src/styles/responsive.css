@@ -1,0 +1,467 @@
+@media (max-width: 1199.98px) {
+  .site-nav {
+    gap: 20px;
+  }
+
+  .site-header__actions {
+    gap: 14px;
+    padding-left: 18px;
+  }
+
+  .hero__title {
+    font-size: clamp(2.9rem, 6.2vw, 4.6rem);
+  }
+
+  .float-card--activity {
+    left: -14px;
+  }
+
+  .float-card--streak {
+    right: -6px;
+  }
+
+  .dashboard-preview__body {
+    grid-template-columns: 180px 1fr;
+  }
+
+  .dash-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roadmap__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991.98px) {
+  .site-nav,
+  .site-header__actions {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: grid;
+    margin-left: auto;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 138px;
+  }
+
+  .hero__content {
+    max-width: 680px;
+  }
+
+  .hero__visual {
+    max-width: 540px;
+    margin: 28px auto 0;
+  }
+
+  .hero__image-wrap {
+    height: 520px;
+  }
+
+  .hero__scroll-cue {
+    display: none;
+  }
+
+  .overview__image-frame,
+  .topic__image img,
+  .about-story__image img {
+    height: 500px;
+  }
+
+  .features__heading-row,
+  .preview__head,
+  .testimonials__head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .features__count {
+    padding-bottom: 0;
+  }
+
+  .how-step__connector {
+    display: none;
+  }
+
+  .dashboard-preview__body {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-sidebar {
+    display: none;
+  }
+
+  .dash-panels {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+
+  .footer-newsletter {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .newsletter-form {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .roadmap__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .simple-cta__inner,
+  .next-feature__inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767.98px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+
+  .section {
+    padding: 78px 0;
+  }
+
+  .hero {
+    padding: 124px 0 96px;
+  }
+
+  .hero__title {
+    margin-top: 24px;
+    font-size: clamp(2.65rem, 11vw, 3.8rem);
+  }
+
+  .hero__text {
+    margin-top: 20px;
+  }
+
+  .hero__actions {
+    margin-top: 30px;
+  }
+
+  .hero__proof {
+    margin-top: 40px;
+    gap: 20px;
+  }
+
+  .hero__proof div {
+    min-width: 90px;
+  }
+
+  .hero__image-wrap {
+    height: 440px;
+    border-radius: 170px 170px 28px 28px;
+  }
+
+  .float-card {
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+
+  .float-card__icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .float-card--activity {
+    top: 52px;
+    left: -6px;
+  }
+
+  .float-card--streak {
+    right: -4px;
+    bottom: 112px;
+  }
+
+  .float-card--recovery {
+    left: 4px;
+    bottom: 34px;
+  }
+
+  .float-card__pulse {
+    display: none;
+  }
+
+  .overview__visual,
+  .topic__image,
+  .about-story__image {
+    padding: 0 14px 14px 0;
+  }
+
+  .overview__image-frame,
+  .topic__image img,
+  .about-story__image img {
+    height: 420px;
+    border-radius: 150px 150px 24px 24px;
+  }
+
+  .overview__floating {
+    max-width: 250px;
+    padding: 14px;
+  }
+
+  .feature-card__visual {
+    height: 150px;
+  }
+
+  .feature-card__body {
+    padding: 22px;
+  }
+
+  .how__steps {
+    margin-top: 40px;
+  }
+
+  .how-step {
+    padding: 26px 22px;
+  }
+
+  .how-step__top {
+    margin-bottom: 30px;
+  }
+
+  .dashboard-preview__chrome {
+    padding: 12px 14px;
+  }
+
+  .dash-main {
+    padding: 22px 16px 26px;
+  }
+
+  .dash-main__top h3 {
+    font-size: 1.32rem;
+  }
+
+  .dash-stats {
+    gap: 9px;
+    margin-top: 20px;
+  }
+
+  .dash-stat {
+    padding: 11px;
+  }
+
+  .dash-chart {
+    gap: 7px;
+    height: 160px;
+  }
+
+  .preview__footer,
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .final-cta {
+    padding-bottom: 78px;
+  }
+
+  .final-cta__panel {
+    border-radius: 28px;
+  }
+
+  .page-hero {
+    padding-top: 132px;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.25rem, 9.5vw, 3.2rem);
+  }
+
+  .feature-detail__art {
+    min-height: 300px;
+  }
+
+  .roadmap__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roadmap__cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .starter-option {
+    min-height: auto;
+  }
+
+  .simple-cta__inner {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .container,
+  .container-fluid {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .brand__name {
+    font-size: 1.08rem;
+  }
+
+  .brand__mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .mobile-nav {
+    margin-left: 14px;
+    margin-right: 14px;
+    padding: 20px;
+  }
+
+  .hero__actions .pulse-btn {
+    width: 100%;
+  }
+
+  .hero__proof {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .hero__proof div {
+    min-width: 0;
+  }
+
+  .hero__proof dt {
+    font-size: 1.25rem;
+  }
+
+  .hero__proof dd {
+    font-size: 0.68rem;
+  }
+
+  .hero__visual {
+    padding-right: 8px;
+  }
+
+  .hero__image-wrap {
+    height: 380px;
+    border-radius: 130px 130px 24px 24px;
+  }
+
+  .float-card--activity {
+    top: 30px;
+    left: -10px;
+  }
+
+  .float-card--streak {
+    right: -10px;
+    bottom: 96px;
+  }
+
+  .float-card__label {
+    font-size: 0.6rem;
+  }
+
+  .float-card strong {
+    font-size: 0.82rem;
+  }
+
+  .float-card--recovery {
+    padding: 8px 10px;
+  }
+
+  .overview__image-frame,
+  .topic__image img,
+  .about-story__image img {
+    height: 350px;
+  }
+
+  .overview__floating {
+    left: 0;
+    right: auto;
+    max-width: 230px;
+  }
+
+  .features__count strong {
+    font-size: 3.2rem;
+  }
+
+  .demo-badge,
+  .sample-badge {
+    white-space: normal;
+  }
+
+  .dash-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dash-stat__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .dash-stat strong {
+    font-size: 0.78rem;
+  }
+
+  .dash-panel {
+    padding: 16px;
+  }
+
+  .dash-chart {
+    gap: 5px;
+    height: 140px;
+  }
+
+  .newsletter-form {
+    flex-wrap: wrap;
+  }
+
+  .newsletter-form input {
+    width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .roadmap__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmap-item {
+    min-height: 100px;
+  }
+
+  .roadmap-item strong {
+    margin-top: 14px;
+  }
+
+  .starter__actions .pulse-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
