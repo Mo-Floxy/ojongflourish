@@ -1,0 +1,25 @@
+{
+  "name": "aethra",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AETHRA — Your Intelligence. Without Limits.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "start": "npm run start -w server",
+    "build": "npm run build -w client",
+    "test": "npm run test -w server",
+    "db:setup": "npm run db:setup -w server",
+    "check": "npm test -w server && npm run build -w client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

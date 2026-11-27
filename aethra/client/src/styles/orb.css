@@ -1,0 +1,89 @@
+/* =========================================================
+   AETHRA — Holographic AI orb wrapper and CSS fallback
+   ========================================================= */
+
+.ai-orb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  outline: none;
+}
+
+.ai-orb canvas {
+  display: block;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.ai-orb::after {
+  content: '';
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.16), transparent 66%);
+  filter: blur(24px);
+  pointer-events: none;
+  animation: orb-halo 5s ease-in-out infinite;
+}
+
+.ai-orb--listening::after {
+  animation-duration: 1.5s;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.24), transparent 66%);
+}
+
+.ai-orb--processing::after {
+  animation-duration: 0.8s;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.26), transparent 66%);
+}
+
+.ai-orb--speaking::after {
+  animation-duration: 2.4s;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.2), transparent 68%);
+}
+
+@keyframes orb-halo {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+.ai-orb__fallback {
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #dff4ff 0%, #60a5fa 20%, #2563eb 46%, #6d28d9 74%, #0b1024 100%);
+  box-shadow: 0 0 60px rgba(59, 130, 246, 0.45), 0 0 120px rgba(139, 92, 246, 0.28);
+  animation: orb-halo 4s ease-in-out infinite;
+}
+
+.ai-orb__fallback::before,
+.ai-orb__fallback::after {
+  content: '';
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  transform: rotateX(64deg);
+}
+
+.ai-orb__fallback::after {
+  inset: -22%;
+  border-color: rgba(96, 165, 250, 0.3);
+  transform: rotateY(64deg);
+}
+
+/* Compact orb used inside chat / voice panels */
+.ai-orb--compact {
+  min-height: 160px;
+}
+
+.ai-orb--compact::after {
+  inset: 8%;
+}
