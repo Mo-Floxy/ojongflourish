@@ -1,33 +1,68 @@
 :root {
-  /* Brand palette — cool, contemporary, editorial */
-  --ink: #0b1220;
-  --forest: #0f766e;
-  --forest-deep: #082f49;
-  --moss: #14b8a6;
-  --sage: #d9f2ee;
-  --sage-soft: #eaf8f5;
-  --cream: #f8fafc;
-  --sand: #eef2f6;
-  --clay: #f97316;
-  --clay-dark: #ea580c;
-  --gold: #f59e0b;
-  --gold-soft: #fef3c7;
-  --danger: #ef4444;
+  /* Premium palette — midnight navy, royal blue and restrained amber. */
+  --navy: #172554;
+  --royal: #2563eb;
+  --royal-dark: #1d4ed8;
+  --amber: #f59e0b;
+  --amber-dark: #d97706;
+  --amber-ink: #92400e;
+  --amber-border: #fcd34d;
+  --cloud: #f8fafc;
+  --white: #ffffff;
+  --charcoal: #172033;
+  --slate: #64748b;
+  --slate-light: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
   --success: #10b981;
-  --warning: #d97706;
+  --success-soft: #d1fae5;
+  --success-border: #a7f3d0;
+  --error: #ef4444;
+  --error-soft: #fee2e2;
+  --error-border: #fda4af;
+  --info: #2563eb;
+  --info-soft: #dbeafe;
+  --info-border: #bfdbfe;
 
-  --text: var(--ink);
-  --text-muted: #64748b;
-  --text-light: #94a3b8;
-  --line: rgba(15, 23, 42, 0.10);
-  --line-strong: rgba(15, 23, 42, 0.18);
-  --surface: #ffffff;
-  --surface-alt: var(--cream);
+  /* Existing semantic names stay, now mapped to the new palette. */
+  --ink: var(--charcoal);
+  --forest: var(--royal);
+  --forest-deep: var(--royal-dark);
+  --moss: var(--royal);
+  --sage: var(--info-soft);
+  --sage-soft: #eff6ff;
+  --cream: var(--cloud);
+  --sand: #f1f5f9;
+  --clay: var(--amber);
+  --clay-dark: var(--amber-dark);
+  --gold: var(--amber);
+  --gold-soft: #fef3c7;
+  --danger: var(--error);
+  --warning: var(--amber);
 
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.07);
-  --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.10);
-  --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.16);
+  --text: var(--slate);
+  --text-muted: var(--slate);
+  --text-light: var(--slate-light);
+  --line: var(--border);
+  --line-strong: var(--border-strong);
+  --surface: var(--white);
+  --surface-alt: var(--cloud);
+  --surface-raised: var(--white);
+
+  --accent-solid: var(--royal);
+  --accent-solid-hover: var(--royal-dark);
+  --accent-solid-ink: var(--white);
+  --wash-green: rgba(16, 185, 129, 0.12);
+  --wash-gold: rgba(245, 158, 11, 0.12);
+  --wash-clay: rgba(245, 158, 11, 0.12);
+  --wash-blue: rgba(37, 99, 235, 0.1);
+  --wash-purple: rgba(37, 99, 235, 0.1);
+  --wash-danger: rgba(239, 68, 68, 0.12);
+
+  --shadow-xs: 0 1px 2px rgba(23, 37, 84, 0.06);
+  --shadow-sm: 0 4px 14px rgba(23, 37, 84, 0.08);
+  --shadow-md: 0 12px 32px rgba(23, 37, 84, 0.12);
+  --shadow-lg: 0 24px 60px rgba(23, 37, 84, 0.18);
 
   --radius-xs: 8px;
   --radius-sm: 12px;

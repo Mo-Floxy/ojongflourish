@@ -121,16 +121,16 @@
   color: var(--moss);
 }
 .vnd-stat-icon.clay {
-  background: #ffedd5;
+  background: var(--gold-soft);
   color: var(--clay-dark);
 }
 .vnd-stat-icon.gold {
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
 }
 .vnd-stat-icon.blue {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: var(--info-soft);
+  color: var(--royal-dark);
 }
 
 .vnd-overview-grid {
@@ -255,7 +255,7 @@
 }
 .vnd-recent-row:hover .vnd-recent-info strong,
 .vnd-stock-row:hover .vnd-stock-info strong {
-  color: var(--clay);
+  color: var(--royal);
 }
 .vnd-recent-row:focus-visible,
 .vnd-stock-row:focus-visible,
@@ -329,7 +329,7 @@
   align-items: center;
   gap: 14px;
   padding: 20px;
-  background: #fff;
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   transition: transform var(--fast), box-shadow var(--fast), border-color var(--fast);
@@ -433,7 +433,7 @@
 }
 .vnd-shop-preview {
   overflow: hidden;
-  background: #fff;
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -458,7 +458,7 @@
 .vnd-preview-logo {
   width: 64px;
   height: 64px;
-  border: 3px solid #fff;
+  border: 3px solid var(--white);
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
   margin-top: -34px;
@@ -537,7 +537,7 @@
   padding: 0 12px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--white);
   font-size: 0.84rem;
   cursor: pointer;
 }
@@ -561,7 +561,7 @@
 .vnd-stock-warning {
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: #ffedd5;
+  background: var(--gold-soft);
   color: var(--clay-dark);
   font-size: 0.68rem;
   font-weight: 700;
@@ -584,7 +584,7 @@
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: #fff;
+  background: var(--white);
   transition: transform var(--fast), box-shadow var(--fast), border-color var(--fast);
 }
 .vnd-category-card:hover {
@@ -613,16 +613,16 @@
   color: var(--moss);
 }
 .vnd-category-icon.tone-1 {
-  background: #ffedd5;
+  background: var(--gold-soft);
   color: var(--clay-dark);
 }
 .vnd-category-icon.tone-2 {
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
 }
 .vnd-category-icon.tone-3 {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: var(--info-soft);
+  color: var(--royal-dark);
 }
 .vnd-category-card h3 {
   font-size: 1.15rem;
@@ -675,24 +675,24 @@
 }
 .vnd-status-pending {
   background: var(--gold-soft);
-  color: #b45309;
-  border-color: #fde68a;
+  color: var(--amber-ink);
+  border-color: var(--amber-border);
 }
 .vnd-status-processing,
 .vnd-status-out_for_delivery {
-  background: #e0f2fe;
-  color: #0369a1;
-  border-color: #bae6fd;
+  background: var(--info-soft);
+  color: var(--royal-dark);
+  border-color: var(--info-border);
 }
 .vnd-status-delivered {
-  background: #ccfbf1;
+  background: var(--success-soft);
   color: var(--success);
-  border-color: #99f6e4;
+  border-color: var(--success-border);
 }
 .vnd-status-cancelled {
-  background: #ffe4e6;
+  background: var(--error-soft);
   color: var(--danger);
-  border-color: #fecdd3;
+  border-color: var(--error-border);
 }
 
 .vnd-order-detail {

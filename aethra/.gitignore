@@ -10,3 +10,6 @@ build/
 Thumbs.db
 .shots/
 coverage/
+
+.vercel
+.env*

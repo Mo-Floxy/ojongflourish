@@ -1,0 +1,25 @@
+/* EDVANTA brand system — the single source of truth for color and shape. */
+:root {
+  --ed-indigo: #171334;
+  --ed-indigo-deep: #0f0c24;
+  --ed-indigo-soft: #211b45;
+  --ed-violet: #7047eb;
+  --ed-violet-light: #a98cff;
+  --ed-sky: #35b8e8;
+  --ed-lavender: #f4f1ff;
+  --ed-orange: #ffb86b;
+  --ed-white: #ffffff;
+  --ed-muted: #9290a8;
+  --ed-border: #e4ddf5;
+  --ed-success: #34d399;
+  --ed-error: #f87171;
+
+  --ed-gradient: linear-gradient(120deg, #7047eb 0%, #8a5cf0 48%, #35b8e8 100%);
+  --ed-shadow-sm: 0 8px 24px rgba(23, 19, 52, 0.07);
+  --ed-shadow-md: 0 18px 45px rgba(23, 19, 52, 0.11);
+  --ed-shadow-lg: 0 32px 80px rgba(23, 19, 52, 0.16);
+  --ed-radius: 20px;
+  --ed-radius-sm: 14px;
+  --ed-pill: 999px;
+  --ed-ease: cubic-bezier(0.22, 0.8, 0.3, 1);
+}

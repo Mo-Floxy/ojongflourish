@@ -11,14 +11,27 @@ _tmp_check/
 .DS_Store
 Thumbs.db
 
+# Dependencies, build artifacts and local secrets (applies to every project)
+node_modules/
+dist/
+build/
+coverage/
+.shots/
+.env
+.env.*
+!.env.example
+*.log
+
 # Separate projects - keep out of portfolio repository
 aptverse/
 campus-coin/
 codeher/
+estatiq/
 jenkinson-sea-life/
 job-hive/
 maxwell-portfolio/
 weather-forecast/
+zenora/
 
 # Build artifacts and QA captures
 vyra/node_modules/

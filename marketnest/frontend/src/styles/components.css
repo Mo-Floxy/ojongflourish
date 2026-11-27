@@ -9,7 +9,7 @@
   border: 1px solid var(--forest);
   border-radius: var(--radius-pill);
   background: var(--forest);
-  color: #fff;
+  color: var(--white);
   font-size: 0.88rem;
   font-weight: 650;
   letter-spacing: 0.01em;
@@ -20,7 +20,7 @@
 .mn-btn:hover {
   background: var(--forest-deep);
   border-color: var(--forest-deep);
-  color: #fff;
+  color: var(--white);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -35,33 +35,33 @@
 }
 .mn-btn.ghost {
   background: transparent;
-  color: var(--forest);
-  border-color: var(--line-strong);
+  color: var(--navy);
+  border-color: var(--info-border);
 }
 .mn-btn.ghost:hover {
   background: var(--sage-soft);
-  color: var(--forest);
-  border-color: var(--moss);
+  color: var(--navy);
+  border-color: var(--royal);
 }
 .mn-btn.gold {
   background: var(--gold);
   border-color: var(--gold);
-  color: var(--forest-deep);
+  color: var(--navy);
 }
 .mn-btn.gold:hover {
-  background: #f59e0b;
-  border-color: #f59e0b;
-  color: var(--forest-deep);
+  background: var(--amber-dark);
+  border-color: var(--amber-dark);
+  color: var(--navy);
 }
 .mn-btn.clay {
   background: var(--clay);
   border-color: var(--clay);
-  color: #fff;
+  color: var(--white);
 }
 .mn-btn.clay:hover {
   background: var(--clay-dark);
   border-color: var(--clay-dark);
-  color: #fff;
+  color: var(--white);
 }
 .mn-btn.sm {
   min-height: 36px;
@@ -89,7 +89,7 @@
   cursor: pointer;
 }
 .link-btn:hover {
-  color: var(--clay);
+  color: var(--royal);
 }
 
 /* Surfaces */
@@ -139,14 +139,14 @@
   padding: 10px 14px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-xs);
-  background: #fff;
+  background: var(--white);
   outline: none;
   transition: border-color var(--fast), box-shadow var(--fast);
 }
 .form-control:focus,
 .form-select:focus {
   border-color: var(--moss);
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
 }
 .form-control::placeholder {
   color: var(--text-light);
@@ -196,32 +196,32 @@ textarea.form-control {
 }
 .pill.gold {
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
 }
 .pill.teal {
-  background: #ccfbf1;
+  background: var(--success-soft);
   color: var(--success);
 }
 .pill.clay {
-  background: #ffedd5;
+  background: var(--gold-soft);
   color: var(--clay-dark);
 }
 .status-pending {
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
 }
 .status-delivered,
 .status-completed {
-  background: #ccfbf1;
+  background: var(--success-soft);
   color: var(--success);
 }
 .status-cancelled {
-  background: #ffe4e6;
+  background: var(--error-soft);
   color: var(--danger);
 }
 .status-processing {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: var(--info-soft);
+  color: var(--royal-dark);
 }
 
 /* Thumbnails */
@@ -316,10 +316,10 @@ textarea.form-control {
 }
 .fav-btn:hover {
   transform: scale(1.08);
-  color: var(--clay);
+  color: var(--royal);
 }
 .fav-btn.active {
-  color: var(--clay);
+  color: var(--royal);
 }
 .product-body {
   display: flex;
@@ -341,7 +341,7 @@ textarea.form-control {
   margin: 5px 0 8px;
 }
 .product-title a:hover {
-  color: var(--clay);
+  color: var(--royal);
 }
 .product-meta {
   display: flex;
@@ -462,7 +462,7 @@ textarea.form-control {
   height: 40px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--white);
   color: var(--text-light);
 }
 .toolbar-search input {
@@ -476,7 +476,7 @@ textarea.form-control {
   padding: 0 32px 0 14px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--white);
   font-size: 0.85rem;
   cursor: pointer;
 }
@@ -500,7 +500,7 @@ textarea.form-control {
   padding: 6px 13px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--white);
   font-size: 0.8rem;
   cursor: pointer;
   transition: all var(--fast);
@@ -511,7 +511,7 @@ textarea.form-control {
 .chip.active {
   background: var(--forest);
   border-color: var(--forest);
-  color: #fff;
+  color: var(--white);
 }
 .chip-row {
   display: flex;
@@ -577,7 +577,7 @@ textarea.form-control {
   place-items: center;
   border: 1px solid var(--line);
   border-radius: var(--radius-xs);
-  background: #fff;
+  background: var(--white);
   cursor: pointer;
   color: var(--moss);
   transition: all var(--fast);
@@ -590,7 +590,7 @@ textarea.form-control {
   color: var(--danger);
 }
 .table-icon-btn.danger:hover {
-  background: #ffe4e6;
+  background: var(--error-soft);
   border-color: var(--danger);
 }
 .table-icon-btn:disabled {
@@ -606,7 +606,7 @@ textarea.form-control {
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(8, 17, 26, 0.6);
+  background: rgba(23, 37, 84, 0.6);
   backdrop-filter: blur(4px);
   animation: fade-in var(--fast) both;
 }
@@ -724,7 +724,7 @@ textarea.form-control {
   margin: 0 auto 20px;
 }
 .skeleton {
-  background: linear-gradient(100deg, var(--sand) 20%, #fff 40%, var(--sand) 60%);
+  background: linear-gradient(100deg, var(--sand) 20%, var(--white) 40%, var(--sand) 60%);
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite linear;
   border-radius: var(--radius-xs);
@@ -736,7 +736,7 @@ textarea.form-control {
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: #fff;
+  border-top-color: var(--white);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -779,14 +779,14 @@ textarea.form-control {
   padding: 0 10px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-xs);
-  background: #fff;
+  background: var(--white);
   cursor: pointer;
   font-size: 0.82rem;
 }
 .pagination button.active {
   background: var(--forest);
   border-color: var(--forest);
-  color: #fff;
+  color: var(--white);
 }
 .pagination button:disabled {
   opacity: 0.4;
@@ -805,7 +805,7 @@ textarea.form-control {
   width: 36px;
   height: 38px;
   border: 0;
-  background: #fff;
+  background: var(--white);
   cursor: pointer;
   color: var(--forest);
 }
@@ -917,7 +917,7 @@ textarea.form-control {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(251, 248, 241, 0.94);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
@@ -946,8 +946,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 11px;
-  background: var(--forest);
-  color: var(--gold-soft);
+  background: var(--royal);
+  color: var(--white);
 }
 .nav-links {
   display: flex;
@@ -957,7 +957,7 @@ textarea.form-control {
   font-weight: 550;
 }
 .nav-links a.active {
-  color: var(--clay);
+  color: var(--royal);
 }
 .nav-search {
   flex: 1;
@@ -970,7 +970,7 @@ textarea.form-control {
   padding: 0 14px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--white);
   color: var(--text-light);
 }
 .nav-search input {
@@ -1010,8 +1010,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--clay);
-  color: #fff;
+  background: var(--royal);
+  color: var(--white);
   font-size: 0.65rem;
   font-weight: 700;
 }
@@ -1032,7 +1032,7 @@ textarea.form-control {
   top: calc(100% + 10px);
   right: 0;
   width: 210px;
-  background: #fff;
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
@@ -1114,8 +1114,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--clay);
-  color: #fff;
+  background: var(--royal);
+  color: var(--white);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -1152,7 +1152,7 @@ textarea.form-control {
 .bubble {
   padding: 11px 15px;
   border-radius: 16px 16px 16px 4px;
-  background: #fff;
+  background: var(--white);
   border: 1px solid var(--line);
   font-size: 0.88rem;
   box-shadow: var(--shadow-xs);
@@ -1161,7 +1161,7 @@ textarea.form-control {
   border-radius: 16px 16px 4px 16px;
   background: var(--forest);
   border-color: var(--forest);
-  color: #fff;
+  color: var(--white);
 }
 .bubble-row small { font-size: 0.7rem; color: var(--text-light); margin-top: 4px; }
 .conversation-form {
@@ -1192,18 +1192,18 @@ textarea.form-control {
 .site-footer {
   margin-top: 80px;
   padding: 64px 0 26px;
-  background: var(--forest-deep);
-  color: rgba(248, 250, 252, 0.72);
+  background: var(--navy);
+  color: rgba(191, 219, 254, 0.78);
 }
 .site-footer .brand {
-  color: #f8fafc;
+  color: var(--cloud);
 }
 .site-footer h4 {
   font-family: var(--font-body);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--info-border);
   margin-bottom: 14px;
 }
 .footer-grid {
@@ -1223,7 +1223,7 @@ textarea.form-control {
   font-size: 0.86rem;
 }
 .footer-links a:hover {
-  color: #fff;
+  color: var(--white);
 }
 .footer-bottom {
   display: flex;
@@ -1231,7 +1231,7 @@ textarea.form-control {
   gap: 16px;
   flex-wrap: wrap;
   padding-top: 22px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(191, 219, 254, 0.18);
   font-size: 0.78rem;
 }
 .newsletter {
@@ -1244,14 +1244,14 @@ textarea.form-control {
   min-width: 0;
   height: 42px;
   padding: 0 14px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(191, 219, 254, 0.32);
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  color: var(--white);
   outline: none;
 }
 .newsletter input::placeholder {
-  color: rgba(255, 255, 255, 0.48);
+  color: rgba(191, 219, 254, 0.6);
 }
 
 /* Checkout */
@@ -1341,7 +1341,7 @@ textarea.form-control {
   min-height: calc(100vh - var(--nav-height));
 }
 .dash-sidebar {
-  background: #fff;
+  background: var(--white);
   border-right: 1px solid var(--line);
   padding: 26px 16px;
   position: sticky;
@@ -1401,7 +1401,7 @@ textarea.form-control {
 }
 .dash-nav a.active {
   background: var(--forest);
-  color: #fff;
+  color: var(--white);
 }
 .dash-main {
   padding: 34px 38px 64px;
@@ -1434,7 +1434,7 @@ textarea.form-control {
   margin-bottom: 24px;
 }
 .stat-card {
-  background: #fff;
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -1477,8 +1477,8 @@ textarea.form-control {
 .auth-art {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(150deg, var(--forest-deep), var(--forest) 60%, #0f766e);
-  color: #fff;
+  background: linear-gradient(150deg, var(--navy), var(--royal) 62%, var(--royal-dark));
+  color: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -1496,7 +1496,7 @@ textarea.form-control {
 }
 .auth-art h2 {
   position: relative;
-  color: #fff;
+  color: var(--white);
   max-width: 420px;
   font-size: 2.6rem;
 }

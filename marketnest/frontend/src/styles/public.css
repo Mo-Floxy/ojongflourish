@@ -11,10 +11,10 @@
   color: var(--text-muted);
 }
 .pub-breadcrumbs a:hover {
-  color: var(--clay);
+  color: var(--royal);
 }
 .pub-breadcrumbs span:last-child {
-  color: var(--clay);
+  color: var(--royal);
 }
 
 .pub-form-grid {
@@ -55,10 +55,10 @@
   position: relative;
   overflow: hidden;
   padding: 78px 0 64px;
-  color: #f8fafc;
+  color: var(--cloud);
   background:
-    radial-gradient(circle at 82% 22%, rgba(245, 158, 11, 0.16), transparent 42%),
-    linear-gradient(135deg, var(--forest-deep), var(--forest) 58%, #0f766e);
+    radial-gradient(circle at 82% 22%, rgba(245, 158, 11, 0.14), transparent 42%),
+    linear-gradient(135deg, var(--navy), var(--royal) 62%, var(--royal-dark));
 }
 .pub-hero::before {
   content: "";
@@ -85,7 +85,7 @@
 }
 .pub-hero-title {
   max-width: 620px;
-  color: #f8fafc;
+  color: var(--cloud);
   font-size: clamp(2.6rem, 5vw, 4.2rem);
 }
 .pub-hero-sub {
@@ -309,8 +309,8 @@
 
 .pub-newsletter {
   padding: 60px 0;
-  background: linear-gradient(120deg, var(--clay), var(--clay-dark));
-  color: #fff;
+  background: linear-gradient(120deg, var(--navy), var(--royal));
+  color: var(--white);
 }
 .pub-newsletter .eyebrow {
   color: var(--gold-soft);
@@ -322,7 +322,7 @@
   align-items: center;
 }
 .pub-newsletter-copy h2 {
-  color: #fff;
+  color: var(--white);
 }
 .pub-newsletter-copy p {
   margin-bottom: 0;
@@ -412,8 +412,8 @@
   cursor: pointer;
 }
 .pub-active-filter:hover {
-  border-color: var(--clay);
-  color: var(--clay-dark);
+  border-color: var(--royal);
+  color: var(--royal-dark);
 }
 .pub-featured-note {
   display: flex;
@@ -424,7 +424,7 @@
   padding: 12px 16px;
   border-radius: var(--radius-sm);
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
   font-size: 0.86rem;
 }
 
@@ -578,8 +578,8 @@
   min-width: 160px;
 }
 .pub-saved {
-  border-color: var(--clay);
-  color: var(--clay);
+  border-color: var(--royal);
+  color: var(--royal);
 }
 .pub-trust {
   display: flex;
@@ -697,7 +697,7 @@
   color: var(--forest);
 }
 .pub-tab.active {
-  border-bottom-color: var(--clay);
+  border-bottom-color: var(--royal);
   color: var(--forest);
 }
 .pub-tab small {
@@ -883,7 +883,7 @@
   height: 76px;
   margin: 0 auto 18px;
   border-radius: 50%;
-  background: #ccfbf1;
+  background: var(--success-soft);
   color: var(--success);
 }
 .pub-checkout-success h1 {
@@ -1037,14 +1037,14 @@
 .pub-404-orbit {
   position: absolute;
   inset: 6px;
-  border: 1.5px dashed rgba(20, 184, 166, 0.28);
+  border: 1.5px dashed rgba(37, 99, 235, 0.24);
   border-radius: 50%;
   animation: pub-spin 24s linear infinite;
 }
 .pub-404-orbit-inner {
   inset: 36px;
   border-style: solid;
-  border-color: rgba(249, 115, 22, 0.24);
+  border-color: rgba(245, 158, 11, 0.2);
   animation-direction: reverse;
 }
 @keyframes pub-spin {
@@ -1064,7 +1064,7 @@
   top: 22px;
   right: 12px;
   background: var(--gold-soft);
-  color: #b45309;
+  color: var(--amber-ink);
 }
 .pub-404-spark {
   bottom: 30px;
@@ -1073,7 +1073,7 @@
   color: var(--moss);
 }
 .pub-404-code {
-  color: var(--clay);
+  color: var(--royal);
   font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;

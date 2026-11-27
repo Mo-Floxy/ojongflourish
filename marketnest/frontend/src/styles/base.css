@@ -72,7 +72,7 @@ textarea {
 
 ::selection {
   background: var(--gold-soft);
-  color: var(--forest-deep);
+  color: var(--navy);
 }
 
 .mn-container {
@@ -95,8 +95,8 @@ textarea {
   position: relative;
   overflow: hidden;
   padding: 58px 0 46px;
-  background: linear-gradient(140deg, var(--forest-deep), var(--forest) 55%, #0f766e);
-  color: #f5f2e9;
+  background: linear-gradient(140deg, var(--navy), var(--royal) 62%, var(--royal-dark));
+  color: var(--cloud);
 }
 .page-hero::after {
   content: "";
@@ -115,7 +115,7 @@ textarea {
 }
 .page-hero h1,
 .page-hero h2 {
-  color: #f8fafc;
+  color: var(--cloud);
   margin-bottom: 12px;
 }
 .page-hero p {
@@ -151,16 +151,16 @@ textarea {
   color: inherit;
 }
 .breadcrumbs a:hover {
-  color: #fff;
+  color: var(--white);
 }
 .breadcrumbs span:last-child {
-  color: var(--gold);
+  color: rgba(255, 255, 255, 0.92);
 }
 .page-hero.light .breadcrumbs {
   color: var(--text-muted);
 }
 .page-hero.light .breadcrumbs span:last-child {
-  color: var(--clay);
+  color: var(--royal);
 }
 
 .eyebrow {
@@ -169,7 +169,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--clay);
+  color: var(--royal);
   margin-bottom: 10px;
 }
 

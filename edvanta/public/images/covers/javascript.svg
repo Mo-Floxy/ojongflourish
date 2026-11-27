@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-label="javascript course cover">
+
+  <defs>
+    <linearGradient id="bg-javascript" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171334"/>
+      <stop offset="1" stop-color="#241A5A"/>
+    </linearGradient>
+    <linearGradient id="line-javascript" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7047EB"/>
+      <stop offset="1" stop-color="#35B8E8"/>
+    </linearGradient>
+    <radialGradient id="glow-javascript">
+      <stop offset="0" stop-color="#7047EB" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7047EB" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-javascript" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    
+  <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+    <path d="M44 0H0V44" fill="none" stroke="#FFFFFF" stroke-opacity="0.055" stroke-width="1"/>
+  </pattern>
+  </defs>
+  <rect width="900" height="560" fill="url(#bg-javascript)"/>
+  <rect width="900" height="560" fill="url(#grid)"/>
+  <circle cx="760" cy="90" r="230" fill="url(#glow-javascript)" filter="url(#soft-javascript)"/>
+  <circle cx="110" cy="500" r="180" fill="url(#glow-javascript)" filter="url(#soft-javascript)" opacity="0.6"/>
+  <g>
+    <path d="M330 190v250c0 46 28 70 78 70 30 0 54-8 72-24" fill="none" stroke="url(#line-javascript)" stroke-width="30" stroke-linecap="round"/>
+    <path d="M640 190v250c0 46-28 70-78 70-30 0-54-8-72-24" fill="none" stroke="url(#line-javascript)" stroke-width="30" stroke-linecap="round" stroke-opacity="0.7"/>
+    <rect x="452" y="402" width="96" height="88" rx="10" fill="#FFB86B" fill-opacity="0.85"/></g>
+</svg>

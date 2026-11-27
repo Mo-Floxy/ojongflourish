@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-label="python course cover">
+
+  <defs>
+    <linearGradient id="bg-python" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#171334"/>
+      <stop offset="1" stop-color="#153C63"/>
+    </linearGradient>
+    <linearGradient id="line-python" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#35B8E8"/>
+      <stop offset="1" stop-color="#7047EB"/>
+    </linearGradient>
+    <radialGradient id="glow-python">
+      <stop offset="0" stop-color="#35B8E8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#35B8E8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-python" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+    
+  <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+    <path d="M44 0H0V44" fill="none" stroke="#FFFFFF" stroke-opacity="0.055" stroke-width="1"/>
+  </pattern>
+  </defs>
+  <rect width="900" height="560" fill="url(#bg-python)"/>
+  <rect width="900" height="560" fill="url(#grid)"/>
+  <circle cx="760" cy="90" r="230" fill="url(#glow-python)" filter="url(#soft-python)"/>
+  <circle cx="110" cy="500" r="180" fill="url(#glow-python)" filter="url(#soft-python)" opacity="0.6"/>
+  <g>
+    <path d="M400 175c-90 0-90 70-90 105 0 42 36 58 90 58h120c48 0 78 20 78 55 0 40-36 62-96 62H265" fill="none" stroke="url(#line-python)" stroke-width="24" stroke-linecap="round"/>
+    <path d="M600 425c90 0 90-70 90-105 0-42-36-58-90-58H480c-48 0-78-20-78-55 0-40 36-62 96-62h235" fill="none" stroke="url(#line-python)" stroke-width="24" stroke-linecap="round" stroke-opacity="0.7"/>
+    <circle cx="500" cy="300" r="13" fill="#FFB86B"/></g>
+</svg>
