@@ -356,6 +356,27 @@
     padding: calc(var(--header-h) + 40px) 0 68px;
   }
 
+  .hero__copy {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero__side-bg {
+    position: absolute;
+    z-index: -1;
+    top: calc(-1 * (var(--header-h) + 40px));
+    right: -14px;
+    display: block;
+    width: 78%;
+    height: calc(100% + var(--header-h) + 56px);
+    background-image: url('../../file_00000000ed5482118689a6c2a58969da.png');
+    background-repeat: no-repeat;
+    background-position: 100% 25%;
+    background-size: contain;
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
   .hero__badge {
     margin-bottom: 20px;
   }

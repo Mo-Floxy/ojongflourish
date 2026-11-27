@@ -5,7 +5,8 @@ import {
   ArrowRight, ArrowUpRight, Braces, Database, Github, Layers3, Mail,
   Server, Sparkles, TerminalSquare,
 } from 'lucide-react'
-import girlDesktop from '../assets/images/girl3.webp'
+import aiHero from '../assets/images/ai-hero.png'
+import heroSideBg from '../../file_00000000b5988211a4c7dd77aa712947.png'
 import logo from '../assets/logo/fn-logo.webp'
 import { PROJECTS, SKILL_GROUPS, SOCIALS } from '../data'
 import ProjectCard from '../components/ProjectCard'
@@ -40,6 +41,7 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: reduceMotion ? 0.15 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
+            <div className="hero__side-bg" aria-hidden="true" />
             <div className="hero__badge">
               <span className="status-dot" aria-hidden="true" />
               Software Engineer
@@ -94,7 +96,7 @@ export default function Home() {
             </div>
             <div className="hero__ai-frame">
               <img
-                src={girlDesktop}
+                src={aiHero}
                 alt="Flourish portrait"
                 className="hero__ai-image"
                 draggable="false"

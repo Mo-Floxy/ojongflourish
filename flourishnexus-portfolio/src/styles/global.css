@@ -808,6 +808,11 @@ ol {
   pointer-events: none;
 }
 
+/* Mobile-only hero background layer; hidden by default so desktop is unchanged. */
+.hero__side-bg {
+  display: none;
+}
+
 .hero__grid {
   position: relative;
   z-index: 1;
