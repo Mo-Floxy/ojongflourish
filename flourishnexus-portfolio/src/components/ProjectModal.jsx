@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, Github, X } from 'lucide-react'
+import { ArrowUpRight, Github, Globe2, X } from 'lucide-react'
 
 export default function ProjectModal({ project, onClose }) {
   const reduceMotion = useReducedMotion()
@@ -74,18 +74,25 @@ export default function ProjectModal({ project, onClose }) {
                 <div>
                   <span className="meta-label">Availability</span>
                   <p className="meta-value">
+                    {project.live && 'Live demo on Vercel'}
+                    {project.live && project.repo && ' · '}
                     {project.repo ? 'Source available on GitHub' : 'Private concept — no public repository'}
                   </p>
                 </div>
               </div>
 
               <div className="project-modal__actions">
+                {project.live && (
+                  <a className="btn btn--glow" href={project.live} target="_blank" rel="noopener noreferrer">
+                    View live demo <Globe2 size={15} />
+                  </a>
+                )}
                 {project.repo && (
-                  <a className="btn btn--glow" href={project.repo} target="_blank" rel="noopener noreferrer">
+                  <a className="btn btn--ghost" href={project.repo} target="_blank" rel="noopener noreferrer">
                     Open repository <ArrowUpRight size={15} />
                   </a>
                 )}
-                {!project.repo && (
+                {!project.repo && !project.live && (
                   <button type="button" className="btn btn--ghost" onClick={close}>
                     Got it <Github size={15} />
                   </button>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Github, Layers3 } from 'lucide-react'
+import { ArrowUpRight, Github, Globe2, Layers3 } from 'lucide-react'
 
 export default function ProjectCard({ project, index, onOpen }) {
   return (
@@ -47,6 +47,17 @@ export default function ProjectCard({ project, index, onOpen }) {
           >
             View Project <ArrowUpRight size={14} />
           </button>
+
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn--ghost btn--small"
+            >
+              <Globe2 size={15} /> Live demo
+            </a>
+          )}
 
           {project.repo && (
             <a
