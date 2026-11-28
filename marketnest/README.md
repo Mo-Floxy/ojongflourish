@@ -79,5 +79,5 @@ marketnest/
 - Cart, favourites and the demo user persist in `localStorage`.
 - Dark mode is available from the moon/sun button in the navbar. The theme choice is saved
   locally; **Settings → Appearance & locale** also offers Light, Dark and Match my device.
-- The visual system uses a cool teal/slate palette with orange accents; tokens live in
+- The visual system uses a midnight plum, burnt orange and warm ivory palette; tokens live in
   `frontend/src/styles/tokens.css` and dark overrides in `frontend/src/styles/dark.css`.

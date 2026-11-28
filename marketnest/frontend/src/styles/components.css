@@ -6,10 +6,10 @@
   gap: 8px;
   min-height: 44px;
   padding: 0 20px;
-  border: 1px solid var(--forest);
+  border: 1px solid var(--orange);
   border-radius: var(--radius-pill);
-  background: var(--forest);
-  color: var(--white);
+  background: var(--orange);
+  color: var(--plum);
   font-size: 0.88rem;
   font-weight: 650;
   letter-spacing: 0.01em;
@@ -18,9 +18,9 @@
     border-color var(--fast), box-shadow var(--fast);
 }
 .mn-btn:hover {
-  background: var(--forest-deep);
-  border-color: var(--forest-deep);
-  color: var(--white);
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: var(--plum);
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
 }
@@ -34,34 +34,34 @@
   box-shadow: none;
 }
 .mn-btn.ghost {
-  background: transparent;
-  color: var(--navy);
-  border-color: var(--info-border);
+  background: var(--plum);
+  color: var(--white);
+  border-color: var(--plum);
 }
 .mn-btn.ghost:hover {
-  background: var(--sage-soft);
-  color: var(--navy);
-  border-color: var(--royal);
+  background: var(--plum-deep);
+  color: var(--white);
+  border-color: var(--plum-deep);
 }
 .mn-btn.gold {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--navy);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 .mn-btn.gold:hover {
-  background: var(--amber-dark);
-  border-color: var(--amber-dark);
-  color: var(--navy);
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: var(--plum);
 }
 .mn-btn.clay {
-  background: var(--clay);
-  border-color: var(--clay);
-  color: var(--white);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 .mn-btn.clay:hover {
-  background: var(--clay-dark);
-  border-color: var(--clay-dark);
-  color: var(--white);
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: var(--plum);
 }
 .mn-btn.sm {
   min-height: 36px;
@@ -89,7 +89,7 @@
   cursor: pointer;
 }
 .link-btn:hover {
-  color: var(--royal);
+  color: var(--orange);
 }
 
 /* Surfaces */
@@ -145,8 +145,8 @@
 }
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--moss);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(240, 120, 66, 0.18);
 }
 .form-control::placeholder {
   color: var(--text-light);
@@ -195,16 +195,16 @@ textarea.form-control {
   white-space: nowrap;
 }
 .pill.gold {
-  background: var(--gold-soft);
-  color: var(--amber-ink);
+  background: var(--orange);
+  color: var(--plum);
 }
 .pill.teal {
   background: var(--success-soft);
   color: var(--success);
 }
 .pill.clay {
-  background: var(--gold-soft);
-  color: var(--clay-dark);
+  background: var(--orange);
+  color: var(--plum);
 }
 .status-pending {
   background: var(--gold-soft);
@@ -308,18 +308,18 @@ textarea.form-control {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--ink);
+  background: var(--white);
+  color: var(--plum);
   cursor: pointer;
   box-shadow: var(--shadow-xs);
   transition: color var(--fast), transform var(--fast);
 }
 .fav-btn:hover {
   transform: scale(1.08);
-  color: var(--royal);
+  color: var(--orange);
 }
 .fav-btn.active {
-  color: var(--royal);
+  color: var(--orange);
 }
 .product-body {
   display: flex;
@@ -339,9 +339,10 @@ textarea.form-control {
   font-size: 1.05rem;
   line-height: 1.25;
   margin: 5px 0 8px;
+  color: var(--charcoal);
 }
 .product-title a:hover {
-  color: var(--royal);
+  color: var(--orange);
 }
 .product-meta {
   display: flex;
@@ -357,7 +358,7 @@ textarea.form-control {
   gap: 8px;
   margin-top: auto;
   font-weight: 750;
-  color: var(--forest);
+  color: var(--plum);
 }
 .product-price del {
   font-weight: 400;
@@ -460,16 +461,21 @@ textarea.form-control {
   min-width: 210px;
   padding: 0 12px;
   height: 40px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--lavender);
   border-radius: var(--radius-pill);
   background: var(--white);
-  color: var(--text-light);
+  color: var(--charcoal);
+}
+.toolbar-search svg {
+  color: var(--orange);
+  flex: 0 0 auto;
 }
 .toolbar-search input {
   border: 0;
   outline: none;
   background: none;
   width: 100%;
+  color: var(--charcoal);
 }
 .sort-select {
   min-height: 40px;
@@ -498,20 +504,22 @@ textarea.form-control {
   align-items: center;
   gap: 6px;
   padding: 6px 13px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--lavender);
   border-radius: var(--radius-pill);
   background: var(--white);
+  color: var(--plum);
   font-size: 0.8rem;
   cursor: pointer;
   transition: all var(--fast);
 }
 .chip:hover {
-  border-color: var(--moss);
+  border-color: var(--orange);
+  color: var(--orange-dark);
 }
 .chip.active {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--white);
+  background: var(--lavender);
+  border-color: var(--lavender);
+  color: var(--plum);
 }
 .chip-row {
   display: flex;
@@ -579,12 +587,13 @@ textarea.form-control {
   border-radius: var(--radius-xs);
   background: var(--white);
   cursor: pointer;
-  color: var(--moss);
+  color: var(--plum);
   transition: all var(--fast);
 }
 .table-icon-btn:hover {
-  background: var(--sage-soft);
-  border-color: var(--moss);
+  background: var(--lavender-soft);
+  border-color: var(--orange);
+  color: var(--orange-dark);
 }
 .table-icon-btn.danger {
   color: var(--danger);
@@ -606,7 +615,7 @@ textarea.form-control {
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(23, 37, 84, 0.6);
+  background: rgba(36, 21, 47, 0.66);
   backdrop-filter: blur(4px);
   animation: fade-in var(--fast) both;
 }
@@ -735,7 +744,7 @@ textarea.form-control {
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(248, 243, 235, 0.45);
   border-top-color: var(--white);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
@@ -784,8 +793,8 @@ textarea.form-control {
   font-size: 0.82rem;
 }
 .pagination button.active {
-  background: var(--forest);
-  border-color: var(--forest);
+  background: var(--plum);
+  border-color: var(--plum);
   color: var(--white);
 }
 .pagination button:disabled {
@@ -807,10 +816,11 @@ textarea.form-control {
   border: 0;
   background: var(--white);
   cursor: pointer;
-  color: var(--forest);
+  color: var(--plum);
 }
 .qty-stepper button:hover:not(:disabled) {
-  background: var(--sage-soft);
+  background: var(--lavender-soft);
+  color: var(--orange-dark);
 }
 .qty-stepper button:disabled {
   color: var(--text-light);
@@ -908,7 +918,7 @@ textarea.form-control {
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--white);
   cursor: pointer;
 }
 
@@ -917,9 +927,9 @@ textarea.form-control {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--plum);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(217, 183, 232, 0.22);
 }
 .nav-inner {
   height: var(--nav-height);
@@ -934,11 +944,11 @@ textarea.form-control {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 650;
-  color: var(--forest);
+  color: var(--white);
   white-space: nowrap;
 }
 .brand:hover {
-  color: var(--forest);
+  color: var(--lavender);
 }
 .brand-mark {
   width: 34px;
@@ -946,8 +956,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 11px;
-  background: var(--royal);
-  color: var(--white);
+  background: var(--white);
+  color: var(--plum);
 }
 .nav-links {
   display: flex;
@@ -956,8 +966,18 @@ textarea.form-control {
   font-size: 0.88rem;
   font-weight: 550;
 }
+.nav-links a {
+  color: var(--ivory);
+  transition: color var(--fast);
+}
+.nav-links a:hover {
+  color: var(--lavender);
+}
 .nav-links a.active {
-  color: var(--royal);
+  color: var(--orange);
+}
+.nav-links a.active:hover {
+  color: var(--orange-dark);
 }
 .nav-search {
   flex: 1;
@@ -968,10 +988,14 @@ textarea.form-control {
   gap: 8px;
   height: 42px;
   padding: 0 14px;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--lavender);
   border-radius: var(--radius-pill);
   background: var(--white);
-  color: var(--text-light);
+  color: var(--charcoal);
+}
+.nav-search svg {
+  color: var(--orange);
+  flex: 0 0 auto;
 }
 .nav-search input {
   border: 0;
@@ -979,6 +1003,7 @@ textarea.form-control {
   background: none;
   width: 100%;
   font-size: 0.86rem;
+  color: var(--charcoal);
 }
 .nav-actions {
   display: flex;
@@ -995,10 +1020,12 @@ textarea.form-control {
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
-  color: var(--forest);
+  color: var(--ivory);
+  transition: color var(--fast), background var(--fast);
 }
 .nav-icon:hover {
-  background: var(--sage-soft);
+  background: rgba(217, 183, 232, 0.16);
+  color: var(--lavender);
 }
 .cart-count {
   position: absolute;
@@ -1010,8 +1037,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--royal);
-  color: var(--white);
+  background: var(--orange);
+  color: var(--plum);
   font-size: 0.65rem;
   font-weight: 700;
 }
@@ -1114,8 +1141,8 @@ textarea.form-control {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--royal);
-  color: var(--white);
+  background: var(--orange);
+  color: var(--plum);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -1159,9 +1186,9 @@ textarea.form-control {
 }
 .bubble-row.mine .bubble {
   border-radius: 16px 16px 4px 16px;
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--white);
+  background: var(--plum);
+  border-color: var(--plum);
+  color: var(--ivory);
 }
 .bubble-row small { font-size: 0.7rem; color: var(--text-light); margin-top: 4px; }
 .conversation-form {
@@ -1192,18 +1219,18 @@ textarea.form-control {
 .site-footer {
   margin-top: 80px;
   padding: 64px 0 26px;
-  background: var(--navy);
-  color: rgba(191, 219, 254, 0.78);
+  background: var(--plum);
+  color: rgba(248, 243, 235, 0.8);
 }
 .site-footer .brand {
-  color: var(--cloud);
+  color: var(--white);
 }
 .site-footer h4 {
   font-family: var(--font-body);
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--info-border);
+  color: var(--white);
   margin-bottom: 14px;
 }
 .footer-grid {
@@ -1223,7 +1250,7 @@ textarea.form-control {
   font-size: 0.86rem;
 }
 .footer-links a:hover {
-  color: var(--white);
+  color: var(--orange);
 }
 .footer-bottom {
   display: flex;
@@ -1231,7 +1258,7 @@ textarea.form-control {
   gap: 16px;
   flex-wrap: wrap;
   padding-top: 22px;
-  border-top: 1px solid rgba(191, 219, 254, 0.18);
+  border-top: 1px solid rgba(217, 183, 232, 0.22);
   font-size: 0.78rem;
 }
 .newsletter {
@@ -1244,14 +1271,14 @@ textarea.form-control {
   min-width: 0;
   height: 42px;
   padding: 0 14px;
-  border: 1px solid rgba(191, 219, 254, 0.32);
+  border: 1px solid var(--lavender);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(248, 243, 235, 0.08);
   color: var(--white);
   outline: none;
 }
 .newsletter input::placeholder {
-  color: rgba(191, 219, 254, 0.6);
+  color: rgba(248, 243, 235, 0.62);
 }
 
 /* Checkout */
@@ -1331,7 +1358,7 @@ textarea.form-control {
 .summary-total strong {
   font-family: var(--font-display);
   font-size: 1.5rem;
-  color: var(--forest);
+  color: var(--plum);
 }
 
 /* Dashboard shell */
@@ -1396,11 +1423,11 @@ textarea.form-control {
   color: var(--text-muted);
 }
 .dash-nav a:hover {
-  background: var(--sage-soft);
-  color: var(--forest);
+  background: var(--lavender-soft);
+  color: var(--plum);
 }
 .dash-nav a.active {
-  background: var(--forest);
+  background: var(--plum);
   color: var(--white);
 }
 .dash-main {
@@ -1448,7 +1475,7 @@ textarea.form-control {
   font-family: var(--font-display);
   font-size: 1.8rem;
   margin: 6px 0 2px;
-  color: var(--forest);
+  color: var(--plum);
 }
 .stat-card .stat-foot {
   font-size: 0.75rem;
@@ -1477,8 +1504,8 @@ textarea.form-control {
 .auth-art {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(150deg, var(--navy), var(--royal) 62%, var(--royal-dark));
-  color: var(--white);
+  background: var(--plum);
+  color: var(--ivory);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -1490,7 +1517,7 @@ textarea.form-control {
   width: 460px;
   height: 460px;
   border-radius: 50%;
-  border: 80px solid rgba(255, 255, 255, 0.05);
+  border: 80px solid rgba(217, 183, 232, 0.1);
   top: -180px;
   right: -160px;
 }
@@ -1502,14 +1529,14 @@ textarea.form-control {
 }
 .auth-art p {
   position: relative;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(248, 243, 235, 0.8);
   max-width: 400px;
 }
 .auth-art .auth-quote {
   position: relative;
   margin-top: 26px;
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(217, 183, 232, 0.28);
   font-size: 0.86rem;
 }
 

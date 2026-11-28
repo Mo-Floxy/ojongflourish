@@ -1,12 +1,12 @@
 const palettes = [
-  ["#DBEAFE", "#2563EB"],
-  ["#EFF6FF", "#1D4ED8"],
-  ["#FEF3C7", "#D97706"],
-  ["#E2E8F0", "#172554"],
-  ["#DBEAFE", "#2563EB"],
-  ["#D1FAE5", "#10B981"],
-  ["#F1F5F9", "#64748B"],
-  ["#FEF3C7", "#F59E0B"],
+  ["#F8F3EB", "#D9B7E8"],
+  ["#FFFFFF", "#D9B7E8"],
+  ["#F8F3EB", "#F07842"],
+  ["#D9B7E8", "#FFFFFF"],
+  ["#FFFFFF", "#F8F3EB"],
+  ["#F8F3EB", "#FFFFFF"],
+  ["#D9B7E8", "#F8F3EB"],
+  ["#FFFFFF", "#F07842"],
 ];
 
 function paletteFor(mark = "") {

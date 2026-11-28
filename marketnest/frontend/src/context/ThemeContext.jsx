@@ -42,7 +42,7 @@ export function ThemeProvider({ children }) {
     root.setAttribute("data-theme", resolvedTheme);
     root.style.colorScheme = resolvedTheme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", resolvedTheme === "dark" ? "#0b1220" : "#172554");
+    if (meta) meta.setAttribute("content", resolvedTheme === "dark" ? "#180D20" : "#24152F");
   }, [resolvedTheme]);
 
   const setTheme = useCallback((next) => {

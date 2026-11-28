@@ -95,8 +95,8 @@ textarea {
   position: relative;
   overflow: hidden;
   padding: 58px 0 46px;
-  background: linear-gradient(140deg, var(--navy), var(--royal) 62%, var(--royal-dark));
-  color: var(--cloud);
+  background: var(--plum);
+  color: var(--ivory);
 }
 .page-hero::after {
   content: "";
@@ -106,7 +106,7 @@ textarea {
   right: -140px;
   top: -220px;
   border-radius: 50%;
-  border: 70px solid rgba(255, 255, 255, 0.045);
+  border: 70px solid rgba(217, 183, 232, 0.09);
   pointer-events: none;
 }
 .page-hero .mn-container {
@@ -115,17 +115,17 @@ textarea {
 }
 .page-hero h1,
 .page-hero h2 {
-  color: var(--cloud);
+  color: var(--ivory);
   margin-bottom: 12px;
 }
 .page-hero p {
-  color: rgba(248, 250, 252, 0.78);
+  color: rgba(248, 243, 235, 0.8);
   max-width: 620px;
   font-size: 1.05rem;
   margin-bottom: 0;
 }
 .page-hero.light {
-  background: linear-gradient(140deg, var(--sage-soft), var(--sand));
+  background: var(--surface);
   color: var(--ink);
 }
 .page-hero.light h1,
@@ -144,17 +144,17 @@ textarea {
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(248, 250, 252, 0.62);
+  color: rgba(248, 243, 235, 0.68);
   margin-bottom: 18px;
 }
 .breadcrumbs a {
   color: inherit;
 }
 .breadcrumbs a:hover {
-  color: var(--white);
+  color: var(--lavender);
 }
 .breadcrumbs span:last-child {
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--ivory);
 }
 .page-hero.light .breadcrumbs {
   color: var(--text-muted);
@@ -169,7 +169,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--royal);
+  color: var(--orange);
   margin-bottom: 10px;
 }
 

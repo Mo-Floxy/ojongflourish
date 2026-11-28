@@ -29,7 +29,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--plum);
 }
 .vnd-field-group > .tiny {
   margin-top: -8px;
@@ -129,8 +129,8 @@
   color: var(--amber-ink);
 }
 .vnd-stat-icon.blue {
-  background: var(--info-soft);
-  color: var(--royal-dark);
+  background: var(--lavender-soft);
+  color: var(--plum);
 }
 
 .vnd-overview-grid {
@@ -199,11 +199,11 @@
   width: min(100%, 42px);
   min-height: 8px;
   border-radius: 8px 8px 3px 3px;
-  background: linear-gradient(180deg, var(--moss), var(--forest));
+  background: var(--lavender);
   transition: height var(--normal);
 }
 .vnd-chart-col.current .vnd-chart-bar {
-  background: linear-gradient(180deg, var(--clay), var(--clay-dark));
+  background: var(--orange);
 }
 .vnd-chart-label {
   font-size: 0.74rem;
@@ -221,7 +221,7 @@
   color: var(--text-muted);
 }
 .vnd-chart-foot strong {
-  color: var(--forest);
+  color: var(--plum);
 }
 
 .vnd-compact-panel .panel-head {
@@ -255,7 +255,7 @@
 }
 .vnd-recent-row:hover .vnd-recent-info strong,
 .vnd-stock-row:hover .vnd-stock-info strong {
-  color: var(--royal);
+  color: var(--orange-dark);
 }
 .vnd-recent-row:focus-visible,
 .vnd-stock-row:focus-visible,
@@ -336,7 +336,7 @@
 }
 .vnd-quick-link:hover {
   transform: translateY(-3px);
-  border-color: var(--moss);
+  border-color: var(--orange);
   box-shadow: var(--shadow-sm);
   color: inherit;
 }
@@ -347,8 +347,8 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--sage-soft);
-  color: var(--moss);
+  background: var(--lavender-soft);
+  color: var(--plum);
 }
 .vnd-quick-copy {
   flex: 1;
@@ -365,7 +365,7 @@
   color: var(--text-muted);
 }
 .vnd-quick-arrow {
-  color: var(--moss);
+  color: var(--orange-dark);
   transition: transform var(--fast);
 }
 .vnd-quick-link:hover .vnd-quick-arrow {
@@ -501,14 +501,14 @@
   gap: 6px;
   padding: 5px 10px;
   border-radius: var(--radius-pill);
-  background: var(--sage-soft);
-  color: var(--forest);
+  background: var(--lavender-soft);
+  color: var(--plum);
   font-size: 0.76rem;
   font-weight: 600;
 }
 .vnd-preview-social a:hover {
-  background: var(--sage);
-  color: var(--forest);
+  background: var(--lavender);
+  color: var(--plum);
 }
 .vnd-preview-note {
   margin-top: 10px;
@@ -561,8 +561,8 @@
 .vnd-stock-warning {
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: var(--gold-soft);
-  color: var(--clay-dark);
+  background: var(--orange-wash);
+  color: var(--orange-dark);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -589,11 +589,11 @@
 }
 .vnd-category-card:hover {
   transform: translateY(-2px);
-  border-color: var(--moss);
+  border-color: var(--orange);
   box-shadow: var(--shadow-sm);
 }
 .vnd-category-card:focus-within {
-  outline: 2px solid var(--moss);
+  outline: 2px solid var(--orange);
   outline-offset: 2px;
 }
 .vnd-category-head {
@@ -609,20 +609,20 @@
   display: grid;
   place-items: center;
   border-radius: var(--radius-xs);
-  background: var(--sage-soft);
-  color: var(--moss);
+  background: var(--lavender-soft);
+  color: var(--plum);
 }
 .vnd-category-icon.tone-1 {
-  background: var(--gold-soft);
-  color: var(--clay-dark);
+  background: var(--orange-wash);
+  color: var(--orange-dark);
 }
 .vnd-category-icon.tone-2 {
-  background: var(--gold-soft);
-  color: var(--amber-ink);
+  background: var(--lavender);
+  color: var(--plum);
 }
 .vnd-category-icon.tone-3 {
-  background: var(--info-soft);
-  color: var(--royal-dark);
+  background: var(--ivory-deep);
+  color: var(--plum);
 }
 .vnd-category-card h3 {
   font-size: 1.15rem;
@@ -729,7 +729,7 @@
   font-size: 0.76rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--plum);
 }
 .vnd-order-lines {
   display: flex;
@@ -778,7 +778,7 @@
 .vnd-order-total strong {
   font-family: var(--font-display);
   font-size: 1.4rem;
-  color: var(--forest);
+  color: var(--plum);
 }
 .vnd-order-info-grid {
   display: grid;
@@ -799,7 +799,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--plum);
 }
 .vnd-order-info-block p {
   margin: 0;

@@ -1,50 +1,67 @@
 /* Dark theme — applied to <html data-theme="dark">.
- * Kept last in the cascade so it can refine any light-first rules. */
+ * Midnight-plum based and kept last in the cascade so it can refine
+ * any light-first rules without changing layout or behaviour. */
 
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --ink: #f8fafc;
-  --forest: #93c5fd;
-  --forest-deep: #60a5fa;
-  --moss: #60a5fa;
-  --sage: #1e3a5f;
-  --sage-soft: #172b4d;
-  --cream: #0b1220;
-  --sand: #1e293b;
-  --clay: #fbbf24;
-  --clay-dark: #fcd34d;
-  --gold: #fbbf24;
-  --gold-soft: rgba(245, 158, 11, 0.16);
-  --amber-ink: #fcd34d;
-  --danger: #f87171;
-  --success: #34d399;
-  --warning: #fbbf24;
+  --ink: var(--ivory);
+  --forest: var(--lavender);
+  --forest-deep: var(--orange);
+  --moss: var(--orange);
+  --sage: rgba(217, 183, 232, 0.16);
+  --sage-soft: rgba(217, 183, 232, 0.12);
+  --cream: var(--plum);
+  --sand: #32203D;
+  --clay: var(--orange);
+  --clay-dark: var(--orange);
+  --gold: var(--orange);
+  --gold-soft: rgba(240, 120, 66, 0.18);
+  --amber-ink: var(--lavender);
+  --amber-border: rgba(240, 120, 66, 0.4);
+  --danger: #F0A096;
+  --success: #9ACCB2;
+  --success-soft: rgba(154, 204, 178, 0.14);
+  --success-border: rgba(154, 204, 178, 0.4);
+  --error-soft: rgba(240, 160, 150, 0.14);
+  --error-border: rgba(240, 160, 150, 0.4);
+  --info-soft: rgba(217, 183, 232, 0.14);
+  --info-border: rgba(217, 183, 232, 0.34);
+  --warning: var(--orange);
 
-  --text: #dbeafe;
-  --text-muted: #94a3b8;
-  --text-light: #64748b;
-  --line: rgba(226, 232, 240, 0.12);
-  --line-strong: rgba(226, 232, 240, 0.2);
-  --surface: #111c33;
-  --surface-alt: #0f172a;
-  --surface-raised: #1e293b;
+  /* Tints are redefined so light-surface washes stay dark-theme friendly. */
+  --ivory-deep: #32203D;
+  --lavender-wash: rgba(217, 183, 232, 0.14);
+  --lavender-soft: rgba(217, 183, 232, 0.1);
+  --orange-wash: rgba(240, 120, 66, 0.16);
+  --plum-wash: rgba(217, 183, 232, 0.1);
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 6px 18px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 14px 36px rgba(0, 0, 0, 0.38);
-  --shadow-lg: 0 26px 64px rgba(0, 0, 0, 0.5);
+  --text: var(--ivory);
+  --text-muted: #DACCE0;
+  --text-light: #BCA9C5;
+  --border: rgba(217, 183, 232, 0.18);
+  --border-strong: rgba(217, 183, 232, 0.34);
+  --line: var(--border);
+  --line-strong: var(--border-strong);
+  --surface: #2E1D3B;
+  --surface-alt: #20132A;
+  --surface-raised: #382549;
+
+  --shadow-xs: 0 1px 2px rgba(12, 6, 16, 0.4);
+  --shadow-sm: 0 6px 18px rgba(12, 6, 16, 0.34);
+  --shadow-md: 0 14px 36px rgba(12, 6, 16, 0.4);
+  --shadow-lg: 0 26px 64px rgba(12, 6, 16, 0.5);
 
   /* Semantic colours for buttons and status washes. */
-  --accent-solid: #2563eb;
-  --accent-solid-hover: #1d4ed8;
-  --accent-solid-ink: #ffffff;
-  --wash-green: rgba(16, 185, 129, 0.16);
-  --wash-gold: rgba(245, 158, 11, 0.16);
-  --wash-clay: rgba(245, 158, 11, 0.16);
-  --wash-blue: rgba(96, 165, 250, 0.16);
-  --wash-purple: rgba(96, 165, 250, 0.16);
-  --wash-danger: rgba(248, 113, 113, 0.16);
+  --accent-solid: var(--orange);
+  --accent-solid-hover: var(--orange-dark);
+  --accent-solid-ink: var(--plum);
+  --wash-green: rgba(154, 204, 178, 0.16);
+  --wash-gold: rgba(240, 120, 66, 0.16);
+  --wash-clay: rgba(240, 120, 66, 0.16);
+  --wash-blue: rgba(217, 183, 232, 0.14);
+  --wash-purple: rgba(217, 183, 232, 0.2);
+  --wash-danger: rgba(240, 160, 150, 0.16);
 }
 
 [data-theme="dark"] body {
@@ -52,12 +69,12 @@
 }
 
 [data-theme="dark"] * {
-  scrollbar-color: var(--royal) transparent;
+  scrollbar-color: var(--lavender) transparent;
 }
 
 [data-theme="dark"] ::selection {
-  background: rgba(245, 158, 11, 0.24);
-  color: var(--cloud);
+  background: rgba(217, 183, 232, 0.26);
+  color: var(--ivory);
 }
 
 /* ---------- Forms and controls ---------- */
@@ -66,13 +83,14 @@
 [data-theme="dark"] .conversation-form input {
   background: var(--surface-raised);
   color: var(--text);
+  border-color: var(--line-strong);
 }
 
 [data-theme="dark"] .form-control:focus,
 [data-theme="dark"] .form-select:focus,
 [data-theme="dark"] .conversation-form input:focus {
-  border-color: var(--moss);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(217, 183, 232, 0.2);
 }
 
 [data-theme="dark"] select option {
@@ -99,55 +117,55 @@
 }
 
 [data-theme="dark"] .mn-btn.ghost {
-  background: transparent;
-  border-color: rgba(147, 197, 253, 0.35);
-  color: #dbeafe;
+  background: var(--plum);
+  border-color: var(--line-strong);
+  color: var(--ivory);
 }
 
 [data-theme="dark"] .mn-btn.ghost:hover {
-  background: var(--sage-soft);
-  border-color: var(--forest);
-  color: #ffffff;
+  background: var(--plum-deep);
+  border-color: var(--lavender);
+  color: var(--white);
 }
 
 [data-theme="dark"] .mn-btn.gold {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--navy);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .mn-btn.gold:hover {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--navy);
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .mn-btn.clay {
-  background: var(--amber);
-  border-color: var(--amber);
-  color: var(--navy);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .mn-btn.clay:hover {
-  background: var(--amber-dark);
-  border-color: var(--amber-dark);
-  color: var(--navy);
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .mn-btn .spinner {
-  border-color: rgba(23, 37, 84, 0.35);
-  border-top-color: var(--accent-solid-ink);
+  border-color: rgba(36, 21, 47, 0.35);
+  border-top-color: var(--plum);
 }
 
 [data-theme="dark"] .link-btn {
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 /* ---------- Pills and statuses ---------- */
 [data-theme="dark"] .pill,
 [data-theme="dark"] .status-pill {
-  background: var(--wash-green);
-  color: var(--forest);
+  background: var(--wash-purple);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .pill.gold,
@@ -158,7 +176,7 @@
 [data-theme="dark"] .dash-preview-badge,
 [data-theme="dark"] .vnd-category-icon.tone-2 {
   background: var(--wash-gold);
-  border-color: rgba(245, 158, 11, 0.2);
+  border-color: rgba(240, 120, 66, 0.24);
   color: var(--amber-ink);
 }
 
@@ -170,7 +188,7 @@
 [data-theme="dark"] .dash-icon-shop,
 [data-theme="dark"] .pub-success-icon {
   background: var(--wash-green);
-  border-color: rgba(16, 185, 129, 0.22);
+  border-color: rgba(154, 204, 178, 0.24);
   color: var(--success);
 }
 
@@ -180,8 +198,17 @@
 [data-theme="dark"] .vnd-stock-warning,
 [data-theme="dark"] .vnd-category-icon.tone-1 {
   background: var(--wash-clay);
-  border-color: rgba(245, 158, 11, 0.2);
-  color: var(--clay);
+  border-color: rgba(240, 120, 66, 0.24);
+  color: var(--orange);
+}
+
+/* Product badges and discount labels stay burnt orange in both themes. */
+[data-theme="dark"] .pill.gold:not(.status-pill),
+[data-theme="dark"] .pill.clay:not(.status-pill),
+[data-theme="dark"] .pill.gold:not(.status-pill):hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .status-cancelled,
@@ -190,7 +217,7 @@
 [data-theme="dark"] .dash-danger-outline:hover,
 [data-theme="dark"] .table-icon-btn.danger:hover {
   background: var(--wash-danger);
-  border-color: rgba(239, 68, 68, 0.22);
+  border-color: rgba(240, 160, 150, 0.24);
   color: var(--danger);
 }
 
@@ -201,21 +228,21 @@
 [data-theme="dark"] .vnd-category-icon.tone-3,
 [data-theme="dark"] .dash-icon-message {
   background: var(--wash-blue);
-  border-color: rgba(37, 99, 235, 0.2);
-  color: var(--forest);
+  border-color: rgba(217, 183, 232, 0.24);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .dash-icon-system {
   background: var(--wash-purple);
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .dash-danger-outline {
-  border-color: rgba(239, 68, 68, 0.32);
+  border-color: rgba(240, 160, 150, 0.34);
 }
 
 [data-theme="dark"] .dash-danger-zone {
-  border-color: rgba(239, 68, 68, 0.22);
+  border-color: rgba(240, 160, 150, 0.24);
 }
 
 /* ---------- Elevated surfaces that were hard-coded white ---------- */
@@ -239,7 +266,6 @@
 [data-theme="dark"] .vnd-shop-preview,
 [data-theme="dark"] .vnd-filter-select,
 [data-theme="dark"] .vnd-category-card,
-[data-theme="dark"] .pub-hero-search,
 [data-theme="dark"] .pub-art-label {
   background: var(--surface-raised);
 }
@@ -257,12 +283,17 @@
 [data-theme="dark"] .table-icon-btn,
 [data-theme="dark"] .qty-stepper button,
 [data-theme="dark"] .pub-art-label {
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .fav-btn:hover,
 [data-theme="dark"] .fav-btn.active {
-  color: var(--forest);
+  color: var(--orange);
+}
+
+/* Thumbnail fallbacks use inline light palette gradients, so keep the mark dark. */
+[data-theme="dark"] .thumb {
+  color: var(--plum);
 }
 
 [data-theme="dark"] .table-icon-btn.danger {
@@ -270,9 +301,9 @@
 }
 
 [data-theme="dark"] .bubble-row.mine .bubble {
-  background: var(--royal);
-  border-color: var(--royal-dark);
-  color: var(--cloud);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .conversation-note {
@@ -283,18 +314,18 @@
 [data-theme="dark"] .pagination button.active,
 [data-theme="dark"] .dash-nav a.active,
 [data-theme="dark"] .dash-settings-tab.active {
-  background: var(--accent-solid);
-  border-color: var(--accent-solid);
-  color: var(--accent-solid-ink);
+  background: var(--lavender);
+  border-color: var(--lavender);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .chip.active .dash-chip-count {
-  background: rgba(23, 37, 84, 0.22);
-  color: var(--accent-solid-ink);
+  background: rgba(36, 21, 47, 0.16);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .modal-backdrop {
-  background: rgba(11, 18, 32, 0.76);
+  background: rgba(18, 9, 24, 0.78);
 }
 
 [data-theme="dark"] .skeleton {
@@ -303,54 +334,55 @@
 
 /* ---------- Navigation ---------- */
 [data-theme="dark"] .site-header {
-  background: rgba(23, 37, 84, 0.94);
+  background: var(--plum);
 }
 
 [data-theme="dark"] .brand {
-  color: var(--ink);
-}
-
-[data-theme="dark"] .brand-mark {
-  background: var(--accent-solid);
   color: var(--white);
 }
 
+[data-theme="dark"] .brand-mark {
+  background: var(--white);
+  color: var(--plum);
+}
+
 [data-theme="dark"] .nav-icon {
-  color: var(--text-muted);
+  color: var(--ivory);
 }
 
 [data-theme="dark"] .nav-icon:hover {
-  background: var(--sage-soft);
-  color: var(--forest);
+  background: rgba(217, 183, 232, 0.16);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .theme-toggle {
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .cart-count,
 [data-theme="dark"] .unread-dot,
 [data-theme="dark"] .dash-unread-dot {
-  color: var(--white);
+  background: var(--orange);
+  color: var(--plum);
 }
 
 /* ---------- Public pages ---------- */
 [data-theme="dark"] .pub-hero {
-  background:
-    radial-gradient(circle at 82% 22%, rgba(245, 158, 11, 0.12), transparent 42%),
-    linear-gradient(135deg, var(--navy), var(--royal-dark) 62%, var(--royal));
+  background: var(--plum);
 }
 
 [data-theme="dark"] .pub-hero-art::before {
-  opacity: 0.09;
+  opacity: 0.12;
 }
 
 [data-theme="dark"] .pub-hero-search {
-  border-color: rgba(226, 232, 240, 0.18);
+  background: var(--white);
+  border-color: var(--lavender);
+  color: var(--charcoal);
 }
 
 [data-theme="dark"] .pub-hero-search input {
-  color: var(--text);
+  color: var(--charcoal);
 }
 
 [data-theme="dark"] .pub-hero-search input::placeholder {
@@ -358,11 +390,11 @@
 }
 
 [data-theme="dark"] .pub-stat-label {
-  color: rgba(226, 232, 240, 0.66);
+  color: rgba(248, 243, 235, 0.66);
 }
 
 [data-theme="dark"] .pub-art-card {
-  border-color: rgba(226, 232, 240, 0.18);
+  border-color: rgba(217, 183, 232, 0.24);
 }
 
 [data-theme="dark"] .pub-featured-note {
@@ -371,37 +403,38 @@
 }
 
 [data-theme="dark"] .pub-newsletter {
-  background: linear-gradient(120deg, var(--navy), var(--royal));
+  background: var(--plum);
 }
 
 [data-theme="dark"] .pub-newsletter .eyebrow {
-  color: var(--amber-ink);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .pub-newsletter-form .newsletter input {
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(11, 18, 32, 0.55);
+  border-color: rgba(217, 183, 232, 0.3);
+  background: rgba(36, 21, 47, 0.55);
   color: var(--white);
 }
 
 [data-theme="dark"] .pub-newsletter-form .newsletter input::placeholder {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(248, 243, 235, 0.58);
 }
 
 [data-theme="dark"] .pub-404-orbit {
-  border-color: rgba(37, 99, 235, 0.2);
+  border-color: rgba(217, 183, 232, 0.24);
 }
 
 [data-theme="dark"] .pub-404-orbit-inner {
-  border-color: rgba(245, 158, 11, 0.2);
+  border-color: rgba(240, 120, 66, 0.3);
 }
 
 [data-theme="dark"] .pub-404-badge {
-  color: var(--amber-ink);
+  background: var(--lavender);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .page-hero.light {
-  background: linear-gradient(140deg, var(--navy), var(--royal-dark));
+  background: var(--surface);
   color: var(--text);
 }
 
@@ -416,7 +449,7 @@
 }
 
 [data-theme="dark"] .page-hero.light .breadcrumbs span:last-child {
-  color: var(--forest);
+  color: var(--orange);
 }
 
 /* ---------- Customer dashboard ---------- */
@@ -428,23 +461,23 @@
 
 [data-theme="dark"] .dash-quick-icon {
   background: var(--wash-blue);
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .dash-timeline-step.done .dash-timeline-marker {
-  background: var(--accent-solid);
-  border-color: var(--accent-solid);
-  color: var(--accent-solid-ink);
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--plum);
 }
 
 [data-theme="dark"] .dash-timeline-step.active .dash-timeline-marker {
   background: var(--wash-gold);
-  border-color: var(--gold);
-  color: var(--amber-ink);
+  border-color: var(--orange);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .dash-switch:checked {
-  background: var(--accent-solid);
+  background: var(--orange);
 }
 
 [data-theme="dark"] .dash-switch::after {
@@ -457,16 +490,16 @@
 
 [data-theme="dark"] .dash-star-btn.active,
 [data-theme="dark"] .dash-star-btn:hover {
-  color: var(--gold);
+  color: var(--orange);
 }
 
 /* ---------- Vendor dashboard ---------- */
 [data-theme="dark"] .vnd-stat-icon.gold {
-  color: var(--amber-ink);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .vnd-stat-icon.blue {
-  color: var(--forest);
+  color: var(--lavender);
 }
 
 [data-theme="dark"] .vnd-stock-warning,

@@ -1,68 +1,83 @@
 :root {
-  /* Premium palette — midnight navy, royal blue and restrained amber. */
-  --navy: #172554;
-  --royal: #2563eb;
-  --royal-dark: #1d4ed8;
-  --amber: #f59e0b;
-  --amber-dark: #d97706;
-  --amber-ink: #92400e;
-  --amber-border: #fcd34d;
-  --cloud: #f8fafc;
-  --white: #ffffff;
-  --charcoal: #172033;
-  --slate: #64748b;
-  --slate-light: #94a3b8;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --success: #10b981;
-  --success-soft: #d1fae5;
-  --success-border: #a7f3d0;
-  --error: #ef4444;
-  --error-soft: #fee2e2;
-  --error-border: #fda4af;
-  --info: #2563eb;
-  --info-soft: #dbeafe;
-  --info-border: #bfdbfe;
+  /* Marketnest core palette — midnight plum, burnt orange and warm ivory. */
+  --plum: #24152F;
+  --plum-deep: #180D20;
+  --orange: #F07842;
+  --orange-dark: #D9652F;
+  --ivory: #F8F3EB;
+  --lavender: #D9B7E8;
+  --charcoal: #29252C;
+  --charcoal-muted: #5F5866;
+  --white: #FFFFFF;
 
-  /* Existing semantic names stay, now mapped to the new palette. */
-  --ink: var(--charcoal);
-  --forest: var(--royal);
-  --forest-deep: var(--royal-dark);
-  --moss: var(--royal);
-  --sage: var(--info-soft);
-  --sage-soft: #eff6ff;
-  --cream: var(--cloud);
-  --sand: #f1f5f9;
-  --clay: var(--amber);
-  --clay-dark: var(--amber-dark);
-  --gold: var(--amber);
-  --gold-soft: #fef3c7;
+  /* Purposeful supporting tints of the core palette. */
+  --ivory-deep: #EFE7DA;
+  --lavender-wash: #F2E7F6;
+  --lavender-soft: #F8F1FA;
+  --orange-wash: #FAE8DF;
+  --plum-wash: rgba(36, 21, 47, 0.08);
+
+  /* Legacy semantic names, remapped to the new palette so every screen stays in sync. */
+  --navy: var(--plum);
+  --royal: var(--plum);
+  --royal-dark: var(--orange-dark);
+  --amber: var(--orange);
+  --amber-dark: var(--orange-dark);
+  --amber-ink: var(--plum);
+  --amber-border: var(--lavender);
+  --cloud: var(--ivory);
+  --slate: var(--charcoal-muted);
+  --slate-light: #7B7381;
+  --border: #E6D9EA;
+  --border-strong: var(--lavender);
+  --success: #3E6B55;
+  --success-soft: #E7EFE9;
+  --success-border: #BCD5C6;
+  --error: #A34239;
+  --error-soft: #F9E7E3;
+  --error-border: #E5B9B1;
+  --info: var(--plum);
+  --info-soft: var(--lavender-wash);
+  --info-border: var(--lavender);
   --danger: var(--error);
-  --warning: var(--amber);
+  --warning: var(--orange);
 
-  --text: var(--slate);
-  --text-muted: var(--slate);
+  --ink: var(--charcoal);
+  --forest: var(--plum);
+  --forest-deep: var(--plum-deep);
+  --moss: var(--orange);
+  --sage: var(--lavender-wash);
+  --sage-soft: var(--lavender-soft);
+  --cream: var(--ivory);
+  --sand: var(--ivory-deep);
+  --clay: var(--orange);
+  --clay-dark: var(--orange-dark);
+  --gold: var(--orange);
+  --gold-soft: var(--orange-wash);
+
+  --text: var(--charcoal-muted);
+  --text-muted: var(--charcoal-muted);
   --text-light: var(--slate-light);
   --line: var(--border);
   --line-strong: var(--border-strong);
   --surface: var(--white);
-  --surface-alt: var(--cloud);
+  --surface-alt: var(--white);
   --surface-raised: var(--white);
 
-  --accent-solid: var(--royal);
-  --accent-solid-hover: var(--royal-dark);
-  --accent-solid-ink: var(--white);
-  --wash-green: rgba(16, 185, 129, 0.12);
-  --wash-gold: rgba(245, 158, 11, 0.12);
-  --wash-clay: rgba(245, 158, 11, 0.12);
-  --wash-blue: rgba(37, 99, 235, 0.1);
-  --wash-purple: rgba(37, 99, 235, 0.1);
-  --wash-danger: rgba(239, 68, 68, 0.12);
+  --accent-solid: var(--orange);
+  --accent-solid-hover: var(--orange-dark);
+  --accent-solid-ink: var(--plum);
+  --wash-green: rgba(62, 107, 85, 0.12);
+  --wash-gold: rgba(240, 120, 66, 0.14);
+  --wash-clay: rgba(240, 120, 66, 0.14);
+  --wash-blue: var(--plum-wash);
+  --wash-purple: rgba(217, 183, 232, 0.22);
+  --wash-danger: rgba(163, 66, 57, 0.12);
 
-  --shadow-xs: 0 1px 2px rgba(23, 37, 84, 0.06);
-  --shadow-sm: 0 4px 14px rgba(23, 37, 84, 0.08);
-  --shadow-md: 0 12px 32px rgba(23, 37, 84, 0.12);
-  --shadow-lg: 0 24px 60px rgba(23, 37, 84, 0.18);
+  --shadow-xs: 0 1px 2px rgba(36, 21, 47, 0.07);
+  --shadow-sm: 0 4px 14px rgba(36, 21, 47, 0.09);
+  --shadow-md: 0 12px 30px rgba(36, 21, 47, 0.12);
+  --shadow-lg: 0 22px 52px rgba(36, 21, 47, 0.16);
 
   --radius-xs: 8px;
   --radius-sm: 12px;
