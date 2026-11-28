@@ -86,6 +86,7 @@ export default function Navbar() {
               type="button"
               className="nav-icon nav-menu-toggle"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((open) => !open)}
             >
               {mobileOpen ? <X size={19} /> : <Menu size={19} />}

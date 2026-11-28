@@ -1086,6 +1086,12 @@ textarea.form-control {
 }
 .mobile-nav {
   display: none;
+  padding: 14px 0 4px;
+  border-top: 1px solid rgba(217, 183, 232, 0.22);
+}
+.mobile-nav .nav-links {
+  display: flex;
+  gap: 16px;
 }
 
 /* Messages */
@@ -1544,6 +1550,8 @@ textarea.form-control {
 @media (max-width: 1080px) {
   .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .nav-links { display: none; }
+  .nav-menu-toggle { display: grid; }
+  .mobile-nav { display: block; }
   .nav-search { max-width: none; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1570,7 +1578,6 @@ textarea.form-control {
   .auth-layout { grid-template-columns: 1fr; }
   .auth-art { display: none; }
   .nav-search { display: none; }
-  .nav-menu-toggle { display: grid; }
 }
 @media (max-width: 640px) {
   .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
