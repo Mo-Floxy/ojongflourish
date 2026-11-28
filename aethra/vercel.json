@@ -15,11 +15,16 @@
     },
     {
       "handle": "filesystem"
+    },
+    {
+      "src": "/.*",
+      "dest": "/api/index"
     }
   ],
   "functions": {
     "api/index.js": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "includeFiles": "client/dist/**"
     }
   },
   "headers": [
