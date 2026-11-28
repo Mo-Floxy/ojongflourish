@@ -1,7 +1,19 @@
-import vyra from './assets/projects/vyra.jpg'
-import codeher from './assets/projects/codeher.png'
-import jobhive from './assets/projects/jobhive.webp'
-import jenkinson from './assets/projects/jenkinson.jpg'
+import aethra from './assets/projects/previews/aethra.jpg'
+import aptverse from './assets/projects/previews/aptverse.jpg'
+import calculator from './assets/projects/previews/calculator.jpg'
+import campuscoin from './assets/projects/previews/campuscoin.jpg'
+import codeher from './assets/projects/previews/codeher.jpg'
+import edvanta from './assets/projects/previews/edvanta.jpg'
+import estatiq from './assets/projects/previews/estatiq.jpg'
+import floura from './assets/projects/previews/floura.jpg'
+import jenkinson from './assets/projects/previews/jenkinson.jpg'
+import jobhive from './assets/projects/previews/jobhive.jpg'
+import marketnest from './assets/projects/previews/marketnest.jpg'
+import maxwell from './assets/projects/previews/maxwell.jpg'
+import pulse from './assets/projects/previews/pulse.jpg'
+import vyra from './assets/projects/previews/vyra.jpg'
+import weather from './assets/projects/previews/weather.jpg'
+import zenora from './assets/projects/previews/zenora.jpg'
 
 export const SOCIALS = {
   email: 'ojongflourish14@gmail.com',
@@ -28,7 +40,7 @@ export const PROJECTS = [
   {
     id: 'codeher',
     name: 'CodeHer',
-    subtitle: 'Community-focused Platform',
+    subtitle: 'Community Platform',
     description: 'A community platform designed to help learners connect, collaborate and grow together in technology.',
     tags: ['React', 'Bootstrap', 'JavaScript'],
     categories: ['Web Apps', 'Community'],
@@ -44,22 +56,10 @@ export const PROJECTS = [
     description: 'A modern marketplace interface for browsing products, discovering sellers and managing a storefront from one responsive dashboard.',
     tags: ['React', 'Vite', 'REST APIs'],
     categories: ['Web Apps'],
-    image: null,
+    image: marketnest,
     repo: 'https://github.com/Mo-Floxy/ojongflourish/tree/main/marketnest',
     live: 'https://marketnest-ashy.vercel.app/',
     accent: '#14B8A6',
-  },
-  {
-    id: 'zenora',
-    name: 'Zenora',
-    subtitle: 'Discovery Platform',
-    description: 'A calm, content-rich discovery platform with curated catalogues, newsletters and a polished responsive interface.',
-    tags: ['React', 'Vite', 'Node.js'],
-    categories: ['Web Apps', 'Community'],
-    image: null,
-    repo: 'https://github.com/Mo-Floxy/zenora',
-    live: 'https://zenora-teal.vercel.app/',
-    accent: '#8B5CF6',
   },
   {
     id: 'aethra',
@@ -68,10 +68,70 @@ export const PROJECTS = [
     description: 'A full-stack AI workspace with secure accounts, streaming chat, image generation, a creations library and a voice assistant.',
     tags: ['React', 'Node.js', 'Express', 'SQL'],
     categories: ['Web Apps'],
-    image: null,
+    image: aethra,
     repo: 'https://github.com/Mo-Floxy/ojongflourish/tree/main/aethra',
-    live: 'https://aethra-ojong-flourishs-projects.vercel.app/',
+    live: 'https://aethra-rho.vercel.app/',
     accent: '#6366F1',
+  },
+  {
+    id: 'aptverse',
+    name: 'APTverse',
+    subtitle: 'Aptech Community Network',
+    description: 'A community hub for Aptech students and alumni with feeds, mentorship, jobs, projects, events and chat.',
+    tags: ['Node.js', 'JavaScript', 'Community'],
+    categories: ['Web Apps', 'Community'],
+    image: aptverse,
+    repo: 'https://github.com/Mo-Floxy/aptverse',
+    live: 'https://aptverse-static.vercel.app/',
+    accent: '#2563EB',
+  },
+  {
+    id: 'campuscoin',
+    name: 'Campus Coin',
+    subtitle: 'Campus Rewards Platform',
+    description: 'A student-focused rewards experience for earning, tracking and redeeming campus coins.',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    categories: ['Web Apps', 'Other'],
+    image: campuscoin,
+    repo: '',
+    live: 'https://campus-coin-indol.vercel.app/',
+    accent: '#F59E0B',
+  },
+  {
+    id: 'edvanta',
+    name: 'EDVANTA',
+    subtitle: 'AI Learning Platform',
+    description: 'A premium learning platform concept with AI assistance, curated courses, progress tracking and a responsive student experience.',
+    tags: ['React', 'Vite', 'Bootstrap'],
+    categories: ['Web Apps', 'Other'],
+    image: edvanta,
+    repo: 'https://github.com/Mo-Floxy/ojongflourish/tree/main/edvanta',
+    live: 'https://edvanta-five.vercel.app/',
+    accent: '#7C3AED',
+  },
+  {
+    id: 'estatiq',
+    name: 'ESTATIQ',
+    subtitle: 'Real Estate Discovery',
+    description: 'A polished property discovery experience with curated listings, agents and neighbourhood exploration.',
+    tags: ['React', 'Express', 'MySQL'],
+    categories: ['Web Apps', 'Other'],
+    image: estatiq,
+    repo: 'https://github.com/Mo-Floxy/estatiq',
+    live: 'https://estatiq-one.vercel.app/',
+    accent: '#0F766E',
+  },
+  {
+    id: 'pulse',
+    name: 'PULSE',
+    subtitle: 'Wellness & Fitness Platform',
+    description: 'A premium wellness foundation with an energetic brand system, responsive homepage, mobile menu and feature previews.',
+    tags: ['React', 'Vite', 'Framer Motion'],
+    categories: ['Web Apps', 'Other'],
+    image: pulse,
+    repo: 'https://github.com/Mo-Floxy/ojongflourish/tree/main/pulse',
+    live: 'https://pulse-wellness.vercel.app/',
+    accent: '#36C98F',
   },
   {
     id: 'jobhive',
@@ -81,19 +141,20 @@ export const PROJECTS = [
     tags: ['HTML', 'CSS', 'JavaScript'],
     categories: ['Web Apps'],
     image: jobhive,
-    repo: 'https://github.com/Mo-Floxy/ojongflourish/tree/main/job-hive',
+    repo: '',
+    live: 'https://job-hive-ebon.vercel.app/',
     accent: '#0EA5E9',
   },
   {
     id: 'weathernow',
     name: 'WeatherNow',
     subtitle: 'Weather Forecast Application',
-    description: 'A responsive weather forecast app that presents live conditions and upcoming forecasts clearly.',
+    description: 'A responsive weather forecast app with live conditions, a five-day outlook and adaptable display settings.',
     tags: ['JavaScript', 'REST APIs', 'CSS'],
     categories: ['Web Apps', 'Other'],
-    image: null,
+    image: weather,
     repo: 'https://github.com/Mo-Floxy/Weather-Forecast',
-    live: 'https://weather-forecast-keb7-ten.vercel.app/',
+    live: 'https://weather-forecast-coral-kappa.vercel.app/',
     accent: '#38BDF8',
   },
   {
@@ -115,7 +176,7 @@ export const PROJECTS = [
     description: 'A warm, visual storefront experience for exploring floral collections and seasonal arrangements.',
     tags: ['React', 'CSS', 'JavaScript'],
     categories: ['Web Apps', 'Other'],
-    image: null,
+    image: floura,
     repo: 'https://github.com/Mo-Floxy/Floura',
     live: 'https://floura-nu.vercel.app/',
     accent: '#F472B6',
@@ -127,10 +188,34 @@ export const PROJECTS = [
     description: 'A straightforward calculator with a clear interface and dependable everyday arithmetic.',
     tags: ['HTML', 'CSS', 'JavaScript'],
     categories: ['Web Apps', 'Other'],
-    image: null,
+    image: calculator,
     repo: 'https://github.com/Mo-Floxy/My-Calculator',
     live: 'https://my-calculator-sandy-three.vercel.app/',
     accent: '#FBBF24',
+  },
+  {
+    id: 'maxwell',
+    name: 'Maxwell Portfolio',
+    subtitle: 'Developer Portfolio',
+    description: 'An earlier portfolio concept presenting engineering work, skills and contact details in a clean layout.',
+    tags: ['HTML', 'CSS', 'JavaScript'],
+    categories: ['Web Apps', 'Other'],
+    image: maxwell,
+    repo: '',
+    live: 'https://maxwell-portfolio-chi.vercel.app/',
+    accent: '#94A3B8',
+  },
+  {
+    id: 'zenora',
+    name: 'Zenora',
+    subtitle: 'Discovery Platform',
+    description: 'A calm, content-rich discovery platform with curated catalogues, newsletters and a polished responsive interface.',
+    tags: ['React', 'Vite', 'Node.js'],
+    categories: ['Web Apps', 'Community'],
+    image: zenora,
+    repo: 'https://github.com/Mo-Floxy/zenora',
+    live: 'https://zenora-teal.vercel.app/',
+    accent: '#8B5CF6',
   },
   {
     id: 'cityguide',
@@ -141,6 +226,7 @@ export const PROJECTS = [
     categories: ['Mobile Apps'],
     image: null,
     repo: '',
+    live: '',
     accent: '#6366F1',
   },
 ]

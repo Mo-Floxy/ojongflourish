@@ -15,6 +15,7 @@ const SCAN_MS = 640
 export default function InteractionScanner() {
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return undefined
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
 
     const pending = new Set()

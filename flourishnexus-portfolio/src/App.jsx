@@ -7,6 +7,7 @@ import InteractionScanner from './components/InteractionScanner'
 import Navbar from './components/Navbar'
 import ScrollToTop from './components/ScrollToTop'
 import SplashScreen from './components/SplashScreen'
+import TouchFeedback from './components/TouchFeedback'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Experience from './pages/Experience'
@@ -38,6 +39,7 @@ export default function App() {
       <a className="skip-link" href="#main">Skip to content</a>
       <Atmosphere />
       <InteractionScanner />
+      <TouchFeedback />
 
       <AnimatePresence>
         {showSplash && <SplashScreen key="splash" onComplete={() => setShowSplash(false)} />}

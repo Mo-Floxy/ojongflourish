@@ -7,6 +7,7 @@ import './styles/animations.css'
 import './styles/responsive.css'
 import './styles/electric-blue.css'
 import './styles/interaction-scanner.css'
+import './styles/touch-feedback.css'
 import App from './App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(

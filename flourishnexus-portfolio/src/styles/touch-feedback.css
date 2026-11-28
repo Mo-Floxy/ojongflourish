@@ -1,0 +1,110 @@
+/* Mobile-only electric pulse + holographic ripple. Visual only — no audio. */
+
+@media (hover: none), (pointer: coarse) {
+  .touch-fx {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+  }
+
+  .touch-fx::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: 4;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(8, 123, 255, 0) 24deg,
+      #087bff 68deg,
+      #00bfff 94deg,
+      #eafaff 111deg,
+      #087bff 130deg,
+      rgba(0, 191, 255, 0) 176deg,
+      transparent 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(0deg);
+  }
+
+  .touch-fx.is-touch-fx::before {
+    animation: electric-border-pulse 620ms cubic-bezier(0.2, 0.7, 0.25, 1);
+  }
+
+  .touch-fx::after {
+    content: '';
+    position: absolute;
+    z-index: 3;
+    top: var(--touch-y, 50%);
+    left: var(--touch-x, 50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(0, 191, 255, 0.78) 26%,
+      rgba(8, 123, 255, 0.36) 52%,
+      rgba(8, 123, 255, 0) 72%
+    );
+    box-shadow:
+      0 0 14px rgba(0, 191, 255, 0.85),
+      0 0 28px rgba(8, 123, 255, 0.45),
+      inset 0 0 8px rgba(255, 255, 255, 0.65);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+    pointer-events: none;
+  }
+
+  .touch-fx.is-touch-fx::after {
+    animation: holographic-ripple 620ms cubic-bezier(0.16, 0.68, 0.3, 1);
+  }
+
+  @keyframes electric-border-pulse {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+    14% {
+      opacity: 1;
+    }
+    78% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes holographic-ripple {
+    0% {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) scale(0.25);
+    }
+    62% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(16);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .touch-fx::before,
+  .touch-fx::after,
+  .touch-fx.is-touch-fx::before,
+  .touch-fx.is-touch-fx::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
